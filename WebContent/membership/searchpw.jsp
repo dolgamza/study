@@ -61,7 +61,6 @@ function send() {
 		</div>
 		<div style='text-align:left;'>인증되었습니다.</div>
 		
-
 		<div class='btn' onclick='send();'>비밀번호전송</div>
 		</form>
 
