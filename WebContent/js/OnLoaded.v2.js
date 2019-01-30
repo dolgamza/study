@@ -26,7 +26,8 @@ $(document).ready(function() {
 	});
 
 	// outer click in burger menu
-	$(document).on("click", ".section, .rooptop, .footer", function(event){
+	$(document).on("click", ".section, .footer", function(event){
+		console.log($(this).focus());
 		if ($("span.menu").position().left < $(window).width()) hidePopMenu();
 		event.stopPropagation();
 	});

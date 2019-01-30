@@ -1,4 +1,8 @@
 <%@page contentType="text/html;charset=utf-8"%>
+<%@ page import = "java.util.ArrayList" %>
+<%@ page import = "kr.co.dw.util.*" %>
+<%@ page import = "kr.co.beable.chain.SeatVO" %>
+<%@ page import = "kr.co.beable.chain.SeatBean" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
@@ -6,6 +10,30 @@ response.setDateHeader("Expires",0);
 
 String strTitle = "";
 String strLocation = "";
+
+/**
+    0. 해당 지점 DB 커넥션
+	1. 현재 실시간 좌석현황 DB에서 당겨오고 세팅
+	
+*/
+
+String paramSeqNo = StrUtil.nvl(request.getParameter("seqno"), "1");	//가맹점 번호
+
+/* 해당지점좌석배치표 조회 */
+ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
+String strCampusRoom	= "";
+String strStudyRoom		= "";
+
+if (arr!=null && arr.size()>0) {
+	for (int i=0; i<arr.size(); i++) {
+		SeatVO vo = arr.get(i);
+		if (vo.ROOM_CD.equals("C")) strCampusRoom += vo.SEAT;
+		else strStudyRoom += vo.SEAT;
+	}
+	strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
+	strStudyRoom  = strStudyRoom.substring(0, strStudyRoom.length()-1);
+}
+
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -38,9 +66,9 @@ a:hover {color:#80191f;}
 #seat td.cell-1 {border:0;}
 #seat td.cell0 {background-color:#fafafa;}
 #seat td.seat {cursor:pointer;}
-#seat td.A {background-color:#fee;}
-#seat td.B {background-color:#efe;}
-#seat td.C {background-color:#eef;}
+#seat td.I {background-color:#fee;}
+#seat td.F {background-color:#efe;}
+#seat td.N {background-color:#eef;}
 #seat td.S {background-color:#fee;}
 #seat td.on {background-color:#80191f;border:1px solid #80191f;color:#fff;}
 </style>
@@ -56,7 +84,13 @@ function goBack() {
 
 function next() {
 	if (room>-1 && seatTypeAndNo!="") {
-		location.href='price_'+room+'.jsp';
+		
+		var frm = document.frmSettle;
+			frm.target = "_self";
+			frm.action = 'price_'+room+'.jsp';
+			frm.submit();
+		
+			//location.href='price_'+room+'.jsp';
 	} else {
 		alert('choice room and seat!');
 	}
@@ -68,25 +102,7 @@ $(document).ready(function() {
 	function initSeat() {
 		var table = "<table>";
 		/* todo : create data */
-		var seats =[
-			['A_1', 'A_2', 'A_3', 'A_4', '-1', '0', 'A_7', 'A_8', 'A_9', '-1', '-1'],
-			['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', 'A_10'],
-			['-1', '-1', '-1', 'C_83', '-1', 'C_82', 'C_81', 'C_80', 'C_79', '-1', 'A_11'],
-			['-1', '-1', '-1', 'C_74', '-1', 'C_75', 'C_76', 'C_77', 'C_78', '-1', 'A_12'],
-			['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', 'A_13'],
-			['-1', '-1', '-1', '-1', 'C_73', 'C_72', 'C_71', 'C_70', 'C_69', '-1', '0'],
-			['-1', '-1', '-1', '-1', 'C_64', '0', 'C_66', 'C_67', 'C_68', '-1', 'A_15'],
-			['-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', 'A_16'],
-			['-1', '-1', '-1', '-1', 'C_63', 'C_62', 'C_61', 'C_60', 'C_59', '-1', 'A_17'],
-			['-1', '-1', '-1', '-1', 'C_54', '0', 'C_56', 'C_57', 'C_58', '-1', 'A_18'],
-			['A_47', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', '-1', 'A_19'],
-			['A_48', '-1', 'B_45', 'B_44', '-1', '0', 'B_32', '-1', 'B_31', '-1', 'A_20'],
-			['A_49', '-1', 'B_46', 'B_45', '-1', 'B_42', 'B_33', '-1', 'B_30', '-1', 'A_21'],
-			['A_50', '-1', 'B_47', 'B_46', '-1', 'B_41', 'B_34', '-1', 'B_29', '-1', '0'],
-			['-1', '-1', '-1', '-1', '-1', 'B_40', 'B_35', '-1', 'B_28', '-1', 'A_23'],
-			['-1', '-1', '-1', '-1', '-1', 'B_39', 'B_36', '-1', 'B_27', '-1', 'A_24'],
-			['-1', '-1', '-1', '-1', '-1', 'B_38', 'B_37', '-1', 'B_26', '-1', 'A_25']
-		];
+		var seats =[<%=strCampusRoom%>];
 		for (var i=0; i<seats.length;i++) {
 			table += "<tr>";
 			for (var j=0;j<seats[i].length;j++) {
@@ -98,7 +114,7 @@ $(document).ready(function() {
 			}
 			table += "</tr>";
 		}
-		table += "</table>";
+		table += "</table>";		
 		$("#seat").html(table);
 	}
 	
@@ -108,13 +124,14 @@ $(document).ready(function() {
 		seatTypeAndNo = "";
 		
 		/* todo : create data */
-		var seats =['S_1_6인실A', 'S_2_6인실B', 'S_3_4인실A', 'S_4_4인실B'];
+		var seats =<%=strStudyRoom%>;
 	
 		var table = "<table>";
 		table += "<tr>";
 		for (var i=0; i<seats.length;i++) {
 			no = seats[i].split("_");
-			table += "<td class='cell seat "+no[0]+"' seatno='"+no[0]+"_"+no[1]+"'>" +  no[2] +"</td>";
+			nm = (no[2]=="") ? no[0]+"인실" : no[2] +"<br>"+no[0]+"인실";
+			table += "<td class='cell seat S' seatno='"+no[0]+"_"+no[1]+"'>" +  nm +"</td>";
 		}
 		table += "</tr>";
 		table += "</table>";
@@ -125,6 +142,9 @@ $(document).ready(function() {
 	$(document).on("click", "#seat td.seat", function() {
 		var t = $("#seat td.seat").index(this);
 		seatTypeAndNo = $(this).attr("seatno");
+		
+		$("#chkSeat").val(seatTypeAndNo);
+		
 		console.log(seatTypeAndNo); // <--------------------------- seat type and number
 		$("#seat td.seat").removeClass("on");
 		$(this).addClass("on");
@@ -134,6 +154,9 @@ $(document).ready(function() {
 	/* choice room */
 	$(".choice span").click(function() {
 		room = $(this).index();
+		
+		$("#chkRoom").val(room);
+		
 		$(".choice span").addClass("off");
 		$(".choice span").eq(room).removeClass("off");
 		$("#next").addClass("off");
@@ -144,7 +167,11 @@ $(document).ready(function() {
 });
 
 </script>
-
+<form name='frmSettle' id='frmSettle' method='post'>
+<input type='hidden' name='centerNo' id='centerNo' value='<%=paramSeqNo %>' />
+<input type='hidden' name='chkRoom' id='chkRoom' />
+<input type='hidden' name='chkSeat' id='chkSeat' />
+</form>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>좌석 선택</div>	
