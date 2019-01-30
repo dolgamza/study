@@ -18,8 +18,8 @@ a:hover {color:#80191f;}
 .section div > ul {list-style-type:none;}
 .section div > ul > li {display:inline-block;padding:10px;font-size:0.8em;line-height:1.2em;width:calc(33% - 23px);height:50px;margin-right:5px; margin-bottom:5px; }
 .btn.off {border:1px solid #777;background-color:#777;}
-.btn.hide {border:1px solid #fff;background-color:#fff;}
-.btn.title {border:1px solid #c44;background-color:#c44;}
+.btn.hide {border:1px solid #fff;background-color:#fff;cursor:default;}
+.btn.title {border:1px solid #c44;background-color:#c44;cursor:default;}
 
 .pop {
 	z-index:21;

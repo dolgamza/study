@@ -1,61 +1,83 @@
 <%@page contentType="text/html;charset=utf-8"%>
+<%@ page import = "java.util.ArrayList" %>
+<%@ page import = "kr.co.dw.util.*" %>
+<%@ page import = "kr.co.beable.chain.ProductVO" %>
+<%@ page import = "kr.co.beable.chain.ProductBean" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
 response.setDateHeader("Expires",0);
 
-String strTitle = "";
-String strLocation = "";
+String strTitle 	= "";
+String strLocation 	= "";
+
+/**
+0. 해당 지점 DB 커넥션
+1. 이용권 가져오기
+*/
+
+String centerNo = StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
+String chkRoom 	= "C";													//ROOM_CD
+String chkSeat 	= StrUtil.nvl(request.getParameter("chkSeat"), "1");	//SEAT_NO
+
+System.out.println("centerNo : " + centerNo);
+System.out.println("chkRoom : " + chkRoom);
+System.out.println("chkSeat : " + chkSeat);
+
+StringBuffer sb = new StringBuffer();
+ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom);
+if (arr!=null && arr.size()>0) {
+	String strPrdGrpCd = "";
+	
+	int j = 0;
+	for (int i=0; i<arr.size(); i++) {
+		ProductVO vo = arr.get(i);
+		if (!strPrdGrpCd.equals(vo.PRD_GRP_CD)) {
+			if (i!=0) {
+				sb.append("--></ul>\n");
+			}
+			sb.append("<ul>\n<li class='btn title'>"+vo.PRD_GRP_NM+"<br/>&nbsp;</li><!-- \n");
+			strPrdGrpCd = vo.PRD_GRP_CD;
+			j = 1;
+		}
+		if (j%3 == 0) {
+			sb.append("--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!-- \n");
+			j++;
+		}
+		sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
+		j++;
+	}
+	sb.append("--></ul>");
+}
+
+
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?3' />
-<script type="text/javascript" src="price.js?1" ></script>
+<link rel='stylesheet' href='price.css?5' />
+<script type="text/javascript" src="price.js?2" ></script>
 
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>이용권 결제</div>	
 		<div class='subtitle'>_ [캠퍼스룸] 이용권 선택</div>
 		<div class='choice'>
-			<ul>
-			<li class='btn title'>당일권<br/>&nbsp;</li><!--  
-			--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!--
-			--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!--
-			--><li class='btn off'>2시간<br/>3,500원</li><!--  
-			--><li class='btn off'>4시간<br/>6,000원</li><!--  
-			--><li class='btn off'>6시간<br/>8,000원</li><!--  
-			--><li class='btn off'>8시간<br/>10,000원</li><!--  
-			--><li class='btn off'>당일권<br/>12,000원</li><!--  
-			--><li class='btn off'>연장(1시간)<br/>1,500원</li>
-			</ul>
-			<ul>
-			<li class='btn title'>4주권<br/>&nbsp;</li><!--  
-			--><li class='btn off'>4주 이용권<br/>160,000원</li>
-			</ul>
-			<ul>
-			<li class='btn title'>시간권<br/>&nbsp;</li><!--  
-			--><li class='btn off'>50시간권<br/>80,000원</li><!--  
-			--><li class='btn off'>100시간권<br/>150,000원</li><!--  
-			--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!--
-			--><li class='btn off'>150시간권<br/>210,000원</li><!--  
-			--><li class='btn off'>200시간권<br/>260,000원</li>
-			</ul>
-			<ul>
-			<li class='btn title'>금액권<br/>&nbsp;</li><!--  
-			--><li class='btn off'>5만원권<br/>50,000원</li><!--  
-			--><li class='btn off'>10만원권<br/>100,000원</li><!--
-			--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!--  
-			--><li class='btn off'>15만원권<br/>150,000원</li><!--  
-			--><li class='btn off'>20만원권<br/>200,000원</li>
-			</ul>
+
+<%=sb.toString() %>
+
 		</div>
 
 		<div class='btn' onclick='complete();'>선택완료</div>
 </div>
-
+<form name='frmPrice' id='frmPrice' method='post'>
+<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
+<input type='text' name='chkSeat' id='chkSeat' value='<%=chkSeat %>' />
+<input type='text' name='product' id='product' />
+</form>
 <!-- popup> -->
 <div id="mask"></div>
 <div class='pop'>
@@ -66,6 +88,18 @@ String strLocation = "";
 	</div>
 </div>
 <!-- >popup -->
+<script>
+function settle(){
+	var frm = document.frmPrice;
+	frm.target = "_self";
+	frm.action = "inipay.jsp"
+	frm.submit();
+}
+
+function cancel() {
+	location.href='center.jsp';
+}
+</script>
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>

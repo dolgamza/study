@@ -1,4 +1,5 @@
 var t = -1;
+var product;
 
 function goBack() {
 	location.href='seat.jsp';
@@ -8,6 +9,10 @@ $(document).ready(function() {
 
 	$(".choice li").click(function() {
 		t = $(".choice li").index(this);
+		alert(t);
+		product = $(this).attr("product"); 
+		$("#product").val(product);
+		
 		$(".choice li").addClass("off");
 		$(".choice li").eq(t).removeClass("off");		
 	});
@@ -23,9 +28,8 @@ $(document).ready(function() {
 });
 
 function complete() {
-	var strNotChoice = "__-1__0__1__2__9__11__14__20__";
-	if (strNotChoice.indexOf("__"+t+"__")>-1) { alert('골라주세요');}
-	else {
+	if (typeof product == "undefined") { alert('이용권을 석택하세요.') 
+	} else {
 		var maskHeight = $(document).height();  
         var maskWidth = $(window).width();  
         $('#mask').css({'width':maskWidth,'height':maskHeight});  
@@ -37,5 +41,8 @@ function complete() {
 }
 
 function settle() {
-	alert('settle!');
+	var frm = document.frmPrice;
+	frm.target = "_self";
+	frm.action = 'inipay.jsp';
+	frm.submit();
 }

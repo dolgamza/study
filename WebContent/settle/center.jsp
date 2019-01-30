@@ -1,11 +1,20 @@
 <%@page contentType="text/html;charset=utf-8"%>
+<%@ page import = "kr.co.dw.util.*" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
 response.setDateHeader("Expires",0);
 
-String strTitle = "";
-String strLocation = "";
+String strTitle 	= "";
+String strLocation 	= "";
+
+String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
+String strPageBlock	= StrUtil.getParameter(request.getParameter("strPageBlock"), "10");
+int intPage			= Integer.parseInt(strPage);
+int intPageBlock	= Integer.parseInt(strPageBlock);
+
+String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
+String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -44,69 +53,102 @@ div.list {width:90%;}
 @media only screen and (max-width : 1040px) {
 .section td.pic {width:120px;height:120px;}
 }
+
+/* pagination */ 
+#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
+#pagination #paging {display:inline-block;position:absolute;}
+#pagination #paging .btn {border-radius:14px;padding:4px 10px;vertical-align:middle;color:#000;background-color:#fff;}
+#pagination #paging .btn:hover {color:#fff;background-color:#000;}
+#pagination #paging .on {background-color:#eee;color:#555;}
 </style>
 
-<script>
+<script src="../js/paging.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$(window).on("load",function() {
+		goPage(1);
+	});
+});
+
 function goBack() {
 	location.href='../membership/login.jsp';
 }
 
 function search() {
-	alert('sfasdfasf?');
+	goPage(1);
 }
 
+function goPage(i) {
+	
+	//페이지번호 셋팅
+	$("#strPage").val(i);
+	
+	//리스트 가져오기
+	$.post("./centerAjax.jsp", $("#frmSearch").serialize(), function(data){
+		var json = JSON.parse($.trim(data));
+		if(json.isSuccess) {
+			fnMakList(i, json.intTotalCnt, json.resData);
+		} else {
+			fnMakList(1, 0, "");
+		}
+	})
+	.error(function(){
+		fnMakList(1, 0, "");
+	});
+}
+
+function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
+	/* 화면 페이징 구현 */
+	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
+	
+	/* 화면 리스트 구현 */
+	var listHtml = '<table>';
+	if(jsonList != '' && jsonList.length > 0) {
+		listHtml += '';
+		for (var i = 0; i < jsonList.length; i++) {
+			listHtml += '<tr>';
+			listHtml += '	<td rowspan="3" class="pic"><img src=""></td>';
+			listHtml += '	<td class="chains"><a href="center_detail.jsp?strFcNo='+jsonList[i].FC_NO+'">'+jsonList[i].FC_NM+'</a></td>';
+			listHtml += '</tr>';
+			listHtml += '<tr>';
+			listHtml += '	<td class="chains">'+jsonList[i].FC_ADDR+'</td>';
+			listHtml += '</tr>';
+			listHtml += '<tr>';
+			listHtml += '	<td class="chains">'+jsonList[i].FC_MAIN_TEL_NO+'</td>';
+			listHtml += '</tr>';
+		}
+	} else {
+		listHtml += '<tr><td style="height:150px;">검색 결과가 없습니다.</td></tr>';
+	}
+	
+	listHtml += '</table>';
+	
+	$(".list").html(listHtml);
+}
 </script>
 
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
-   		<div class='title'>센터 검색</div>	
+   	<div class='title'>센터 검색</div>	
 
-		<form>
+	<form name="frmSearch" id="frmSearch" method="post">
+	<input type="hidden" name="strPage" id="strPage">
+	<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
 		<div>
-				<span><label for='f_cls'></label>
-					<select id='f_cls' class='fa'>
-						<option>센터명</option>
-					</select></span><!--  
-				--><span><input type='text' id='b' value='' class='fb chain_search'></span><!--  
-				--><span><input type='text' id='b' value='검색' class='fc' onclick='search();'></span>
+			<span>
+				<label for='strSelFg'></label>
+				<select name='strSelFg' id='strSelFg' class='fa'>
+					<option value="FC_NAME" <%if("FC_NAME".equals(strSelFg)){ out.println("selected");} %>>센터명</option>
+					<option value="FC_TELN" <%if("FC_TELN".equals(strSelFg)){ out.println("selected");} %>>연락처</option>
+					<option value="FC_ADDR" <%if("FC_ADDR".equals(strSelFg)){ out.println("selected");} %>>주소</option>
+				</select></span><!-- 
+			--><span><input type='text' name='strSelVal' id='strSelVal' class='fb chain_search' placeholder="검색어를 입력하세요."></span><!--
+			--><span><input type='text' value='검색' class='fc' onclick='search();'></span>
 		</div>
 
-		</form>
-
-		<div class='list'>
-
-				<table>
- 				<tr>
-		        	<td rowspan="3" class='pic'><img src='../images/space/bangbae.jpg'></td>
-		        	<td colspan="2" class='chains'><a href='center_detail.jsp'>방배 센터</a></td>
-		        </tr>
-				<tr>
-		        	<td class='chains'>서울특별시 강서구 양천로 583</td>
-		        </tr>
-		        <tr>
-		        	<td class='chains'>000000</td>
-		        </tr>
-				</table>
- 				<table>
- 				<tr>
-		        	<td rowspan="3" class='pic'><img src='../images/space/banpo.jpg'></td>
-		        	<td colspan="2" class='chains'><a href='center_detail.jsp'>반포 센터</a></td>
-		        </tr>
-				<tr>
-		        	<td class='chains'>서울특별시 강서구 양천로 583</td>
-		        </tr>
-		        <tr>
-		        	<td class='chains'>000000</td>
-		        </tr>
-				</table>	
-				
-				<table>
-				<tr><td colspan="3" style="height:150px;">검색 결과가 없습니다.</td>
-				</table>
-		
-		
-		
-		</div>
+	</form>
+		<div class='list'></div>
+		<div id="pagination"></div>
 </div>
 
 

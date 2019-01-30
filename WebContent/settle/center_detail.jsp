@@ -1,11 +1,15 @@
 <%@page contentType="text/html;charset=utf-8"%>
+<%@ page import = "kr.co.dw.util.*" %>
 <%
-response.setHeader("Cache-Control","no-cache");
-response.setHeader("Pragma","no-cache");
-response.setDateHeader("Expires",0);
-
-String strTitle = "";
-String strLocation = "";
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	
+	String strTitle = "";
+	String strLocation = "";
+	
+	//레알적용시 변경
+	String paramFcNo = StrUtil.nvl(request.getParameter("strFcNo"), "1");
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -46,7 +50,7 @@ function goBack() {
 }
 
 function next() {
-	location.href='seat.jsp';
+	location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>;
 }
 
 </script>
