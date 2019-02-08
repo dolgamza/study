@@ -3,6 +3,7 @@
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.ProductVO" %>
 <%@ page import = "kr.co.beable.chain.ProductBean" %>
+<%@ include file = "/membership/loginSess.jsp" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
@@ -52,8 +53,9 @@ if (arr!=null && arr.size()>0) {
 </jsp:include>
 
 <link rel='stylesheet' href='price.css?2' />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />  
 <script type="text/javascript" src="price.js?1" ></script>
-
+<script src="../js/jquery-ui.js" type="text/javascript"></script>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>이용권 결제</div>	
@@ -62,6 +64,21 @@ if (arr!=null && arr.size()>0) {
 
 <%=sb.toString() %>
 
+		</div>
+		<div>
+			<select id=''>
+				<option value='1'>1시간</option>
+				<option value='2'>2시간</option>
+				<option value='3'>3시간</option>
+				<option value='4'>4시간</option>
+				<option value='5'>5시간</option>
+				<option value='6'>6시간</option>
+				<option value='7'>7시간</option>
+				<option value='8'>8시간</option>
+			</select>
+		</div>
+		<div style='left:0;'>
+		이용일자 : <input type='text' id="strStartYmd" name='strStartYmd' maxlength='10' style='width:100px' value='' readOnly>
 		</div>
 
 		<div class='btn' onclick='complete();'>선택완료</div>
@@ -78,6 +95,17 @@ if (arr!=null && arr.size()>0) {
 </div>
 <!-- >popup -->
 <script>
+$(document).ready(function(){
+	$( "#strStartYmd" ).datepicker({
+           monthNamesShort: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
+           dayNamesMin:["월","화","수","목","금","토","일"],
+           showMonthAfterYear: true,
+           changeMonth: true,
+           changeYear: true,
+           dateFormat:"yy/mm/dd"
+	});
+});
+
 function inipay_settle() {
 	$.post("./inipay.jsp", $("#frmEnt").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
@@ -94,8 +122,12 @@ function inipay_settle() {
 	});
 }
 
-function cancel() {
-	location.href='center.jsp';
+function cancel(){
+	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
+}
+
+function goBack() {
+	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
 }
 </script>
 

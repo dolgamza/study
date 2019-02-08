@@ -1,5 +1,6 @@
 <%@page contentType="text/html;charset=utf-8"%>
 <%@ page import = "kr.co.dw.util.*" %>
+<%@ include file = "/membership/loginSess.jsp" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
@@ -71,7 +72,7 @@ $(function(){
 });
 
 function goBack() {
-	location.href='../membership/login.jsp';
+	location.href='../customer/';
 }
 
 function search() {
@@ -108,13 +109,13 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		for (var i = 0; i < jsonList.length; i++) {
 			listHtml += '<tr>';
 			listHtml += '	<td rowspan="3" class="pic"><img src=""></td>';
-			listHtml += '	<td class="chains"><a href="center_detail.jsp?strFcNo='+jsonList[i].FC_NO+'">'+jsonList[i].FC_NM+'</a></td>';
+			listHtml += '	<td class="chains"><a href="center_detail.jsp?strFcNo='+jsonList[i].STORE_NO+'">'+jsonList[i].STORE_NM+'</a></td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<td class="chains">'+jsonList[i].FC_ADDR+'</td>';
+			listHtml += '	<td class="chains">'+jsonList[i].ADDR+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<td class="chains">'+jsonList[i].FC_MAIN_TEL_NO+'</td>';
+			listHtml += '	<td class="chains">'+jsonList[i].PHONE_NO+'</td>';
 			listHtml += '</tr>';
 		}
 	} else {

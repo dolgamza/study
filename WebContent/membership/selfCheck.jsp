@@ -1,11 +1,17 @@
 <%@page contentType="text/html;charset=utf-8"%>
+<%@ page import = "kr.co.dw.util.*" %>
 <%
-response.setHeader("Cache-Control","no-cache");
-response.setHeader("Pragma","no-cache");
-response.setDateHeader("Expires",0);
-
-String strTitle = "";
-String strLocation = "";
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	
+	String strTitle 	= "";
+	String strLocation 	= "";
+	
+	String f_id			= StrUtil.nvl(request.getParameter("f_id"), "");
+	
+	System.out.println("f_id : " + f_id);
+	
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -20,6 +26,10 @@ a {text-decoration:none;color:#000;}
 a:visited {color:#555;}
 a:hover {color:#80191f;}
 
+input.fa {width:calc(50% - 12px);border-right:0;}
+input.fb {width:calc(25% - 22px);border-left:0;text-align:right;padding-right:10px;}
+input.fc {width:calc(25% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;margin-left:7px;cursor:pointer;}
+
 .subheading_img {width:160px;height:auto;}
 .section div {width:90%;margin-left:auto;margin-right:auto;margin-bottom:5px;}
 
@@ -31,58 +41,32 @@ a:hover {color:#80191f;}
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src='${pageContext.request.contextPath}/js/formchecker.js?0.1' type='text/javascript'></script>
 <script>
-function login() {
-	
-	if (!checkLength($('#f_id'), 10, 11)) {
-		alertify.alert('올바른 아이디를 입력하십시오.');
-		$('#f_id').css('background-color' ,'#fee');
-		$('#f_id').focus();
+function NextPage() {
+	if($("#f_id").val() != '<%=f_id %>'){
+		alertify.alert("가입된 휴대전화 번호와 입력한 휴대전화 번호가 다릅니다.");
 		return false;
-	} else $('#f_id').css('background-color' ,'#fff');
-	
-	if (!checkPhone($('#f_id'))) {
-		alertify.alert("아이디를 정확히 입력하세요.");
-		$('#f_id').css('background-color' ,'#fee');
-		$('#f_id').focus();
-		return false;
-	} else $('#f_id').css('background-color' ,'#fff');
-	
-	$.post("${pageContext.request.contextPath}/membership/loginIdCheckProc.jsp", $("#frmEnt").serialize(), function(data){
-		var json = JSON.parse($.trim(data));
-		if(json.isSuccess) {
-			//location.href = json.resUrl;
-			nextPage(json.resUrl);
-		} else {
-			alertify.alert(json.resMsg);
-		}
-	})
-	.error(function(){
-		alertify.alert("로그인 중 오류가 발생했습니다.\n시스템 관리자에게 문의하세요.");
-	});
-
-	return false;
+	}
+	location.href='${pageContext.request.contextPath}/membership/inputChangePwd.jsp?f_id='+$("#f_id").val();	
 };
-
-function nextPage(url){
-	var frm = document.frmEnt;
-	frm.target = "_self";
-	frm.action = url;
-	frm.submit();
-}
 
 function goMain() {
 	location.href='${pageContext.request.contextPath}';
 }
 
-</script>
+</script> 
 
 <div class='section'>
 		<a href='javascript:goMain();'><img src='../images/main/logo4sub.png' class='subheading_img'/></a>
-   		<div style='margin-top:20px;margin-bottom:80px;'>비밀번호를 찾고자 하는 아이디를 입력해 주세요.</div>	
+   		<div style='margin-top:20px;margin-bottom:80px;'>회원정보 인증 후 비밀번호 변경이 가능합니다.<br>(가입된 휴대전화 번호와 입력한 휴대전화 번호가 같아야 인증번호를 받을 수 있습니다.)</div>	
 
 		<form id='frmEnt' name='frmEnt' method='post'>
 		<div><label for='f_id'></label><input type='text' name= 'f_id' id='f_id' placeholder='휴대폰번호' onkeypress='numberOnly(this);' maxlength='11'></div>
-		<div class='btn' onclick='login();'>다음</div>
+		<div>
+			<span><label for='f_ath'></label><input type='text' name='f_ath' id='f_ath' placeholder='인증번호' class='fa'></span><!--  
+			--><span><input type='text' id='b' value='02:00' class='fb'></span><!--  
+			--><span><input type='text' id='b' value='인증번호 받기' class='fc' onclick='auth();'></span>
+		</div>
+		<div class='btn' onclick='NextPage();'>다음</div>
 		</form>
 
 </div>

@@ -28,7 +28,7 @@ String strLocation = java.net.URLDecoder.decode(((request.getParameter("location
     <link rel="canonical" href="http://">
     <link rel="apple-touch-icon-precomposed" href="/favicon.ico">
     <link rel="shortcut icon" href="<%=application.getContextPath() %>/favicon.ico">
-    <link rel="stylesheet" href="<%=application.getContextPath() %>/css/style.v2.css?0.1.0.1" type="text/css" media="all">
+    <link rel="stylesheet" href="<%=application.getContextPath() %>/css/style.v2.css?0.1.0.2" type="text/css" media="all">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
      <script src="<%=application.getContextPath() %>/js/common.js" type="text/javascript"></script>
 </head>
@@ -40,9 +40,9 @@ String strLocation = java.net.URLDecoder.decode(((request.getParameter("location
 			<ul>
 				<li><span class='nochild'><a href="<%=application.getContextPath() %>/chain/">창업</a></span>
 				<li><span>이용자</span>
-					<ul>
+					<ul class='submenu'>
 						<li><a href="<%=application.getContextPath() %>/customer/">이용자 안내</a></li>
-						<li><a href="<%=application.getContextPath() %>/settle/center.jsp">결제</a></li>
+						<li><a href="<%=application.getContextPath() %>/membership/login.jsp">결제</a></li>
 						<li><a href="<%=application.getContextPath() %>/membership/login.jsp">결제내역</a></li>
 					</ul>
 				</li>

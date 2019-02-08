@@ -3,6 +3,7 @@
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.ProductVO" %>
 <%@ page import = "kr.co.beable.chain.ProductBean" %>
+<%@ include file = "/membership/loginSess.jsp" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
@@ -96,8 +97,13 @@ function settle(){
 	frm.submit();
 }
 
-function cancel() {
-	location.href='center.jsp';
+function cancel(){
+	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
+}
+
+
+function goBack() {
+	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
 }
 </script>
 

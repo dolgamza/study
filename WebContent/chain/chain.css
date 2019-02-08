@@ -44,7 +44,7 @@ body {background-image:url('../images/main/bg_02.jpg');}
 .main-section-5 table {position:absolute;top:0;left:156px;margin:0;padding:0;width:calc(100% - 189px);font-size:1em;}
 .main-section-5 label {padding-top:7px;}
 .main-section-5 td {margin:0;padding:0;background-color:white;width:30%;border:1px solid #80191f;}
-.main-section-5 td:last-child {border-left:0;}
+.main-section-5 td:last-child {}
 .main-section-5 td.at {width:5%;text-align:center;border:0;}
 .main-section-5 input, .main-section-5 select {background-color:white;padding:5px;font-size:0.825em;height:auto;}
 .main-section-5 td input, .main-section-5 td select {border:0;}
@@ -58,14 +58,45 @@ body {background-image:url('../images/main/bg_02.jpg');}
 
 .btn {width:90%;margin-left:auto;margin-right:auto;}
 
+
+.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, 'µ¸¿ò', sans-serif;line-height: 1.5;}
+.wrap * {padding: 0;margin: 0;}
+.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+.info .title {padding: 5px 0 0 10px;height: 30px;background: #d95050;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+.info .close:hover {cursor: pointer;}
+.info .body {position: relative;overflow: hidden;}
+.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}    
+.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.info .link {color: #5085BB;}
+   
+select.fa {width:calc(30% - 17px);}
+input.fb {width:calc(50% - 0px);margin:5px;}
+input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
+.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
+   
+.main-section-3 div>ul>li>div>span:hover {background-color:orange;}
+.main-section-3 div>ul>li>div>span:last-child {border-right:1px solid #ccc;}
+
+/* pagination */ 
+#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
+#pagination #paging {display:inline-block;position:absolute;}
+#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
+#pagination #paging .btn:hover {color:#fff;background-color:#000;}
+#pagination #paging .on {background-color:#80191f;color:#fff;}
+
+
 /* responsive web */
 @media only screen and (max-width : 1040px) {
 	.subheading {font-size:1.6em;}
 	.slideup div img {width:100%;}
-	.main-section-3 .chain_search {display:block;}
+	.main-section-3 .chain_search {display:inline-block;}
 	embed {display:none;}
 	.main-section-3 li:nth-child(1) {width:0;} 
-	.main-section-3 li:nth-child(2) {width:100%;}
+	.main-section-3 li:nth-child(2) {width:100%;text-align:left;}
 	.main-section-3 td.pic {width:120px;height:120px;}
 	.main-section-3 th {display:none;}
 
@@ -78,5 +109,9 @@ body {background-image:url('../images/main/bg_02.jpg');}
 
 	.subheading.s {font-size:1.4em;margin-bottom:30px;}
 	.phone {font-size:1.4em;}
+	
+	
+	.main-section-3 .maparea {display:none;}
+	.fb {width:30%;}
 	
 }

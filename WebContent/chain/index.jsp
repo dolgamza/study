@@ -1,5 +1,6 @@
 <%@page contentType="text/html;charset=utf-8"%>
 <%@ page import = "java.util.*" %>
+<%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.*" %>
 <%
 	response.setHeader("Cache-Control","no-cache");
@@ -10,14 +11,22 @@
 	String strLocation 	= "";
 	int tot_cnt			= 0;
 	
-	ArrayList<ChainVO.reqLocationTapVO> arr = new ChainBean().FC_LOCATION_TAP_PROC("");
+	String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
+	String strPageBlock	= StrUtil.getParameter(request.getParameter("strPageBlock"), "10");
+	int intPage			= Integer.parseInt(strPage);
+	int intPageBlock	= Integer.parseInt(strPageBlock);
+	
+	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
+	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
+	
+	ArrayList<ChainVO.resLocationTapVO> arr = new ChainBean().FC_LOCATION_TAP_PROC("");
 	if(arr != null && arr.size() > 0) {
 		tot_cnt = Integer.parseInt(arr.get(0).TOT_CNT);
 	}
 	
 	StringBuffer sb 			= new StringBuffer();
 
-	ArrayList<ChainVO.reqLocationMapVO> arrMap = new ChainBean().FC_LOCATION_MAP_PROC();
+	ArrayList<ChainVO.resLocationMapVO> arrMap = new ChainBean().FC_LOCATION_MAP_PROC("", "");
 	if(arrMap != null && arrMap.size() > 0){
 		
 		String comma	 = ",";
@@ -26,26 +35,26 @@
 			
 			if(i == (arrMap.size()-1)) comma = "";
 			
-			ChainVO.reqLocationMapVO vo = (ChainVO.reqLocationMapVO)arrMap.get(i);
+			ChainVO.resLocationMapVO vo = (ChainVO.resLocationMapVO)arrMap.get(i);
 			
 			sb.append("{content:\n");
 			sb.append("	'<div class=\"wrap\">'+\n");
 			sb.append("		'<div class=\"info\">'+\n");
-			sb.append("			'<div class=\"title\">"+vo.FC_NM+"</div>'+\n");
+			sb.append("			'<div class=\"title\">"+vo.STORE_NM+"</div>'+\n");
 			sb.append("			'<div class=\"body\">'+\n");
 // 			sb.append("				'<div class=\"img\">'+\n");
 // 			sb.append("                '<img src=\""+vo.FC_THUMBNAIL+"\" width=\"73\" height=\"70\">'+\n");
 // 			sb.append("           	'</div>'+\n");
 			sb.append("				'<div class=\"desc\">'+\n");
-			sb.append("					'<div class=\"ellipsis\">"+vo.FC_ADDR+"</div>'+\n");
-			sb.append("					'<div class=\"jibun ellipsis\">"+vo.FC_MAIN_TEL_NO+"</div>'+\n");
-			sb.append("					'<div><a href=\""+vo.FC_HOMEPAGE+"\" target=\"_blank\" class=\"link\">홈페이지</a></div>'+\n");
+			sb.append("					'<div class=\"ellipsis\">"+vo.ADDR+"</div>'+\n");
+			sb.append("					'<div class=\"jibun ellipsis\">"+vo.PHONE_NO+"</div>'+\n");
+			sb.append("					'<div><a href=\""+vo.WEB_URL+"\" target=\"_blank\" class=\"link\">홈페이지</a></div>'+\n");
 			sb.append("				'</div>'+\n");
 			sb.append("			'</div>'+\n");
 			sb.append("		'</div>'+\n");
 			sb.append("	'</div>'\n");
 			sb.append(",");
-			sb.append("latlng:new daum.maps.LatLng("+vo.FC_COORDINATE+")");
+			sb.append("latlng:new daum.maps.LatLng("+vo.COORDINATE+")");
 			sb.append("}" + comma);
 		}
 	}
@@ -55,32 +64,84 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
+<link rel='stylesheet' href='chain.css?0.1.0.22' />
 <style>
-    .wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-    .wrap * {padding: 0;margin: 0;}
-    .wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-    .info .title {padding: 5px 0 0 10px;height: 30px;background: #d95050;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-    .info .close:hover {cursor: pointer;}
-    .info .body {position: relative;overflow: hidden;}
-    .info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
-    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}    
-    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-    .info .link {color: #5085BB;}
-    
-    .main-section-3 div>ul>li>div>span {
-	   display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;
-	   width:calc(95%/<%=tot_cnt%> - 10px);
-	   text-align:center;cursor:pointer;
-	}
-	.main-section-3 div>ul>li>div>span:hover {background-color:orange;}
-	.main-section-3 div>ul>li>div>span:last-child {border-right:1px solid #ccc;}
+.main-section-3 div>ul>li>div>span {
+   display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;
+   width:calc(95%/<%=tot_cnt%> - 10px);
+   text-align:center;cursor:pointer;
+}
 </style>
-<link rel='stylesheet' href='chain.css?0.1.0.18' />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src='https://rawgit.com/alvarotrigo/fullPage.js/dev/src/fullpage.js'></script>
+<script src="${pageContext.request.contextPath}/js/paging.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/formchecker.js?0.1" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$(window).on("load",function() {
+		goPage(1);
+	});
+});
 
+function search() {
+	goPage(1);
+}
+
+function goPage(i) {
+	
+	//페이지번호 셋팅
+	$("#strPage").val(i);
+	
+	//리스트 가져오기
+	$.post("../settle/centerAjax.jsp", $("#frmSearch").serialize(), function(data){
+		var json = JSON.parse($.trim(data));
+		if(json.isSuccess) {
+			fnMakList(i, json.intTotalCnt, json.resData);
+		} else {
+			fnMakList(1, 0, "");
+		}
+	})
+	.error(function(){
+		fnMakList(1, 0, "");
+	});
+}
+
+function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
+	/* 화면 페이징 구현 */
+	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
+	
+	/* 화면 리스트 구현 */
+	var listHtml = '<table>';
+	if(jsonList != '' && jsonList.length > 0) {
+		listHtml += '';
+		for (var i = 0; i < jsonList.length; i++) {
+			listHtml += '<tr>';
+			listHtml += '	<td rowspan="4" class="pic underline"><img src=""></td>';
+			listHtml += '	<td colspan="2">'+jsonList[i].STORE_NM+'</td>';
+			listHtml += '</tr>';
+			listHtml += '<tr>';
+			listHtml += '	<th>주소</th>';
+			listHtml += '	<td class="detail">'+jsonList[i].ADDR+'</td>';
+			listHtml += '</tr>';
+			listHtml += '<tr>';
+			listHtml += '	<th>전화번호</th>';
+			listHtml += '	<td class="detail">'+jsonList[i].PHONE_NO+'</td>';
+			listHtml += '</tr>';
+			listHtml += '<tr>';
+			listHtml += '	<th class="underline">홈페이지</th>';
+			listHtml += '	<td class="detail underline">'+jsonList[i].WEB_URL+'</td>';
+			listHtml += '</tr>';
+		}
+	} else {
+		listHtml += '<tr><td style="height:150px;">검색 결과가 없습니다.</td></tr>';
+	}
+	
+	listHtml += '</table>';
+	
+	$(".list").html(listHtml);
+}
+</script>
 <div id="fullpage">
 	<div class="section main-section-2" tabindex="1">
     	<div class='slideup'>
@@ -95,7 +156,7 @@
    		<div>
    			<ul>
    				<!-- 지도영역 --> 
-   				<li>
+   				<li class='maparea'>
                   	<div style="text-align:left;margin-bottom:10px;">
                   	<%
            			String strTag_first = "";
@@ -110,8 +171,8 @@
            						strTag_last = " -->"; strTag_first = "<!-- ";
            					}
            					
-           					ChainVO.reqLocationTapVO vo = (ChainVO.reqLocationTapVO)arr.get(i);
-           					out.println(strTag_last+"<span><a href=\"javascript:setLocMove('"+vo.MM_LOC_LATITUDE+"','"+vo.MM_LOC_LONGITUDE+"');\">"+vo.MM_LOC_NM+" ("+vo.CNT+")</a></span>"+strTag_first);
+           					ChainVO.resLocationTapVO vo = (ChainVO.resLocationTapVO)arr.get(i);
+           					out.println(strTag_last+"<span><a href=\"javascript:setLocMove('"+vo.LOC_LATITUDE+"','"+vo.LOC_LONGITUDE+"');\">"+vo.SIDO_NM+" ("+vo.CNT+")</a></span>"+strTag_first);
            				}
 					}
                   	%>
@@ -121,116 +182,26 @@
 				</li>
 				<!-- // 지도영역 -->
    				<li>
-   					<div><input type='text' class='chain_search' id='chain_search'></div>
+   					<div>
+   						<form name="frmSearch" id="frmSearch" method="post">
+   						<input type="hidden" name="strPage" id="strPage">
+						<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
+						<div>
+							<span>
+								<label for='strSelFg'></label>
+								<select name='strSelFg' id='strSelFg' class='fa'>
+									<option value="FC_NAME" <%if("FC_NAME".equals(strSelFg)){ out.println("selected");} %>>센터명</option>
+									<option value="FC_TELN" <%if("FC_TELN".equals(strSelFg)){ out.println("selected");} %>>연락처</option>
+									<option value="FC_ADDR" <%if("FC_ADDR".equals(strSelFg)){ out.println("selected");} %>>주소</option>
+								</select></span><!-- 
+							--><span><input type='text' name='strSelVal' id='strSelVal' class='fb chain_search'></span><!--
+							--><span><input type='text' value='검색' class='fc' onclick='search();'></span>
+						</div>
+   						</form>
+   					</div>
    					<div style="overflow:auto;width:100%; height:450px;" class="search_list" tabindex="1">
-	   					<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/bangbae.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th class='underline'>홈페이지</th>
-					        	<td class='detail underline'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
-						<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/bangbae.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th class='underline'>홈페이지</th>
-					        	<td class='detail underline'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
-						<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/bangbae.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th class='underline'>홈페이지</th>
-					        	<td class='detail underline'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
-						<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/bangbae.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th class='underline'>홈페이지</th>
-					        	<td class='detail underline'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
-						<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/bangbae.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th class='underline'>홈페이지</th>
-					        	<td class='detail underline'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
-	   					<table>
-	   						<tr>
-					        	<td rowspan="4" class='pic underline'><img src='../images/space/banpo.jpg'></td>
-					        	<td colspan="2">하계 센터</td>
-					        </tr>
-							<tr>
-					        	<th>주소</th>
-					        	<td class='detail'>서울특별시 강서구 양천로 583</td>
-					        </tr>
-					        <tr>
-					        	<th>전화번호</th>
-					        	<td class='detail'>000000</td>
-					        </tr>
-					        <tr>
-					        	<th>홈페이지</th>
-					        	<td class='detail'>www.beablekorea.com</td>
-					     	</tr>
-						</table>
+	   					<div class='list'></div>
+						<div id="pagination"></div>
 					</div>
    				</li>
    			</ul>
@@ -261,9 +232,9 @@
   		</table>
 
   		<ul>
-  			<li>센터 환경에 따라 공사 인테리어 비용이 변동될 수 있음</li>
-  			<li>소방, 전기증설, 냉난방 공사(평수 크기 비례)시 별도 책정</li>
-  			<li>임대보증금, 계약시 중개수수료는 점주님 별로 납부로 진행</li>
+  			<li>센터 환경에 따라 인테리어 비용 변동 가능</li>
+  			<li>소방/전기/냉난방 공사시 별도 책정</li>
+  			<li>임대보증금/중개수수료는 점주님 별도 납부</li>
 			<li>협력업체 계약금 별도 진행</li>
   		</ul>
 
@@ -275,35 +246,34 @@
 		<div class='email'><a href='mailto:beablestudy@naver.com'>beablestudy@naver.com</a></div>
 
 		<div class='form'>
-			<form name='frmEnt' id='frmEnt'>
+			<form name='frmEnt' id='frmEnt' method='post'>
 			<ul>
 				<li>
 					<label for='f_name'>이름</label>
-					<input id='f_name' type='text' class='half'>
+					<input type='text' id='f_name' name='f_name' class='half' maxlength='15'>
 				</li>
 				<li>
 					<label for='f_mail'>이메일</label>
 					<table>
 						<tr>
-							<td><input id='f_mail' type='text'></td>
+							<td><input type='text' id='f_mail' name='f_mail' maxlength='20'></td>
 							<td class='at'>@</td>
-							<td><input id='f_mail_domain' type='text'></td>
-							<td><select>	<option>직접입력</option></select></td>
+							<td><input type='text' id='f_mail_domain' name='f_mail_domain' maxlength='30'></td>
 						</tr>
 					</table>
 				</li>
 				<li>
 					<label for='f_phone'>연락처</label>
-					<input id='f_phone' type='text' class='half'>
+					<input type='text' id='f_phone' name='f_phone' class='half' maxlength='3' onkeypress='numberOnly(this);'>
 				</li>
-				<li class='textarea'><textarea></textarea></li>
+				<li class='textarea'><textarea id="f_bigo" name='f_bigo' maxlength='250'></textarea></li>
 			</ul>
 			</form>
 			<div class='btn'>신청</div>
-		</div>
-		
+		</div> 
+		 
 	</div>
-	<div class='section'></div>
+	<div class='section'></div> 
 </div>
 
 <script>
@@ -313,9 +283,9 @@ var positions =  [<%=sb.toString() %>]
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = { 
         center: new daum.maps.LatLng(37.557116552265875,126.86434741907806), // 지도의 중심좌표
-        level: 10 // 지도의 확대 레벨
+        level: 9 // 지도의 확대 레벨
     };
-
+  
 // 지도를 생성합니다        
 var map = new daum.maps.Map(mapContainer, mapOption); 
 
@@ -403,6 +373,79 @@ function goSearch(){
 	});		
 }
 
+
+
+$(document).ready(function() {
+	
+	//가맹문의 신청
+	$(".btn").click(function(){
+		if (!fnRegChk()) {
+			return;
+		} else {
+			alertify.confirm("신청을 하시겠습니까?", function (e) {
+				if (e) {
+					$.post("./contactProc.jsp", $("#frmEnt").serialize(), function(data){
+						var json = JSON.parse($.trim(data));
+						if(json.isSuccess) {
+							location.href = json.resUrl;
+						} else {
+							alertify.alert(json.resMsg);
+						}
+					})
+					.error(function(){
+						alertify.alert("신청서 제출중 오류가 발생하였습니다. \n시스템 관리자에게 문의하세요.");
+					});
+				}
+			});
+		}
+    });
+	
+});
+
+function fnRegChk() {
+	
+	//이름
+	if (!checkLength($('#f_name'), 1, 15)) {
+		alertify.alert('이름을 입력해 주세요.');
+		$('#f_name').css('background-color' ,'#fee');
+		$('#f_name').focus();
+		return false;
+	} else $('#f_name').css('background-color' ,'#fff');
+	
+	//이메일주소
+	if (!checkLength($('#f_mail'), 1, 20)) {
+		alertify.alert('이메일을 입력해 주세요.');
+		$('#f_mail').css('background-color' ,'#fee');
+		$('#f_mail').focus();
+		return false;
+	} else $('#f_mail').css('background-color' ,'#fff');
+	
+	//도메인
+	if (!checkLength($('#f_mail_domain'), 1, 30)) {
+		alertify.alert('이메일 도메인을 입력해 주세요.');
+		$('#f_mail_domain').css('background-color' ,'#fee');
+		$('#f_mail_domain').focus();
+		return false;
+	} else $('#f_mail_domain').css('background-color' ,'#fff');
+	
+	//연락처
+	if (!checkLength($('#f_phone'), 1, 13)) {
+		alertify.alert('연락처를 입력해 주세요.');
+		$('#f_phone').css('background-color' ,'#fee');
+		$('#f_phone').focus();
+		return false;
+	} else $('#f_phone').css('background-color' ,'#fff');
+	
+	//비고
+	if (!checkLength($('#f_bigo'), 1, 250)) {
+		alertify.alert('문의사항을 입력해 주세요.');
+		$('#f_bigo').css('background-color' ,'#fee');
+		$('#f_bigo').focus();
+		return false;
+	} else $('#f_bigo').css('background-color' ,'#fff');
+	
+	return true;
+}
 
 </script>
 

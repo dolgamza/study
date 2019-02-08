@@ -3,7 +3,7 @@
 <%@ page import = "org.json.simple.JSONObject" %>
 <%@ page import = "org.json.simple.JSONArray" %>
 <%@ page import = "java.util.ArrayList" %>
-<%@ page import = "kr.co.beable.center.*" %>
+<%@ page import = "kr.co.beable.chain.*" %>
 <%
 	//페이징 변수
 	String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
@@ -20,31 +20,31 @@
 	JSONObject json 	= new JSONObject();
 	int intTotalCnt 	= 0;
 	
-	CenterVO.reqLocationMapVO req = new CenterVO().new reqLocationMapVO();
+	ChainVO.reqCenterListVO req = new ChainVO().new reqCenterListVO();
 	req.PAGE		= intPage;
-	req.BLOCKSIZE	= intPageBlock;
+	req.BLOCKSIZE	= intPageBlock; 
 	req.SEL_FG		= strSelFg;
 	req.SEL_VAL		= strSelVal;
 	
-	ArrayList<CenterVO.resLocationMapVO> arrList	= new CenterBean().FC_LOCATION_LIST_PROC(req);
+	ArrayList<ChainVO.resCenterListVO> arrList	= new ChainBean().FC_LOCATION_LIST_PROC(req);
 	
 	if (isSuccess) {
 		if (arrList != null && arrList.size() > 0) {
 			for (int i=0; i<arrList.size(); i++) {
-				CenterVO.resLocationMapVO VO = (CenterVO.resLocationMapVO)arrList.get(i);
+				ChainVO.resCenterListVO VO = (ChainVO.resCenterListVO)arrList.get(i);
 				
 				if (i == 0)		intTotalCnt = VO.TCNT;
 				
 				JSONObject jsonData		= new JSONObject();
-				jsonData.put("RN"				, VO.RN);
-				jsonData.put("FC_NO"			, VO.FC_NO);
-				jsonData.put("FC_NM"			, VO.FC_NM);
-				jsonData.put("FC_MAIN_TEL_NO"	, VO.FC_MAIN_TEL_NO);
-				jsonData.put("FC_ADDR"			, VO.FC_ADDR);
-				jsonData.put("FC_ZIP_CODE"		, VO.FC_ZIP_CODE);
-				jsonData.put("FC_COORDINATE"	, VO.FC_COORDINATE);
-				jsonData.put("FC_HOMEPAGE"		, VO.FC_HOMEPAGE);
-				jsonData.put("FC_THUMBNAIL"		, VO.FC_THUMBNAIL);
+				jsonData.put("RN"			, VO.RN);
+				jsonData.put("STORE_NO"		, VO.STORE_NO);
+				jsonData.put("STORE_NM"		, VO.STORE_NM);
+				jsonData.put("PHONE_NO"		, VO.PHONE_NO);
+				jsonData.put("ADDR"			, VO.ADDR);
+				jsonData.put("ZIP_CODE"		, VO.ZIP_CODE);
+				jsonData.put("COORDINATE"	, VO.COORDINATE);
+				jsonData.put("WEB_URL"		, VO.WEB_URL);
+				jsonData.put("IMG_URL"		, VO.IMG_URL);
 				
 				resData.add(jsonData);
 			}

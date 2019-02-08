@@ -3,6 +3,7 @@
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.SeatVO" %>
 <%@ page import = "kr.co.beable.chain.SeatBean" %>
+<%@ include file = "/membership/loginSess.jsp" %>
 <%
 response.setHeader("Cache-Control","no-cache");
 response.setHeader("Pragma","no-cache");
@@ -17,12 +18,19 @@ String strLocation = "";
 	
 */
 
-String paramSeqNo = StrUtil.nvl(request.getParameter("seqno"), "1");	//가맹점 번호
+String paramSeqNo = StrUtil.nvl(request.getParameter("paramSeqNo"), "1");	//가맹점 번호
+
+System.out.println("paramSeqNo : " + paramSeqNo);
+System.out.println("paramSeqNo : " + paramSeqNo);
+System.out.println("paramSeqNo : " + paramSeqNo);
 
 /* 해당지점좌석배치표 조회 */
 ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
 String strCampusRoom	= "";
 String strStudyRoom		= "";
+
+System.out.println("arr.size() : " + arr.size());
+System.out.println("arr.size() : " + arr.size());
 
 if (arr!=null && arr.size()>0) {
 	for (int i=0; i<arr.size(); i++) {
@@ -33,6 +41,9 @@ if (arr!=null && arr.size()>0) {
 	strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
 	strStudyRoom  = strStudyRoom.substring(0, strStudyRoom.length()-1);
 }
+
+System.out.println("strCampusRoom : " + strCampusRoom);
+System.out.println("strStudyRoom : " + strStudyRoom);
 
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
@@ -78,10 +89,6 @@ a:hover {color:#80191f;}
 var room = -1;
 var seatTypeAndNo = "";
 
-function goBack() {
-	location.href='center_detail.jsp';
-}
-
 function next() {
 	if (room>-1 && seatTypeAndNo!="") {
 		
@@ -89,8 +96,7 @@ function next() {
 			frm.target = "_self";
 			frm.action = 'price_'+room+'.jsp';
 			frm.submit();
-		
-			//location.href='price_'+room+'.jsp';
+			
 	} else {
 		alert('choice room and seat!');
 	}
@@ -164,6 +170,10 @@ $(document).ready(function() {
 		else { initStudyRoom(); } // study room
 	});
 	
+	$(".back").click(function(){
+		location.href="center_detail.jsp";
+	});
+	
 });
 
 </script>
@@ -172,7 +182,7 @@ $(document).ready(function() {
 <input type='hidden' name='chkRoom' id='chkRoom' />
 <input type='hidden' name='chkSeat' id='chkSeat' />
 </form>
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
    		<div class='title'>좌석 선택</div>	
 

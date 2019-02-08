@@ -52,6 +52,7 @@ a.btn:hover {background-color:#779;}
 .menu ul>li>span.nochild::after {content:' '}
 .menu ul>li>ul>li:first-child {border-top:0;margin-top:7px;}
 .menu ul>li>ul>li:last-child {margin-bottom:7px;}
+/* .menu ul>li>ul {display:inline-block;} */
 
 /* section */
 .section {text-align:center;}

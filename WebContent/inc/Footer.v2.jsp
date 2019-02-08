@@ -27,7 +27,7 @@ request.setCharacterEncoding("utf-8");
 		</table>
 	</div>
 
-	<script src="<%=application.getContextPath()%>/js/OnLoaded.v2.js?0.1.3" type='text/javascript'></script>
+	<script src="<%=application.getContextPath()%>/js/OnLoaded.v2.js?0.1.6" type='text/javascript'></script>
 
 
 </body>
