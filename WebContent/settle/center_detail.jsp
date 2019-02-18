@@ -11,7 +11,11 @@
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
-	String paramFcNo 	= StrUtil.nvl(request.getParameter("strFcNo"), "1");
+	String paramFcNo 	= StrUtil.nvl(request.getParameter("strFcNo"), "");
+	String paramCardNo	= StrUtil.nvl(request.getParameter("strCardNo"), "");
+	
+	System.out.println("paramFcNo : " + paramFcNo);
+	System.out.println("paramCardNo : " + paramCardNo);
 	
 	CenterVO.resCenterDetailVO vo = null;
 	
@@ -59,14 +63,14 @@ a:hover {color:#80191f;}
 
 <script>
 function goBack() {
-	location.href='center.jsp';
+	alert("2222");
+	location.href='./center.jsp';
 }
 
 function next() {
-	//location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>;
-	location.href='seat.jsp?paramSeqNo=28';
+	//location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>+'&paramCardNo='+<%=paramCardNo %>;
+	location.href='seat.jsp?paramSeqNo=28&paramCardNo='+<%=paramCardNo %>;
 }
-
 </script>
 
 <div class='back' onclick='goBack();'>&lt;</div>

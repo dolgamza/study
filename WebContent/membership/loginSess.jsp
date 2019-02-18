@@ -4,8 +4,8 @@
 <%@ page import = "java.text.SimpleDateFormat" %>
 <%
 	String sessUsrPhoneNo	= StrUtil.nvl((String) session.getAttribute("SESS_USR_PHONE_NO"));
-	String sessStoreNo		= StrUtil.nvl((String) session.getAttribute("SESS_STORE_NO"));
-	String sessCardNO		= StrUtil.nvl((String) session.getAttribute("SESS_CARD_NO"));
+	//String sessStoreNo		= StrUtil.nvl((String) session.getAttribute("SESS_STORE_NO"));
+	//String sessCardNO		= StrUtil.nvl((String) session.getAttribute("SESS_CARD_NO"));
 	
 	String strDateTime		= DateTimeUtil.getCurrentDate("") + DateTimeUtil.getCurrentTime().replaceAll(":", "");
 	SimpleDateFormat df		= new SimpleDateFormat("yyyyMMddHHmmss");

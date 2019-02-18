@@ -1,9 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@page contentType="text/html;charset=utf-8"%>
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "org.json.simple.JSONObject" %>
 <%@ page import = "org.json.simple.JSONArray" %>
 <%@ page import = "java.util.ArrayList" %>
 <%@ page import = "kr.co.beable.chain.*" %>
+<%@ include file = "/membership/loginSess.jsp" %>
 <%
 	//페이징 변수
 	String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
@@ -21,12 +22,15 @@
 	int intTotalCnt 	= 0;
 	
 	ChainVO.reqCenterListVO req = new ChainVO().new reqCenterListVO();
-	req.PAGE		= intPage;
-	req.BLOCKSIZE	= intPageBlock; 
-	req.SEL_FG		= strSelFg;
-	req.SEL_VAL		= strSelVal;
+	req.PAGE			= intPage;
+	req.BLOCKSIZE		= intPageBlock; 
+	req.SEL_FG			= strSelFg;
+	req.SEL_VAL			= strSelVal;
+	req.USR_PHONE_NO 	= sessUsrPhoneNo;
 	
-	ArrayList<ChainVO.resCenterListVO> arrList	= new ChainBean().FC_LOCATION_LIST_PROC(req);
+	ArrayList<ChainVO.resCenterListVO> arrList	= new ChainBean().FC_STORE_SELECT_LIST_PROC(req);
+	
+	String setMsg		= "";
 	
 	if (isSuccess) {
 		if (arrList != null && arrList.size() > 0) {
@@ -34,6 +38,9 @@
 				ChainVO.resCenterListVO VO = (ChainVO.resCenterListVO)arrList.get(i);
 				
 				if (i == 0)		intTotalCnt = VO.TCNT;
+				
+				if(!"".equals(VO.USR_PHONE_NO)) { setMsg = "<font color='red'>(카드번호 : "+VO.CARD_NO+")</font>"; }
+				else { setMsg = ""; }
 				
 				JSONObject jsonData		= new JSONObject();
 				jsonData.put("RN"			, VO.RN);
@@ -45,6 +52,13 @@
 				jsonData.put("COORDINATE"	, VO.COORDINATE);
 				jsonData.put("WEB_URL"		, VO.WEB_URL);
 				jsonData.put("IMG_URL"		, VO.IMG_URL);
+				jsonData.put("USR_PHONE_NO"	, VO.USR_PHONE_NO);
+				jsonData.put("CARD_NO"		, VO.CARD_NO);
+				jsonData.put("USR_MSG"		, VO.USR_MSG);
+				jsonData.put("SET_MSG"		, setMsg);
+				jsonData.put("USR_CODE"		, VO.USR_CODE);
+				 
+				System.out.println(VO.USR_CODE);
 				
 				resData.add(jsonData);
 			}

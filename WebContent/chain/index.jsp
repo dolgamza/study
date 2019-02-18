@@ -19,14 +19,14 @@
 	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
 	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
 	
-	ArrayList<ChainVO.resLocationTapVO> arr = new ChainBean().FC_LOCATION_TAP_PROC("");
+	ArrayList<ChainVO.resLocationTapVO> arr = new ChainBean().FC_LOCATION_TAP_PROC();
 	if(arr != null && arr.size() > 0) {
 		tot_cnt = Integer.parseInt(arr.get(0).TOT_CNT);
 	}
 	
 	StringBuffer sb 			= new StringBuffer();
 
-	ArrayList<ChainVO.resLocationMapVO> arrMap = new ChainBean().FC_LOCATION_MAP_PROC("", "");
+	ArrayList<ChainVO.resLocationMapVO> arrMap = new ChainBean().FC_LOCATION_MAP_PROC("", "", "A");
 	if(arrMap != null && arrMap.size() > 0){
 		
 		String comma	 = ",";
@@ -64,17 +64,138 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel='stylesheet' href='chain.css?0.1.0.22' />
 <style>
+
+.section.bg {background-image:url('../images/main/bg_02.jpg');height:500px;background-size:cover;}
+.section.main-section-3,  .section.main-section-4,  .section.main-section-5 {position:relative;background-color:white;}
+.section:last-child {padding-bottom:120px;}
+.rooptop {position:fixed;top:0;}
+.footer {position:relative;margin-top:-50px;}
+
+/* #process */
+.section.main-section-2 {padding-top:30px;background-color:#fff;}
+.slideup {text-align:center;width:100%;height:480px;}
+.slideup > .subheading_img {margin-top:0;}
+
+/* as-is */
+.main-section-3 ul {width:90%;margin-left:auto;margin-right:auto;}
+.main-section-3 li {display:inline-block;list-style:none;font-size:0.9em;width:48%;}
+.main-section-3 .chain_search {margin-bottom:10px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
+.main-section-3 li table {width:100%;margin-top:0px;margin-bottom:10px;}
+.main-section-3 li table th, .main-section-3 li table td {border-top:1px solid #ccc;}
+.main-section-3 li table td.underline {border-bottom:1px solid #ccc;}
+.main-section-3 li table td.detail {text-align:left;padding-left:10px;color:#555;}
+
+.main-section-3 td.pic {width:150px;height:150px;padding:0px;} 
+.main-section-3 td img {width:100%;height:100%;margin-bottom:-3px;}
+
+/* #fund */
+.main-section-4 table {margin-top:0;}
+.main-section-4 th {width:10%;border-bottom:1px solid #a0393f;}
+.main-section-4 td {width:30%;border-bottom:1px solid #ccc;}
+.main-section-4 .topline {border-top:1px solid #ccc;}
+.main-section-4 ul {text-align:left;width:90%;margin-left:auto;margin-right:auto;margin-top:15px;font-size:0.7em;}
+.main-section-4 li {list-style-position:inside;margin-bottom:8px;text-indent:-24px;padding-left:24px;}
+
+/* contacts */
+.form {margin-top:40px;}
+.form ul {position:relative;width:90%;margin-left:auto;margin-right:auto;text-align:left;}
+.form li {list-style:none;width:50%;}
+.form label {display:inline-block;width:150px;height:30px;color:#80191f;border-bottom:1px solid #80191f;font-size:0.85em;}
+
+.main-section-5 li {position:relative;}
+.main-section-5 table {position:absolute;top:0;left:156px;margin:0;padding:0;width:calc(100% - 189px);font-size:1em;}
+.main-section-5 label {padding-top:7px;}
+.main-section-5 td {margin:0;padding:0;background-color:white;width:30%;border:1px solid #80191f;}
+.main-section-5 td:last-child {}
+.main-section-5 td.at {width:5%;text-align:center;border:0;}
+.main-section-5 input, .main-section-5 select {background-color:white;padding:5px;font-size:0.825em;height:auto;}
+.main-section-5 td input, .main-section-5 td select {border:0;}
+.form select {height:auto;margin-left:3px;width:calc(100% - 11px);}
+
+.form .half {width:calc(100% - 200px);}
+.form li.textarea {position:absolute;top:0;left:50%;}
+.form textarea {width:100%;margin-left:-30px;height:86px;resize:none;overflow-y:scroll;}
+.phone {font-size:2.4em;color:#80191f;margin-top:-30px;}
+.email a {color:#80191f;}
+
+.btn {width:90%;margin-left:auto;margin-right:auto;}
+
+
+.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
+.wrap * {padding: 0;margin: 0;}
+.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
+.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
+.info .title {padding: 5px 0 0 10px;height: 30px;background: #d95050;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
+.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
+.info .close:hover {cursor: pointer;}
+.info .body {position: relative;overflow: hidden;}
+.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
+.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}    
+.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
+.info .link {color: #5085BB;}
+   
+select.fa {width:calc(30% - 17px);}
+input.fb {width:calc(50% - 0px);margin:5px;}
+input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
+.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
+   
+.main-section-3 div>ul>li>div>span:hover {background-color:orange;}
+.main-section-3 div>ul>li>div>span:last-child {border-right:1px solid #ccc;}
+
+/* pagination */ 
+#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
+#pagination #paging {display:inline-block;position:absolute;}
+#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
+#pagination #paging .btn:hover {color:#fff;background-color:#000;}
+#pagination #paging .on {background-color:#80191f;color:#fff;}
+
+.phone {margin-top:20px;}
+.phone img {width:35px;}
+
+/* responsive web */
+@media only screen and (max-width : 1040px) {
+	.subheading {font-size:1.6em;}
+	.slideup {text-align:center;width:90%;height:300px;;margin-left:auto;margin-right:auto;}
+	.slideup div img {width:100%;}
+
+	.main-section-3 .chain_search {display:inline-block;}
+	.main-section-3 li:nth-child(1) {width:0;} 
+	.main-section-3 li:nth-child(2) {width:100%;text-align:left;}
+	.main-section-3 td.pic {width:120px;height:120px;}
+	.main-section-3 th {display:none;}
+
+	.main-section-5 table {left:86px;width:calc(100% - 86px);}
+	.form li.textarea {position:relative;left:30px;width:calc(100% - 22px);margin-top:5px;}
+
+	.form li {width:100%;margin-bottom:2px;}
+	.form label {width:80px;height:28px;}
+	.form .half {width:calc(100% - 100px);}
+
+	.subheading.s {font-size:1.4em;margin-bottom:30px;}
+	.phone {font-size:1.4em;margin-top:10px;}
+	.phone img {width:20px;}
+	
+	.main-section-3 .maparea {display:none;}
+	.fb {width:30%;}
+	
+}
+
+
 .main-section-3 div>ul>li>div>span {
    display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;
-   width:calc(95%/<%=tot_cnt%> - 10px);
+   width:calc(95%/5 - 10px);
    text-align:center;cursor:pointer;
 }
+
+
+
+
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
-<script src='https://rawgit.com/alvarotrigo/fullPage.js/dev/src/fullpage.js'></script>
 <script src="${pageContext.request.contextPath}/js/paging.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/js/formchecker.js?0.1" type="text/javascript"></script>
 <script type="text/javascript">
@@ -143,11 +264,12 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 }
 </script>
 <div id="fullpage">
+	<div class='section bg'></div>
 	<div class="section main-section-2" tabindex="1">
     	<div class='slideup'>
     		<img src='../images/main/logo4sub.png' class='subheading_img'/>
     		<div class='subheading'>개설절차</div>
-    		<div><img src='../images/chain/process.png' width="70%"></div>
+    		<div><img src='../images/chain/process.png?3' width="70%"></div>
     	</div>	
 	</div>
 	<div class="section main-section-3">
@@ -210,39 +332,40 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	<div class="section main-section-4">
 		<img src='../images/main/logo4sub.png' class='subheading_img'/>
    		<div class='subheading'>창업비용</div>
-   		<table>
+   		<div><img src='../images/chain/type.png' width='90%'></div>
+   		<!-- table>
   			<tr>
   				<th class='topline'>평수</th>
   				<td class='topline'>50평</td>
-  				<td class='topline'>100평</td>
-  				<td class='topline'>80,000평</td>
+  				<td class='topline'>60평</td>
+  				<td class='topline'>70평</td>
   			</tr>
     		<tr>
   				<th>도면사진</th>
-  				<td><img src="../images/chain/floor_plan.jpg" width='100%'></td>
-  				<td><img src="../images/chain/floor_plan.jpg" width='100%'></td>
-  				<td><img src="../images/chain/floor_plan.jpg" width='100%'></td>
+  				<td><img src="../images/chain/floor_plan_50.jpg" width='100%'></td>
+  				<td><img src="../images/chain/floor_plan_60.jpg" width='100%'></td>
+  				<td><img src="../images/chain/floor_plan_70.jpg" width='100%'></td>
   			</tr> 
   			<tr>
   				<th>비용</th>
-  				<td>1,000만원</td>
-  				<td>2,000만원</td>
-  				<td>5,000만원</td>
+  				<td>155,000,000원</td>
+  				<td>175,000,000원</td>
+  				<td>195,000,000원</td>
   			</tr>		
-  		</table>
+  		</table -->
 
   		<ul>
-  			<li>센터 환경에 따라 인테리어 비용 변동 가능</li>
-  			<li>소방/전기/냉난방 공사시 별도 책정</li>
-  			<li>임대보증금/중개수수료는 점주님 별도 납부</li>
-			<li>협력업체 계약금 별도 진행</li>
+  			<li>센터 환경에 따라 공사 인테리어 비용이 변동될 수 있음</li>
+  			<li>소방, 전기증설, 냉난방 공사(평수 크기 비례)시 별도 책정</li>
+  			<li>임대보증금, 계약시 중개수수료는 점주님 별로 납부 진행</li>
+			<li>멀티자판기, 커피자판기 등 협력업체 계약금 별도 진행</li>
   		</ul>
 
 	</div>
 	<div class="section main-section-5">
 		<img src='../images/main/logo4sub.png' class='subheading_img'/>
    		<div class='subheading s'>비에이블스터디카페 가맹문의</div>
-		<div class='phone'>☎ 1544-8306</div>
+		<div class='phone'><img src='../images/chain/phone.png'> 1544-8306</div>
 		<div class='email'><a href='mailto:beablestudy@naver.com'>beablestudy@naver.com</a></div>
 
 		<div class='form'>
@@ -449,10 +572,7 @@ function fnRegChk() {
 
 </script>
 
-<script src='onloaded.js?0.2'></script>
-<script>
-</script>>
-<div style='height:300px;'></div>
+<script src='onloaded.js?0.4'></script>
 
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">

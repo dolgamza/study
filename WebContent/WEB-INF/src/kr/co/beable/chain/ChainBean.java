@@ -14,16 +14,16 @@ public class ChainBean {
 	 * Location tap list
 	 * @return
 	 */
-	public ArrayList<ChainVO.resLocationTapVO> FC_LOCATION_TAP_PROC(String strCoordinate){
-		return dao.FC_LOCATION_TAP_PROC(strCoordinate);
+	public ArrayList<ChainVO.resLocationTapVO> FC_LOCATION_TAP_PROC(){
+		return dao.FC_LOCATION_TAP_PROC();
 	}
 	
 	/**
 	 * Location map list
 	 * @return
 	 */
-	public ArrayList<ChainVO.resLocationMapVO> FC_LOCATION_MAP_PROC(String strLocCode, String strFcNm){
-		return dao.FC_LOCATION_MAP_PROC(strLocCode, strFcNm);
+	public ArrayList<ChainVO.resLocationMapVO> FC_LOCATION_MAP_PROC(String strLocCode, String strFcNm, String strGubun){
+		return dao.FC_LOCATION_MAP_PROC(strLocCode, strFcNm, strGubun);
 	}
 	
 	/**
@@ -41,5 +41,9 @@ public class ChainBean {
 	 */
 	public int CONTENT_US_PROC(ChainVO.reqContactUsVO reqContactUsVO) {
 		return dao.CONTENT_US_PROC(reqContactUsVO);
+	}
+	
+	public ArrayList<ChainVO.resCenterListVO> FC_STORE_SELECT_LIST_PROC(ChainVO.reqCenterListVO req){
+		return dao.FC_STORE_SELECT_LIST_PROC(req);
 	}
 }

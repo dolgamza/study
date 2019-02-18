@@ -9,7 +9,6 @@ $(document).ready(function() {
 
 	$(".choice li").click(function() {
 		t = $(".choice li").index(this);
-		alert(t);
 		product = $(this).attr("product"); 
 		$("#product").val(product);
 		

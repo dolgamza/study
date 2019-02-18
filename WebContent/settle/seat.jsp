@@ -5,46 +5,45 @@
 <%@ page import = "kr.co.beable.chain.SeatBean" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
-response.setHeader("Cache-Control","no-cache");
-response.setHeader("Pragma","no-cache");
-response.setDateHeader("Expires",0);
-
-String strTitle = "";
-String strLocation = "";
-
-/**
-    0. 해당 지점 DB 커넥션
-	1. 현재 실시간 좌석현황 DB에서 당겨오고 세팅
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
 	
-*/
-
-String paramSeqNo = StrUtil.nvl(request.getParameter("paramSeqNo"), "1");	//가맹점 번호
-
-System.out.println("paramSeqNo : " + paramSeqNo);
-System.out.println("paramSeqNo : " + paramSeqNo);
-System.out.println("paramSeqNo : " + paramSeqNo);
-
-/* 해당지점좌석배치표 조회 */
-ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
-String strCampusRoom	= "";
-String strStudyRoom		= "";
-
-System.out.println("arr.size() : " + arr.size());
-System.out.println("arr.size() : " + arr.size());
-
-if (arr!=null && arr.size()>0) {
-	for (int i=0; i<arr.size(); i++) {
-		SeatVO vo = arr.get(i);
-		if (vo.ROOM_CD.equals("C")) strCampusRoom += vo.SEAT;
-		else strStudyRoom += vo.SEAT;
+	String strTitle = "";
+	String strLocation = "";
+	
+	/**
+	    0. 해당 지점 DB 커넥션
+		1. 현재 실시간 좌석현황 DB에서 당겨오고 세팅
+		
+	*/
+	
+	String paramSeqNo 	= StrUtil.nvl(request.getParameter("paramSeqNo"), "");		//가맹점 번호
+	String paramCardNo 	= StrUtil.nvl(request.getParameter("paramCardNo"), "");	//카드번호
+	
+	System.out.println("paramSeqNo : " + paramSeqNo);
+	System.out.println("paramCardNo : " + paramCardNo);
+	
+	/* 해당지점좌석배치표 조회 */
+	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
+	String strCampusRoom	= "";
+	String strStudyRoom		= "";
+	
+	System.out.println("arr.size() : " + arr.size());
+	System.out.println("arr.size() : " + arr.size());
+	
+	if (arr!=null && arr.size()>0) {
+		for (int i=0; i<arr.size(); i++) {
+			SeatVO vo = arr.get(i);
+			if (vo.ROOM_CD.equals("C")) strCampusRoom += vo.SEAT;
+			else strStudyRoom += vo.SEAT;
+		}
+		strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
+		strStudyRoom  = strStudyRoom.substring(0, strStudyRoom.length()-1);
 	}
-	strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
-	strStudyRoom  = strStudyRoom.substring(0, strStudyRoom.length()-1);
-}
-
-System.out.println("strCampusRoom : " + strCampusRoom);
-System.out.println("strStudyRoom : " + strStudyRoom);
-
+	
+	System.out.println("strCampusRoom : " + strCampusRoom);
+	System.out.println("strStudyRoom : " + strStudyRoom);
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -171,7 +170,7 @@ $(document).ready(function() {
 	});
 	
 	$(".back").click(function(){
-		location.href="center_detail.jsp";
+		location.href="center_detail.jsp?strFcNo="+<%=paramSeqNo %>+"&strCardNo="+<%=paramCardNo %>;
 	});
 	
 });
@@ -182,7 +181,7 @@ $(document).ready(function() {
 <input type='hidden' name='chkRoom' id='chkRoom' />
 <input type='hidden' name='chkSeat' id='chkSeat' />
 </form>
-<div class='back'>&lt;</div>
+<div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>좌석 선택</div>	
 

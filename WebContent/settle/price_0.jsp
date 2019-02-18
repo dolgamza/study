@@ -63,7 +63,7 @@ if (arr!=null && arr.size()>0) {
 
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
-   		<div class='title'>이용권 결제</div>	
+   		<div class='title'>이용권 선택</div>	
 		<div class='subtitle'>_ [캠퍼스룸] 이용권 선택</div>
 		<div class='choice'>
 
@@ -74,10 +74,10 @@ if (arr!=null && arr.size()>0) {
 		<div class='btn' onclick='complete();'>선택완료</div>
 </div>
 <form name='frmPrice' id='frmPrice' method='post'>
-<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
-<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
-<input type='text' name='chkSeat' id='chkSeat' value='<%=chkSeat %>' />
-<input type='text' name='product' id='product' />
+<input type='hidden' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+<input type='hidden' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
+<input type='hidden' name='chkSeat' id='chkSeat' value='<%=chkSeat %>' />
+<input type='hidden' name='product' id='product' />
 </form>
 <!-- popup> -->
 <div id="mask"></div>

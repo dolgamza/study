@@ -11,7 +11,7 @@ import kr.co.dw.util.WrapPreparedStatementUtil;
 
 public class ChainDAO {
 	
-	protected ArrayList<ChainVO.resLocationTapVO> FC_LOCATION_TAP_PROC(String strCoordinate){
+	protected ArrayList<ChainVO.resLocationTapVO> FC_LOCATION_TAP_PROC(){
 		Connection conn									= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps					= null;
 		ResultSet rs									= null;
@@ -20,8 +20,7 @@ public class ChainDAO {
 		
 		try {
 			
-			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_TAP_PROC ? ");
-			ps.setString(1, strCoordinate);
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_TAP_PROC ");
 			logger.debug(ps.getQueryString());
 			rs = ps.executeQuery();
 			
@@ -47,7 +46,8 @@ public class ChainDAO {
 		return arrResult;
 	}
 	
-	protected ArrayList<ChainVO.resLocationMapVO> FC_LOCATION_MAP_PROC(String strLocCode, String strFcNm){
+	protected ArrayList<ChainVO.resLocationMapVO> FC_LOCATION_MAP_PROC(String strLocCode, String strFcNm, String strGubun){
+		
 		Connection conn									= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps					= null;
 		ResultSet rs									= null;
@@ -56,9 +56,10 @@ public class ChainDAO {
 		
 		try {
 			
-			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_MAP_PROC ?, ? ");
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_MAP_PROC ?, ?, ? ");
 			ps.setString(1, strLocCode);
 			ps.setString(2, strFcNm);
+			ps.setString(3, strGubun);
 			logger.debug(ps.getQueryString());
 			rs = ps.executeQuery();
 			
@@ -98,7 +99,7 @@ public class ChainDAO {
 		try {
 			
 			int i = 1;
-			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_LIST_PROC ?,?,?,?");
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_LOCATION_LIST_PROC ?, ?, ?, ?");
 			ps.setInt(i++, req.PAGE);
 			ps.setInt(i++, req.BLOCKSIZE);
 			ps.setString(i++, req.SEL_FG);
@@ -163,5 +164,56 @@ public class ChainDAO {
 			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
 		}
 		return isSuccess;
+	}
+	
+	protected ArrayList<ChainVO.resCenterListVO> FC_STORE_SELECT_LIST_PROC(ChainVO.reqCenterListVO req){
+		
+		Connection conn									= ConnectionMgr.getInstance().getConnetion();
+		WrapPreparedStatementUtil ps					= null;
+		ResultSet rs									= null;
+		Logger logger									= Logger.getLogger(this.getClass());
+		ArrayList<ChainVO.resCenterListVO> arrResult	= new ArrayList<ChainVO.resCenterListVO>();
+		
+		try {
+			
+			int i = 1;
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_STORE_SELECT_LIST_PROC ?, ?, ?, ?, ?");
+			ps.setInt(i++, req.PAGE);
+			ps.setInt(i++, req.BLOCKSIZE);
+			ps.setString(i++, req.SEL_FG);
+			ps.setString(i++, req.SEL_VAL);
+			ps.setString(i++, req.USR_PHONE_NO);
+			logger.debug(ps.getQueryString());
+			System.out.println(ps.getQueryString());
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				
+				ChainVO.resCenterListVO res = new ChainVO().new resCenterListVO();
+				res.TCNT			= rs.getInt("TCNT");
+				res.RN				= rs.getInt("RN");
+				res.STORE_NO		= rs.getString("STORE_NO");
+				res.STORE_NM		= rs.getString("STORE_NM");
+				res.PHONE_NO		= rs.getString("PHONE_NO");
+				res.ADDR			= rs.getString("ADDR");
+				res.ZIP_CODE		= rs.getString("ZIP_CODE");
+				res.COORDINATE		= rs.getString("COORDINATE");
+				res.WEB_URL			= rs.getString("WEB_URL");
+				res.IMG_URL			= rs.getString("IMG_URL");
+				res.USR_PHONE_NO	= rs.getString("USR_PHONE_NO");
+				res.CARD_NO			= rs.getString("CARD_NO");
+				res.USR_MSG			= rs.getString("USR_MSG");
+				res.USR_CODE		= rs.getString("USR_CODE");
+				arrResult.add(res);
+			}
+			
+		} catch (Exception e) {
+			logger.error(ps.getQueryString());
+			System.out.println(e.toString());
+		} finally {
+			System.out.println(ps.getQueryString());
+			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
+		}
+		return arrResult;
 	}
 }

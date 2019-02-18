@@ -29,25 +29,30 @@ response.setDateHeader("Expires",0);
   <link rel='stylesheet' href='https://rawgit.com/alvarotrigo/fullPage.js/dev/src/fullpage.css'>
   <link rel="stylesheet" href="./css/style.v2.css" type="text/css" media="all">
   <style>
-body {background-image:url('./images/main/bg_00.jpg');}
+body {background-image:url('./images/main/bg_00.png');}
 
-.logo {z-index:10;position:absolute; }
+.logo {z-index:10;position:absolute;}
 .section .title {position:absolute;top:100px;margin:0px 40px;font-size:3em;color:#fff;}
 
 .section ul {text-align:center;display:inline-table;width:90%;margin:0;}
 .section li {display:inline;width:calc(30% - 20px);padding:20px;float:left;list-style:none;position:relative;}
 .section li img {width:70%;}
 
-.section.main-section-2 .darky {padding:0 15px;height:200px;text-align:left;line-height:1.4em;font-size:0.9em;color:white;background-color:rgba(0,0,0,0.4);border-right:1px solid #777;}
+.section.main-section-1 img {}
+
+.section.main-section-2 .darky {padding:0 15px;height:200px;text-align:left;line-height:1.4em;font-size:0.9em;color:white;background-color:rgba(0,0,0,0.4);border-right:1px solid #777;text-align:center;}
 .section.main-section-2 .darky:nth-child(3n) {border:0;}
 .section.main-section-2 .darky.hr {height:20px;border:0;}
 
 .section.main-section-3 ul {both:clear;margin-top:100px;}
 .section.main-section-3 li {padding:10px;}
-.section.main-section-3 li img {width:60%;}
+.section.main-section-3 li img {width:80%;}
 
 .section.main-section-4 li {width:calc(50% - 60px);}
 .section.main-section-4 li img {width:45%;}
+.section.main-section-4 li.settle {display:none;}
+
+.section.main-section-2 .darky {text-align:left;}
 
 /* responsive web */
 @media only screen and (max-width : 1040px) {
@@ -68,6 +73,7 @@ body {background-image:url('./images/main/bg_00.jpg');}
 	.section.main-section-2 img {width:100%;margin-left:-70px;}
 	.section.main-section-3 li img {width:120%;margin-left:-30px;}
 	.section.main-section-4 li img {width:120%;margin-left:-70px;padding-left:0;}
+	.section.main-section-4 li.settle {display:block;}
 }
 	</style>
   
@@ -88,6 +94,7 @@ body {background-image:url('./images/main/bg_00.jpg');}
   		$(".main-section-3 li").click(function(){
   	    	var idx = $(".main-section-3 li").index(this);
   	    	$(".section.main-section-3").css("background-image", "url('./images/main/bg_section_"+idx+".jpg')");
+  	    	$(".section.main-section-3").css("background-size", "cover");
   	    });
   		
   	});
@@ -110,9 +117,9 @@ body {background-image:url('./images/main/bg_00.jpg');}
 			<li class='darky hr'></li>
 			<li class='darky hr'></li>
 			<li class='darky hr'></li>
-			<li class='darky'>비에이블스터디카페는 2016년 4월 1호점 서울대입구센터를 시작으로 현재 까지 전국 약 60여개의 센터를 운영하고 있습니다. <br/>소비자의 니즈에 맞는 공간 디자인을 통해 프리미엄 무인 스터디카페의 트렌드를 주도합니다. </li>
-			<li class='darky'>비에이블만의 차별화된 컨셉과 디자인으로 업계 최고의 인테리어를 구축하였습니다. <br/>쾌적하고 안정감을 주는 학습공간으로 소비자들에게 다가가고 있으며 대표의 지휘아래 모든 공사 과정을 본사에서 직접 진행하고 있습니다. </li>
-			<li class='darky'>현재 까지 꾸준한 센터 개설로 약 60개 센터의 통합 관리를 통한 운영 매뉴얼화로 국내 최초 자동화 시스템 원천기술을 보유하고 있습니다. <br/>또한 본사가 직접 시스템을 업데이트 하고 유지보수를 진행하고 있습니다. </li>
+			<li class='darky'>비에이블스터디카페는 2016년 4월 1호점 서울대입구센터를 시작으로 현재 까지 수도권을 기반으로 전국적인 개설센터 및 운영중에 있습니다.  </li>
+			<li class='darky'>대표의 지휘아래 모든 공사 과정을 본사에서 직접 진행하며, 비에이블만의 차별화된 컨셉과 디자인으로 업계 최고의 인테리어를 구축하였습니다. </li>
+			<li class='darky'>센터의 통합 관리를 통한 운영 메뉴얼화로 국내 최초 자동화 시스템 원천기술을 보유하고 있으며, 시스템 업데이트 및 유지보수를 진행하고 있습니다.  </li>
 			<li class='darky hr'></li>
 			<li class='darky hr'></li>
 			<li class='darky hr'></li>
@@ -121,7 +128,7 @@ body {background-image:url('./images/main/bg_00.jpg');}
     <div class="section main-section-3">
 	    <div class='title'>_공간소개</div>
     	<ul>
-			<li><img src='./images/main/section_3_icon_1.png' class='over' onclick='c(1);'></li>
+			<li><img src='./images/main/section_3_icon_1.png' class='over'></li>
 			<li><img src='./images/main/section_3_icon_2.png' class='over'></li>
 			<li><img src='./images/main/section_3_icon_3.png' class='over'></li>
 		</ul>
@@ -131,6 +138,7 @@ body {background-image:url('./images/main/bg_00.jpg');}
     	<ul>
 			<li><a href='./customer/'><img src='./images/main/section_4_icon_1.png' class='over'></a></li>
 			<li><a href='./chain/'><img src='./images/main/section_4_icon_2.png' class='over'></a></li>
+			<li class='settle'><a href=''><img src='./images/main/section_4_icon_settle.png' ></a></li>
 		</ul>
     </div>
 </div>

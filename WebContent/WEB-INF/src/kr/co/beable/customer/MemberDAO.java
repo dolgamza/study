@@ -35,7 +35,7 @@ public class MemberDAO {
 			ps.setString(i++, reqMemVO.CARD_NO);
 			
 			logger.debug(ps.getQueryString());
-			
+			System.out.println(ps.getQueryString());
 			rs = ps.executeQuery();
 			rs.next();
 			isSuccess = rs.getInt("RESULT");
@@ -55,29 +55,29 @@ public class MemberDAO {
 	 * @param strF_cardno
 	 * @return
 	 */
-	protected boolean CM_MEMBER_DUP_CHK_PROC(String strFranchise,String strF_id,String strF_cardno) {
+	protected String CM_MEMBER_DUP_CHK_PROC(String strFranchise,String strF_id,String strF_cardno, String strF_ath) {
 		
 		Connection conn					= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps	= null;
 		ResultSet rs					= null;
 		Logger logger					= Logger.getLogger(this.getClass());
-		boolean result					= false;
+		String result					= "";
 		
 		try {
 			
-			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.CM_MEMBER_DUP_CHK_PROC ?, ?, ? ");
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.CM_MEMBER_DUP_CHK_PROC ?, ?, ?, ? ");
 			ps.setString(1, strFranchise);
 			ps.setString(2, strF_id);
 			ps.setString(3, strF_cardno);
+			ps.setString(4, strF_ath);
 			
+			System.out.println(ps.getQueryString());
 			logger.debug(ps.getQueryString());
 			rs = ps.executeQuery();
 			
 			rs.next();
 			
-			if (rs.getInt("CNT") == 0) {
-				result = true;
-			}
+			result = rs.getString("MSG");
 			
 		} catch (Exception e) {
 			logger.error(ps.getQueryString());
@@ -175,6 +175,38 @@ public class MemberDAO {
 			
 			ps.setString(i++, strId);
 			ps.setString(i++, strPwd);
+			
+			logger.debug(ps.getQueryString());
+			System.out.println(ps.getQueryString());
+			rs = ps.executeQuery();
+			rs.next();
+			isSuccess = rs.getInt("RESULT");
+		} catch (Exception e) {
+			logger.error(ps.getQueryString());
+			System.out.println(e.toString());
+		} finally {
+			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
+		}
+		return isSuccess;
+	}
+	
+	protected int CM_CARDNO_CHANGE_PROC(String strStoreNo, String sessUsrPhoneNo, String strFcardno, String strGubun) {
+		
+		Connection conn					= ConnectionMgr.getInstance().getConnetion();
+		WrapPreparedStatementUtil ps	= null;
+		ResultSet                 rs   	= null;
+		Logger logger					= Logger.getLogger(this.getClass());
+		int isSuccess 					= 0;
+		
+		try {
+			
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.CM_CARDNO_CHANGE_PROC ?, ?, ?, ? " );
+			int i = 1;
+			
+			ps.setInt(i++, Integer.parseInt(strStoreNo));
+			ps.setString(i++, sessUsrPhoneNo);
+			ps.setInt(i++, Integer.parseInt(strFcardno));
+			ps.setString(i++, strGubun);
 			
 			logger.debug(ps.getQueryString());
 			System.out.println(ps.getQueryString());

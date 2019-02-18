@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>beablekorea</title>
+  <link rel='stylesheet' href='https://rawgit.com/alvarotrigo/fullPage.js/dev/src/fullpage.css'>
+  <style>
+
+@import url('http://fonts.googleapis.com/earlyaccess/hanna.css');
+
+body {margin:0;padding:0;height:100%;font-family:'Hanna', sans-serif;background-image:url('./images/main/bg_00.jpg');}
+.logo {z-index:10;position:absolute; }
+
+.section {text-align:center;font-size: 3em;}
+/*
+.section.main-section-1 {background-image:url('./images/main/bg_00.jpg');}
+.section.main-section-2 {background-image:url('./images/main/bg_00.jpg');padding:60px;}
+.section.main-section-3 {background-image:url('./images/main/bg_00.jpg');}
+.section.main-section-4 {background-image:url('./images/main/bg_00.jpg');}
+*/
+.section .title {position:absolute;top:100px;margin:0px 40px;color:#fff;}
+
+.section ul {text-align:center;display:inline-table;width:90%;margin:0;}
+.section li {display:inline;width:calc(30% - 20px);padding:20px;float:left;list-style:none;position:relative;}
+.section li img {width:70%;}
+
+.section.main-section-2 .darky {padding:0 15px;height:200px;text-align:left;line-height:1.4em;color:white;font-size:0.4em;background-color:rgba(110,110,0,0.4);border-right:1px solid #aaa;}
+.section.main-section-2 .darky:nth-child(3n) {border:0;}
+.section.main-section-2 .darky.hr {height:20px;border:0;}
+
+.section.main-section-4 li {width:calc(50% - 60px);}
+
+.footer {position:absolute;bottom:0;z-index:9;width:100%;background-color:#333;font-size:1em;color:white;padding:30px 0px;}
+.footer table {border:0;width:90%;margin-left: auto; margin-right: auto;border-spacing:0;}
+.footer th {border-right:1px solid #aaa;text-align:left;height:25px;padding-right:15px;}
+.footer td {border:0;text-align:left;padding-left:15px;}
+
+   </style>
+  
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
+     <script type="text/javascript">
+     $(document).ready(function() {
+
+        $(window).scroll(function(){
+           console.log($(window).scrollTop());
+        });
+        
+        $('.over').hover(function(){
+           $(this).attr("src", $(this).attr("src").replace('.png', '_on.png'));
+        }, function() {
+           $(this).attr("src", $(this).attr("src").replace('_on.png', '.png'));
+        });
+     
+     });
+     
+     function c(idx) {
+        if (idx==1) {
+           $(".section.main-section-3").css("background-image", "url('./images/main/bg_01.jpg')");
+        }
+        
+     }
+     
+     </script>
+</head>
+
+<body>
+
+  <div class='logo'><img src='./images/main/logo.png'></div>
+
+  <div id="fullpage">
+    <div class="section main-section-1"><img src='./images/main/logo_neon.png'></div>
+    <div class="section main-section-2">
+      <ul>
+         <li><img src='./images/main/section_2_icon_1.png'></li>
+         <li><img src='./images/main/section_2_icon_2.png'></li>
+         <li><img src='./images/main/section_2_icon_3.png'></li>
+      </ul>
+      <ul>
+         <li class='darky hr'></li>
+         <li class='darky hr'></li>
+         <li class='darky hr'></li>
+         <li class='darky'>비에이블스터디카페는 2016년 4월 1호점 서울대입구센터를 시작으로 현재 까지 전국 약 60여개의 센터를 운영하고 있습니다. <br/>소비자의 니즈에 맞는 공간 디자인을 통해 프리미엄 무인 스터디카페의 트렌드를 주도합니다. </li>
+         <li class='darky'>비에이블만의 차별화된 컨셉과 디자인으로 업계 최고의 인테리어를 구축하였습니다. <br/>쾌적하고 안정감을 주는 학습공간으로 소비자들에게 다가가고 있으며 대표의 지휘아래 모든 공사 과정을 본사에서 직접 진행하고 있습니다. </li>
+         <li class='darky'>현재 까지 꾸준한 센터 개설로 약 60개 센터의 통합 관리를 통한 운영 매뉴얼화로 국내 최초 자동화 시스템 원천기술을 보유하고 있습니다. <br/>또한 본사가 직접 시스템을 업데이트 하고 유지보수를 진행하고 있습니다. </li>
+         <li class='darky hr'></li>
+         <li class='darky hr'></li>
+         <li class='darky hr'></li>
+      </ul>
+    </div>
+    <div class="section main-section-3">
+       <div class='title'>_공간소개</div>
+       <ul>
+         <li><img src='./images/main/section_3_icon_1.png' class='over' onclick='c(1);'></li>
+         <li><img src='./images/main/section_3_icon_2.png' class='over'></li>
+         <li><img src='./images/main/section_3_icon_3.png' class='over'></li>
+      </ul>
+    </div>
+
+    <div class="section main-section-4" >
+       <ul>
+         <li><img src='./images/main/section_4_icon_1.png' class='over'></li>
+         <li><img src='./images/main/section_4_icon_2.png' class='over'></li>
+      </ul>
+    </div>
+</div>
+
+    <div class="footer" >
+      <table>
+         <tr>
+            <th>상호</th>
+            <td>비에이블스터디카페</td>
+            <th> 주소</th>
+            <td> 서울특별시 강서구 양천로 583</td>
+         </tr>
+         <tr>
+            <th>대표자</th>
+            <td>전보익</td>
+            <th></th>
+            <td>(염창동, 우림블루나인비즈니스센터) , A동 2210호</td>
+         </tr>
+         <tr>
+            <th>사업자 등록번호</th>
+            <td> 641-81-01148</td>
+            <th>대표번호</th>
+            <td>1544-8306</td>
+         </tr>
+      </table>
+      
+    </div>
+
+  <script src='https://rawgit.com/alvarotrigo/fullPage.js/dev/src/fullpage.js'></script>
+  <script type="text/javascript">
+     new fullpage('#fullpage', {
+    	licenseKey : 'OPEN-SOURCE-GPLV3-LICENSE',
+        anchors:['top', 'intro', 'space', 'customer'],
+        navigation: true,
+        navigationPosition: 'right',
+        fadingEffect: true,
+        onLeave: function(index, nextIndex, direction){
+           $(".section.main-section-3").css("background-image", "");
+           if (nextIndex != null && typeof nextIndex == 'object') {
+              console.log(JSON.stringify(nextIndex));
+              if (nextIndex.isLast) {
+                 $(".footer").delay(800).slideDown('fast');
+              } else $(".footer").slideUp();
+           }
+        }
+     });
+     $(".footer").hide();
+     </script>
+
+</body>
+</html>

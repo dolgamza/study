@@ -2,20 +2,20 @@
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
-response.setHeader("Cache-Control","no-cache");
-response.setHeader("Pragma","no-cache");
-response.setDateHeader("Expires",0);
-
-String strTitle 	= "";
-String strLocation 	= "";
-
-String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
-String strPageBlock	= StrUtil.getParameter(request.getParameter("strPageBlock"), "10");
-int intPage			= Integer.parseInt(strPage);
-int intPageBlock	= Integer.parseInt(strPageBlock);
-
-String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
-String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
+	
+	String strTitle 	= "";
+	String strLocation 	= "";
+	
+	String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
+	String strPageBlock	= StrUtil.getParameter(request.getParameter("strPageBlock"), "10");
+	int intPage			= Integer.parseInt(strPage);
+	int intPageBlock	= Integer.parseInt(strPageBlock);
+	
+	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
+	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -99,6 +99,10 @@ function goPage(i) {
 }
 
 function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
+	
+	var nextUrl;
+	var modifyUrl;
+	
 	/* 화면 페이징 구현 */
 	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
 	
@@ -107,9 +111,18 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	if(jsonList != '' && jsonList.length > 0) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
+			
+			if('OK' == jsonList[i].USR_CODE) {
+				nextUrl 	= 'center_detail.jsp?strFcNo='+jsonList[i].STORE_NO+'&strCardNo='+jsonList[i].CARD_NO;
+				modifyUrl 	= '<a href="javascript:cardModify(\'M\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;&nbsp;&nbsp;카드번호 변경</a>';
+			} else {
+				nextUrl 	= '#'; 
+				modifyUrl 	= '<a href="javascript:cardModify(\'I\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;&nbsp;&nbsp;카드번호 등록</a>';
+			}
+			
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="3" class="pic"><img src=""></td>';
-			listHtml += '	<td class="chains"><a href="center_detail.jsp?strFcNo='+jsonList[i].STORE_NO+'">'+jsonList[i].STORE_NM+'</a></td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src=""></td>';
+			listHtml += '	<td class="chains"><a href="'+nextUrl+'">'+jsonList[i].STORE_NM+'</a></td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<td class="chains">'+jsonList[i].ADDR+'</td>';
@@ -117,7 +130,10 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			listHtml += '<tr>';
 			listHtml += '	<td class="chains">'+jsonList[i].PHONE_NO+'</td>';
 			listHtml += '</tr>';
-		}
+			listHtml += '<tr>';
+			listHtml += '	<td class="chains">'+jsonList[i].SET_MSG+modifyUrl+'</td>';
+			listHtml += '</tr>';
+		}  
 	} else {
 		listHtml += '<tr><td style="height:150px;">검색 결과가 없습니다.</td></tr>';
 	}
@@ -126,6 +142,20 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	
 	$(".list").html(listHtml);
 }
+
+function cardModify(gubun, store_no, store_nm) {
+	
+	frm = document.frmSearch;
+	
+	$("#gubun").val(gubun);
+	$("#store_no").val(store_no);
+	$("#store_nm").val(store_nm);
+	
+	frm.target = "_self";
+	frm.action = "../membership/cardModify.jsp";
+	frm.submit();
+	
+}
 </script>
 
 <div class='back' onclick='goBack();'>&lt;</div>
@@ -133,6 +163,9 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
    	<div class='title'>센터 검색</div>	
 
 	<form name="frmSearch" id="frmSearch" method="post">
+	<input type="hidden" name="gubun" id="gubun">
+	<input type="hidden" name="store_no" id="store_no">
+	<input type="hidden" name="store_nm" id="store_nm">
 	<input type="hidden" name="strPage" id="strPage">
 	<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
 		<div>

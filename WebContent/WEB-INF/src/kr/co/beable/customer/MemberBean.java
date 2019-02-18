@@ -20,10 +20,14 @@ public class MemberBean {
 	
 	/**
 	 * MEMBER JOIN DUPLICATION CHECK
+	 * @param strFranchise
+	 * @param strF_id
+	 * @param strF_cardno
+	 * @param strF_ath
 	 * @return
 	 */
-	public boolean CM_MEMBER_DUP_CHK_PROC(String strFranchise,String strF_id,String strF_cardno) {
-		return dao.CM_MEMBER_DUP_CHK_PROC(strFranchise, strF_id, strF_cardno);
+	public String CM_MEMBER_DUP_CHK_PROC(String strFranchise, String strF_id, String strF_cardno, String strF_ath) {
+		return dao.CM_MEMBER_DUP_CHK_PROC(strFranchise, strF_id, strF_cardno, strF_ath);
 	}
 	
 	/**
@@ -46,9 +50,23 @@ public class MemberBean {
 	
 	/**
 	 * USER LOGIN PWD CHANGE
+	 * @param strId
+	 * @param strPwd
 	 * @return
 	 */
 	public int CM_LOGIN_PWD_CHANGE_PROC(String strId, String strPwd) {
 		return dao.CM_LOGIN_PWD_CHANGE_PROC(strId, strPwd);
+	}
+	
+	/**
+	 * USER CARDNO CHANGE
+	 * @param strStoreNo
+	 * @param sessUsrPhoneNo
+	 * @param setFcardno
+	 * @param strGubun
+	 * @return
+	 */
+	public int CM_CARDNO_CHANGE_PROC(String strStoreNo, String sessUsrPhoneNo, String strFcardno, String strGubun) {
+		return dao.CM_CARDNO_CHANGE_PROC(strStoreNo, sessUsrPhoneNo, strFcardno, strGubun);
 	}
 }

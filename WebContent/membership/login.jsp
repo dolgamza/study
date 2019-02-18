@@ -94,7 +94,7 @@ function login() {
 			alertify.alert(json.resMsg);
 		}
 	})
-	.error(function(){
+	.error(function(){  
 		alertify.alert("로그인 중 오류가 발생했습니다.\n시스템 관리자에게 문의하세요.");
 	});
 

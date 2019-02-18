@@ -10,6 +10,7 @@
 
 	String strF_id 		= request.getParameter("f_id");
 	String strF_pw 		= request.getParameter("f_pw");
+	String strF_ath		= request.getParameter("f_ath");
 	String strF_cardno 	= request.getParameter("f_cardno");
 	String strFranchise = request.getParameter("franchise");
 	
@@ -21,10 +22,11 @@
 	JSONObject json 	= new JSONObject();
 	
 	//가입 중복 체크
-	boolean memDupChk = new MemberBean().CM_MEMBER_DUP_CHK_PROC(strFranchise, strF_id, strF_cardno);
-	if(strF_id.trim().length() < 1 || !memDupChk) {
+	String dupChkMsg = new MemberBean().CM_MEMBER_DUP_CHK_PROC(strFranchise, strF_id, strF_cardno, strF_ath);
+	
+	if(!"OK".equalsIgnoreCase(dupChkMsg)){
 		json.put("isSuccess", false);
-		json.put("resMsg", "가입한 내역이 있습니다.<br>다시 확인 해주세요.");
+		json.put("resMsg", dupChkMsg);
 		out.println(json.toJSONString());
 		
 		logger.debug("Member duplication");

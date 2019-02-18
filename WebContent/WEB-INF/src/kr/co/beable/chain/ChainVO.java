@@ -46,6 +46,7 @@ public class ChainVO {
 		public int BLOCKSIZE;
 		public String SEL_FG;
 		public String SEL_VAL;
+		public String USR_PHONE_NO;
 	}
 	
 	/**
@@ -64,6 +65,10 @@ public class ChainVO {
 		public String COORDINATE;
 		public String WEB_URL;
 		public String IMG_URL;
+		public String USR_PHONE_NO;
+		public String CARD_NO;
+		public String USR_MSG;
+		public String USR_CODE;
 	}
 	
 	public class reqContactUsVO {

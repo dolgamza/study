@@ -24,7 +24,11 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
+<link rel='stylesheet' href='customer.css?0.1.0.9' />
 <style>
+
+	.section.bg {background-image:url('../images/customer/bg.jpg');height:500px;background-size:cover;}
+	.title:before {content:url('../images/customer/ico.png?1');width:32px;height:32px;}
 
 	select.fa {width:calc(30% - 17px);}
 	input.fb {width:calc(50% - 0px);margin:5px;}
@@ -38,7 +42,6 @@
 	#pagination #paging .btn:hover {color:#fff;background-color:#000;}
 	#pagination #paging .on {background-color:#80191f;color:#fff;}
 </style>
-<link rel='stylesheet' href='customer.css?0.1.0.4' />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/js/paging.js" type="text/javascript"></script>
@@ -108,18 +111,19 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 }
 </script>
 <div id="fullpage">
+	<div class='section bg'></div>
 	<div class="section main-section-2">
     	<div class='slideup'>
     		<img src='../images/main/logo4sub.png' class='subheading_img'/>
-    		<div class='subheading'>이용방법</div>
+    		<div class='subheading'>이용수칙 및 방법</div>
     		<div class='title'>_키오스크 이용방법</div>
     		<div class='detail'>
-    			<ol>
-    					<li>1~2시간 이용하셔도 회원카드는 발급받으셔야 합니다.</li>
-    					<li>4주 회원권, 금액권, ...</li>
-    					<li>퇴실</li>
-    					<li>퇴실</li>
-    					<li>퇴실</li>
+    			<div style='padding:10px 0 20px 0;text-align:left;'><font color='#80191f'>★</font> 1~2시간 이용하셔도 회원카드는 발급받으셔야 합니다.</div>
+    			<ol style="margin-left:-20px;">
+    					<li>4주 회원권, 금액권, 시간권을 구매하셨다면, 구매 후 좌석배정을 받으셔야 합니다.</li>
+    					<li>퇴실(좌석반납)은 다른 이용객을 위한 배려입니다.</li>
+    					<li>센터를 재방문하실 예정이면 카드를 반납할 필요는 없습니다.</li>
+    					<li>이용시간을 확인하시고, 연장하시려면 꼭 이용시간 내에 진행해 주세요.</li>
     				</ol>
 	    		</div>
     	</div>	
@@ -131,23 +135,23 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   			<div>
 		   				<span>1</span>
 		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_01.jpg'>
+		   				<img src='../images/customer/k_01.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>2</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_02.jpg'>
+		   				<span>&lt;이용공간의 선택&gt;</span><br/>
+		   				<img src='../images/customer/k_02.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>3</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_03.jpg'>
+		   				<span>&lt;회원카드 터치&gt;</span><br/>
+		   				<img src='../images/customer/k_03.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
@@ -155,23 +159,23 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   			<div>
 		   				<span>4</span>
 		   				<span>&lt;전화번호 입력&gt;</span><br/>
-		   				<img src='../images/customer/k_04.jpg'>
+		   				<img src='../images/customer/k_04.png'>
 		   				<div>전화번호를 통해 입출입문자, 퇴실알림문자 서비스 발송, 다양한 이벤트 및 연락의 수단 분실시 이용객과의 소통을 위해 필요한 절차입니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>5</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_05.jpg'>
+		   				<span>&lt;좌석 선택&gt;</span><br/>
+		   				<img src='../images/customer/k_05.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>6</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_06.jpg'>
+		   				<span>&lt;결제방법 선택&gt;</span><br/>
+		   				<img src='../images/customer/k_06.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
@@ -186,15 +190,15 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   			<div>
 		   				<span>1</span>
 		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
-		   				<img src='../images/customer/k_01.jpg'>
+		   				<img src='../images/customer/k_01.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>2</span>
-		   				<span>&lt;2/4/6인실 중 선택&gt;</span><br/>
-		   				<img src='../images/customer/k_05.jpg'>
+		   				<span>&lt;2/4/6인실 선택&gt;</span><br/>
+		   				<img src='../images/customer/k_05.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다. 회원카드발급 버튼을 터치하여 카드를 발급받습니다. 회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>
@@ -202,7 +206,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   			<div>
 		   				<span>3</span>
 		   				<span>&lt;시간 선택&gt;</span><br/>
-		   				<img src='../images/customer/sr_03.jpg'>
+		   				<img src='../images/customer/sr_03.png'>
 		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
 		   			</div>
 		   		</li>

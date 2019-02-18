@@ -1,10 +1,14 @@
 package kr.co.beable.inf;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
+
 import kr.co.dw.mgr.ConnectionMgr;
 import kr.co.dw.util.StrUtil;
 import kr.co.dw.util.WrapPreparedStatementUtil;
@@ -38,7 +42,7 @@ public class LocalDatabaseDAO {
 		Logger logger					= Logger.getLogger(this.getClass());
 		ArrayList<LocalDatabaseInfoVO> arr = new ArrayList<LocalDatabaseInfoVO>();
 		try {
-			ps = new WrapPreparedStatementUtil(conn, "EXEC DBO.CM_STORE_DB_CONN_INFO_PROC ?");
+			ps = new WrapPreparedStatementUtil(conn, "EXEC DBO.CM_STORE_DB_CONN_INFO_PROC ? ");
 			ps.setInt(1, Integer.parseInt(strStoreNo));
 			logger.debug(ps.getQueryString());
 			rs = ps.executeQuery();
@@ -61,5 +65,111 @@ public class LocalDatabaseDAO {
 		return arr;
 	}
 	
+	protected int CM_STORE_MAKE_CERTIFICATION_PROC (String strF_id, String strStoreNo) throws SQLException {
+		
+		System.out.println("class strF_id : " + strF_id);
+		System.out.println("class strStoreNo : " + strStoreNo);
+		
+		String strUrl	= "";
+		int insertCnt	= 0;
+		int resultCnt	= -1;
+		
+		Connection localConn 				= null;
+		WrapPreparedStatementUtil localPs	= null;
+		
+		String strRandomNum					= new LocalDatabaseDAO().numberGen(6);
+		
+		try {
+			
+			strUrl	= new LocalDatabaseBean().CM_STORE_DB_CONN_INFO_PROC(strStoreNo);
+			
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			localConn = DriverManager.getConnection(strUrl);
+			localPs = new WrapPreparedStatementUtil(localConn, " exec IUD_SMS ?, ?, ?, ?, ?, ? ");
+			int i = 1;
+			
+			localPs.setString(i++, strF_id);
+			localPs.setString(i++, "[비에이블] 인증번호[" + strRandomNum + "]를 입력해 주세요.");
+			localPs.setString(i++, "00000000000000");	//예약문자 전송시 'YYYYmmddHHMMss', 즉시전송시 '00000000000000'
+			localPs.setString(i++, "0");				//Default = 0, ( 0 : 즉시전송(숫자 0) R : 예약전송 )
+			localPs.setString(i++, "S");				//'S' -- M : MMS, S : SMS, I : 국제문자, L : 국제 MMS
+			localPs.setString(i++, "SM_006_SEAT_IN");   //기본값
+			System.out.println(localPs.getQueryString());
+			
+			insertCnt += localPs.executeUpdate();
+			
+			System.out.println("insertCnt : " + insertCnt);
+			
+			if(insertCnt > 0) {
+				resultCnt = new LocalDatabaseDAO().CM_STORE_CHECK_CERTIFICATION_PROC(strF_id, strRandomNum);
+			}
+			
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			localPs.close();
+			localConn.close();
+		}
+		
+		return resultCnt;
+		
+	}
+	
+	protected int CM_STORE_CHECK_CERTIFICATION_PROC (String strF_id, String strRandomNum) {
+		Connection conn					= ConnectionMgr.getInstance().getConnetion();
+		WrapPreparedStatementUtil ps	= null;
+		ResultSet rs					= null;
+		Logger logger					= Logger.getLogger(this.getClass());
+		int isSuccess 					= 0;
+		
+		try {
+			ps = new WrapPreparedStatementUtil(conn, "EXEC DBO.CM_STORE_CHECK_CERTIFICATION_PROC ?, ? ");
+			ps.setString(1, strF_id);
+			ps.setString(2, strRandomNum);
+			rs = ps.executeQuery();
+			rs.next();
+			isSuccess = rs.getInt("RESULT");
+			
+			System.out.println("isSuccess : " + isSuccess);
+			
+		} catch (Exception e) {
+			logger.error(ps.getQueryString());
+			System.out.println(e.toString());
+		} finally {
+			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
+		}
+		return isSuccess;
+	}
+	
+	/**
+	 * random number
+	 * @param len
+	 * @return
+	 */
+	private String numberGen(int len) {
+        
+        Random rand 	= new Random();
+        String numStr 	= ""; //난수가 저장될 변수
+        
+        for(int i=0;i<len;i++) {
+            
+            //0~9 까지 난수 생성
+            String ran = Integer.toString(rand.nextInt(10));
+            
+            if(!numStr.contains(ran)) {
+                //중복된 값이 없으면 numStr에 append
+                numStr += ran;
+            }else {
+                //생성된 난수가 중복되면 루틴을 다시 실행한다
+                i-=1;
+            }
+        }
+        
+        return numStr;
+    }
+	
+	public static void main(String args[]) {
+		System.out.println(new LocalDatabaseDAO().numberGen(6));
+	}
 
 }
