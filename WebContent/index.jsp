@@ -38,7 +38,7 @@ body {background-image:url('./images/main/bg_00.png');}
 .section li {display:inline;width:calc(30% - 20px);padding:20px;float:left;list-style:none;position:relative;}
 .section li img {width:70%;}
 
-.section.main-section-1 img {}
+.section.main-section-1 img {width:40%}
 
 .section.main-section-2 .darky {padding:0 15px;height:200px;text-align:left;line-height:1.4em;font-size:0.9em;color:white;background-color:rgba(0,0,0,0.4);border-right:1px solid #777;text-align:center;}
 .section.main-section-2 .darky:nth-child(3n) {border:0;}
@@ -60,6 +60,8 @@ body {background-image:url('./images/main/bg_00.png');}
 	.section .title {font-size:2em;}
 	.footer table {width:96%;}
 	.section div img {width:100%;}
+	.section.main-section-1 img {width:80%}
+	
 	.section.main-section-2 li {display:block;float:none;height:150px;}
 	.section.main-section-2 ul {margin-top:100px;margin-left:20px;}
 	.section.main-section-2 ul:nth-child(1) {position:absolute;top:0;left:60px;width:30%;}
@@ -106,7 +108,7 @@ body {background-image:url('./images/main/bg_00.png');}
   <div class='logo'><img src='./images/main/logo.png'></div>
 
   <div id="fullpage">
-    <div class="section main-section-1"><img src='./images/main/logo_neon.png'></div>
+    <div class="section main-section-1"><img src='./images/main/logo_neon.png?1'></div>
     <div class="section main-section-2">
 		<ul>
 			<li><img src='./images/main/section_2_icon_1.png'></li>

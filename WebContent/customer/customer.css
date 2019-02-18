@@ -1,9 +1,12 @@
+.section.bg {background-image:url('../images/customer/bg.jpg');height:500px;background-size:cover;}
+
 .section.main-section-3,  .section.main-section-4,  .section.main-section-5 {position:relative;background-color:white;}
 .section:last-child {padding-bottom:120px;}
 .rooptop {position:fixed;top:0;}
 .footer {position:relative;margin-top:-50px;}
 
 div.title {width:90%;margin-left:auto;margin-right:auto;padding-top:80px;text-align:left;font-size:1.4em;color:#80191f;margin-bottom:15px;}
+div.title:before {content:url('../images/customer/ico.png?1');width:32px;height:32px;}
 div.detail {width:90%;margin-left:auto;margin-right:auto;text-align:left;font-size:0.825em;line-height:1.2em;}
 
 /* #user guide */
@@ -41,15 +44,27 @@ ol {list-style-type: decimal;margin:0;color:#333;}
 .section th {border-top:1px solid #a0393f;}
 .section td {border-top:1px solid #ccc;border-left:1px solid #ccc;border-right:1px solid #ccc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .section td.pic {width:150px;height:150px;padding:0px;vertical-align:top;}
-.section td img {width:100%;height:100%;margin-bottom:-3px;}
+.section td.detail {width:calc(100% - 160px);text-align:left;padding-left:10px;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.section td img {width:150px;height:150px;margin-bottom:-3px;}
 .section td.underline {border-bottom:1px solid #ccc;}
 .section .chains {text-align:left;color:#000;}
 .section .last {border-bottom:1px solid #ccc;}
 
-div.list  {height:500px;overflow-y:scroll;}
+div.list  {height:500px;overflow-x:hidden;overflow-y:scroll;font-size:0.9em;}
 .all div.list {padding-left:50px;}
 .search div table {margin-bottom:5px;}
 
+select.fa {width:calc(30% - 17px);}
+input.fb {width:calc(50% - 0px);margin:5px;}
+input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
+.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
+ 
+/* pagination */ 
+#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
+#pagination #paging {display:inline-block;position:absolute;}
+#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
+#pagination #paging .btn:hover {color:#fff;background-color:#000;}
+#pagination #paging .on {background-color:#80191f;color:#fff;}
 
 /* responsive web */
 @media only screen and (max-width : 1040px) {

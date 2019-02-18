@@ -8,21 +8,21 @@ request.setCharacterEncoding("utf-8");
 		<table>
 			<tr>
 				<th>상호</th>
-				<td>비에이블스터디카페</td>
+				<td class='f'>비에이블스터디카페</td>
 				<th> 주소</th>
-				<td> 서울특별시 강서구 양천로 583</td>
+				<td class='b'> 서울특별시 강서구 양천로 583</td>
 			</tr>
 			<tr>
 				<th>대표자</th>
-				<td>전보익</td>
+				<td class='f'>전보익</td>
 				<th></th>
-				<td>(염창동, 우림블루나인비즈니스센터) , A동 2210호</td>
+				<td class='b'>(염창동, 우림블루나인비즈니스센터), A동 2210호</td>
 			</tr>
 			<tr>
 				<th>사업자 등록번호</th>
-				<td> 641-81-01148</td>
+				<td class='f'>641-81-01148</td>
 				<th>대표번호</th>
-				<td>1544-8306</td>
+				<td class='b'>1544-8306</td>
 			</tr>
 		</table>
 	</div>

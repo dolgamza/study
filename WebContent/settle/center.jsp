@@ -16,6 +16,9 @@
 	
 	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
 	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
+	String strMyGubun	= StrUtil.getParameter(request.getParameter("strMyGubun"), "OK");
+	
+	String Referer = request.getHeader("referer");
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -76,6 +79,7 @@ function goBack() {
 }
 
 function search() {
+	$("#strMyGubun").val("NO");
 	goPage(1);
 }
 
@@ -121,7 +125,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			}
 			
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic"><img src=""></td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src="'+jsonList[i].IMG_URL+'"></td>';
 			listHtml += '	<td class="chains"><a href="'+nextUrl+'">'+jsonList[i].STORE_NM+'</a></td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
@@ -168,6 +172,7 @@ function cardModify(gubun, store_no, store_nm) {
 	<input type="hidden" name="store_nm" id="store_nm">
 	<input type="hidden" name="strPage" id="strPage">
 	<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
+	<input type="hidden" name="strMyGubun" id="strMyGubun">
 		<div>
 			<span>
 				<label for='strSelFg'></label>

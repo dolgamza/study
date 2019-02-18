@@ -158,6 +158,7 @@ $(document).ready(function() {
 
 	/* choice room */
 	$(".choice span").click(function() {
+		
 		room = $(this).index();
 		
 		$("#chkRoom").val(room);

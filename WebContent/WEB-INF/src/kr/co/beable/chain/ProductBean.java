@@ -7,4 +7,8 @@ public class ProductBean {
 	public ArrayList<ProductVO> PM_PRODUCT_LIST_PROC(String strStoreNo, String strRoomCd){
 		return new ProductDAO().PM_PRODUCT_LIST_PROC(strStoreNo, strRoomCd);
 	}
+	
+	public ArrayList<ProductVO> PM_PRODUCT_LIST_PROC(String strStoreNo, String strRoomCd, String strProductNo){
+		return new ProductDAO().PM_PRODUCT_LIST_PROC(strStoreNo, strRoomCd, strProductNo);
+	}
 }

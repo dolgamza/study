@@ -177,12 +177,13 @@ public class ChainDAO {
 		try {
 			
 			int i = 1;
-			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_STORE_SELECT_LIST_PROC ?, ?, ?, ?, ?");
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.FC_STORE_SELECT_LIST_PROC ?, ?, ?, ?, ?, ? ");
 			ps.setInt(i++, req.PAGE);
 			ps.setInt(i++, req.BLOCKSIZE);
 			ps.setString(i++, req.SEL_FG);
 			ps.setString(i++, req.SEL_VAL);
 			ps.setString(i++, req.USR_PHONE_NO);
+			ps.setString(i++, req.MY_GUBUN);
 			logger.debug(ps.getQueryString());
 			System.out.println(ps.getQueryString());
 			rs = ps.executeQuery();

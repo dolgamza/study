@@ -26,8 +26,14 @@ $(document).ready(function() {
 	
 });
 
-function complete() {
-	if (typeof product == "undefined") { alert('이용권을 석택하세요.') 
+function complete(storeNo, cardNo, roomType) {
+	if (typeof product == "undefined") { 
+		alert('이용권을 석택하세요.')
+	} else {
+		location.href="seatSelectList.jsp?paramSeqNo="+storeNo+"&paramCardNo="+cardNo+"&paramroomType="+roomType;
+	}
+	/*
+	 
 	} else {
 		var maskHeight = $(document).height();  
         var maskWidth = $(window).width();  
@@ -37,6 +43,7 @@ function complete() {
         $(".pop").show();
         $("html, body").scrollTop(0);
 	}
+	*/
 }
 
 function settle() {

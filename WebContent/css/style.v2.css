@@ -91,8 +91,14 @@ a.btn:hover {background-color:#779;}
 	*/
 	.onlymobile {display:block;}
 	
-	.footer table {width:96%;}
+	.footer table {width:96%;font-size:0.75em;}
+	.footer th {display:none;}
+	.footer td.f {width:30%;padding:5px 0;}
+	.footer td.b {width:66%;padding:5px 0;}
 	.subheading_img {margin-top:36px;}
+	
+	
+	
 }
 
 

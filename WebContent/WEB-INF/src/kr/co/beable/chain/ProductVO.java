@@ -7,4 +7,5 @@ public class ProductVO {
 	public String STORE_NO;
 	public String PRD_NM;
 	public String PRICE;
+	public String PRD_MATCHING_CD;
 }

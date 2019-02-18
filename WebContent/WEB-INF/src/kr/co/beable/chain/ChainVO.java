@@ -47,6 +47,7 @@ public class ChainVO {
 		public String SEL_FG;
 		public String SEL_VAL;
 		public String USR_PHONE_NO;
+		public String MY_GUBUN;
 	}
 	
 	/**

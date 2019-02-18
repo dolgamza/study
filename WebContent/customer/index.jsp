@@ -24,23 +24,9 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel='stylesheet' href='customer.css?0.1.0.9' />
+<link rel='stylesheet' href='customer.css?0.1.0.12' />
 <style>
 
-	.section.bg {background-image:url('../images/customer/bg.jpg');height:500px;background-size:cover;}
-	.title:before {content:url('../images/customer/ico.png?1');width:32px;height:32px;}
-
-	select.fa {width:calc(30% - 17px);}
-	input.fb {width:calc(50% - 0px);margin:5px;}
-	input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
-	.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
-  
-	/* pagination */ 
-	#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
-	#pagination #paging {display:inline-block;position:absolute;}
-	#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
-	#pagination #paging .btn:hover {color:#fff;background-color:#000;}
-	#pagination #paging .on {background-color:#80191f;color:#fff;}
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
@@ -62,7 +48,7 @@ function goPage(i) {
 	$("#strPage").val(i);
 	
 	//리스트 가져오기
-	$.post("../settle/centerAjax.jsp", $("#frmSearch").serialize(), function(data){
+	$.post("./getCenterList.jsp", $("#frmSearch").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
 		if(json.isSuccess) {
 			fnMakList(i, json.intTotalCnt, json.resData);
@@ -85,8 +71,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic underline"><img src=""></td>';
-			listHtml += '	<td colspan="2">'+jsonList[i].STORE_NM+'</td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src="'+jsonList[i].IMG_URL+'"></td>';
+			listHtml += '	<td colspan="2" class="detail">'+jsonList[i].STORE_NM+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>주소</th>';
@@ -97,8 +83,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			listHtml += '	<td class="detail">'+jsonList[i].PHONE_NO+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<th class="underline">홈페이지</th>';
-			listHtml += '	<td class="detail underline">'+jsonList[i].WEB_URL+'</td>';
+			listHtml += '	<th>홈페이지</th>';
+			listHtml += '	<td class="detail">'+jsonList[i].WEB_URL+'</td>';
 			listHtml += '</tr>';
 		}
 	} else {

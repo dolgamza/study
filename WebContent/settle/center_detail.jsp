@@ -63,13 +63,12 @@ a:hover {color:#80191f;}
 
 <script>
 function goBack() {
-	alert("2222");
 	location.href='./center.jsp';
 }
 
 function next() {
 	//location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>+'&paramCardNo='+<%=paramCardNo %>;
-	location.href='seat.jsp?paramSeqNo=28&paramCardNo='+<%=paramCardNo %>;
+	location.href='categoryList.jsp?paramSeqNo=28&paramCardNo='+<%=paramCardNo %>;
 }
 </script>
 

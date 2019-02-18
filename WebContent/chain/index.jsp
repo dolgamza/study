@@ -25,7 +25,6 @@
 	}
 	
 	StringBuffer sb 			= new StringBuffer();
-
 	ArrayList<ChainVO.resLocationMapVO> arrMap = new ChainBean().FC_LOCATION_MAP_PROC("", "", "A");
 	if(arrMap != null && arrMap.size() > 0){
 		
@@ -42,9 +41,6 @@
 			sb.append("		'<div class=\"info\">'+\n");
 			sb.append("			'<div class=\"title\">"+vo.STORE_NM+"</div>'+\n");
 			sb.append("			'<div class=\"body\">'+\n");
-// 			sb.append("				'<div class=\"img\">'+\n");
-// 			sb.append("                '<img src=\""+vo.FC_THUMBNAIL+"\" width=\"73\" height=\"70\">'+\n");
-// 			sb.append("           	'</div>'+\n");
 			sb.append("				'<div class=\"desc\">'+\n");
 			sb.append("					'<div class=\"ellipsis\">"+vo.ADDR+"</div>'+\n");
 			sb.append("					'<div class=\"jibun ellipsis\">"+vo.PHONE_NO+"</div>'+\n");
@@ -64,135 +60,13 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
+<link rel="stylesheet" href="chain.css?4" type="text/css" media="all">
 <style>
-
-.section.bg {background-image:url('../images/main/bg_02.jpg');height:500px;background-size:cover;}
-.section.main-section-3,  .section.main-section-4,  .section.main-section-5 {position:relative;background-color:white;}
-.section:last-child {padding-bottom:120px;}
-.rooptop {position:fixed;top:0;}
-.footer {position:relative;margin-top:-50px;}
-
-/* #process */
-.section.main-section-2 {padding-top:30px;background-color:#fff;}
-.slideup {text-align:center;width:100%;height:480px;}
-.slideup > .subheading_img {margin-top:0;}
-
-/* as-is */
-.main-section-3 ul {width:90%;margin-left:auto;margin-right:auto;}
-.main-section-3 li {display:inline-block;list-style:none;font-size:0.9em;width:48%;}
-.main-section-3 .chain_search {margin-bottom:10px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
-.main-section-3 li table {width:100%;margin-top:0px;margin-bottom:10px;}
-.main-section-3 li table th, .main-section-3 li table td {border-top:1px solid #ccc;}
-.main-section-3 li table td.underline {border-bottom:1px solid #ccc;}
-.main-section-3 li table td.detail {text-align:left;padding-left:10px;color:#555;}
-
-.main-section-3 td.pic {width:150px;height:150px;padding:0px;} 
-.main-section-3 td img {width:100%;height:100%;margin-bottom:-3px;}
-
-/* #fund */
-.main-section-4 table {margin-top:0;}
-.main-section-4 th {width:10%;border-bottom:1px solid #a0393f;}
-.main-section-4 td {width:30%;border-bottom:1px solid #ccc;}
-.main-section-4 .topline {border-top:1px solid #ccc;}
-.main-section-4 ul {text-align:left;width:90%;margin-left:auto;margin-right:auto;margin-top:15px;font-size:0.7em;}
-.main-section-4 li {list-style-position:inside;margin-bottom:8px;text-indent:-24px;padding-left:24px;}
-
-/* contacts */
-.form {margin-top:40px;}
-.form ul {position:relative;width:90%;margin-left:auto;margin-right:auto;text-align:left;}
-.form li {list-style:none;width:50%;}
-.form label {display:inline-block;width:150px;height:30px;color:#80191f;border-bottom:1px solid #80191f;font-size:0.85em;}
-
-.main-section-5 li {position:relative;}
-.main-section-5 table {position:absolute;top:0;left:156px;margin:0;padding:0;width:calc(100% - 189px);font-size:1em;}
-.main-section-5 label {padding-top:7px;}
-.main-section-5 td {margin:0;padding:0;background-color:white;width:30%;border:1px solid #80191f;}
-.main-section-5 td:last-child {}
-.main-section-5 td.at {width:5%;text-align:center;border:0;}
-.main-section-5 input, .main-section-5 select {background-color:white;padding:5px;font-size:0.825em;height:auto;}
-.main-section-5 td input, .main-section-5 td select {border:0;}
-.form select {height:auto;margin-left:3px;width:calc(100% - 11px);}
-
-.form .half {width:calc(100% - 200px);}
-.form li.textarea {position:absolute;top:0;left:50%;}
-.form textarea {width:100%;margin-left:-30px;height:86px;resize:none;overflow-y:scroll;}
-.phone {font-size:2.4em;color:#80191f;margin-top:-30px;}
-.email a {color:#80191f;}
-
-.btn {width:90%;margin-left:auto;margin-right:auto;}
-
-
-.wrap {position: absolute;left: 0;bottom: 40px;width: 288px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-.wrap * {padding: 0;margin: 0;}
-.wrap .info {width: 286px;height: 120px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-.wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-.info .title {padding: 5px 0 0 10px;height: 30px;background: #d95050;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-.info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-.info .close:hover {cursor: pointer;}
-.info .body {position: relative;overflow: hidden;}
-.info .desc {position: relative;margin: 13px 0 0 90px;height: 75px;}
-.desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-.desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}    
-.info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-.info .link {color: #5085BB;}
-   
-select.fa {width:calc(30% - 17px);}
-input.fb {width:calc(50% - 0px);margin:5px;}
-input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
-.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
-   
-.main-section-3 div>ul>li>div>span:hover {background-color:orange;}
-.main-section-3 div>ul>li>div>span:last-child {border-right:1px solid #ccc;}
-
-/* pagination */ 
-#pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
-#pagination #paging {display:inline-block;position:absolute;}
-#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
-#pagination #paging .btn:hover {color:#fff;background-color:#000;}
-#pagination #paging .on {background-color:#80191f;color:#fff;}
-
-.phone {margin-top:20px;}
-.phone img {width:35px;}
-
-/* responsive web */
-@media only screen and (max-width : 1040px) {
-	.subheading {font-size:1.6em;}
-	.slideup {text-align:center;width:90%;height:300px;;margin-left:auto;margin-right:auto;}
-	.slideup div img {width:100%;}
-
-	.main-section-3 .chain_search {display:inline-block;}
-	.main-section-3 li:nth-child(1) {width:0;} 
-	.main-section-3 li:nth-child(2) {width:100%;text-align:left;}
-	.main-section-3 td.pic {width:120px;height:120px;}
-	.main-section-3 th {display:none;}
-
-	.main-section-5 table {left:86px;width:calc(100% - 86px);}
-	.form li.textarea {position:relative;left:30px;width:calc(100% - 22px);margin-top:5px;}
-
-	.form li {width:100%;margin-bottom:2px;}
-	.form label {width:80px;height:28px;}
-	.form .half {width:calc(100% - 100px);}
-
-	.subheading.s {font-size:1.4em;margin-bottom:30px;}
-	.phone {font-size:1.4em;margin-top:10px;}
-	.phone img {width:20px;}
-	
-	.main-section-3 .maparea {display:none;}
-	.fb {width:30%;}
-	
-}
-
-
 .main-section-3 div>ul>li>div>span {
    display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;
    width:calc(95%/5 - 10px);
    text-align:center;cursor:pointer;
 }
-
-
-
-
-
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
@@ -204,18 +78,16 @@ $(function(){
 		goPage(1);
 	});
 });
-
 function search() {
 	goPage(1);
 }
-
 function goPage(i) {
 	
 	//페이지번호 셋팅
 	$("#strPage").val(i);
 	
 	//리스트 가져오기
-	$.post("../settle/centerAjax.jsp", $("#frmSearch").serialize(), function(data){
+	$.post("../customer/getCenterList.jsp", $("#frmSearch").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
 		if(json.isSuccess) {
 			fnMakList(i, json.intTotalCnt, json.resData);
@@ -227,7 +99,6 @@ function goPage(i) {
 		fnMakList(1, 0, "");
 	});
 }
-
 function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	/* 화면 페이징 구현 */
 	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
@@ -238,8 +109,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic underline"><img src=""></td>';
-			listHtml += '	<td colspan="2">'+jsonList[i].STORE_NM+'</td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src="${pageContext.request.contextPath}'+jsonList[i].IMG_URL+'"></td>';
+			listHtml += '	<td colspan="2" class="detail">'+jsonList[i].STORE_NM+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>주소</th>';
@@ -250,8 +121,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			listHtml += '	<td class="detail">'+jsonList[i].PHONE_NO+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<th class="underline">홈페이지</th>';
-			listHtml += '	<td class="detail underline">'+jsonList[i].WEB_URL+'</td>';
+			listHtml += '	<th>홈페이지</th>';
+			listHtml += '	<td class="detail">'+jsonList[i].WEB_URL+'</td>';
 			listHtml += '</tr>';
 		}
 	} else {
@@ -269,7 +140,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
     	<div class='slideup'>
     		<img src='../images/main/logo4sub.png' class='subheading_img'/>
     		<div class='subheading'>개설절차</div>
-    		<div><img src='../images/chain/process.png?3' width="70%"></div>
+    		<div><img src='../images/chain/process.png?3'></div>
     	</div>	
 	</div>
 	<div class="section main-section-3">
@@ -321,7 +192,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 						</div>
    						</form>
    					</div>
-   					<div style="overflow:auto;width:100%; height:450px;" class="search_list" tabindex="1">
+   					<div class="search_list" tabindex="1">
 	   					<div class='list'></div>
 						<div id="pagination"></div>
 					</div>
@@ -402,7 +273,6 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 <script>
 			     
 var positions =  [<%=sb.toString() %>] 
-
 var mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = { 
         center: new daum.maps.LatLng(37.557116552265875,126.86434741907806), // 지도의 중심좌표
@@ -411,11 +281,9 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
   
 // 지도를 생성합니다        
 var map = new daum.maps.Map(mapContainer, mapOption); 
-
 //지도, 스카이뷰    
 var mapTypeControl = new daum.maps.MapTypeControl();
     map.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
-
 //ZOOM    
 var zoomControl = new daum.maps.ZoomControl();
 map.addControl(zoomControl, daum.maps.ControlPosition.BOTTOMRIGHT);    
@@ -423,7 +291,6 @@ map.addControl(zoomControl, daum.maps.ControlPosition.BOTTOMRIGHT);
 var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다    
     imageSize = new daum.maps.Size(24, 35), // 마커이미지의 크기입니다
     imageOption = {offset: new daum.maps.Point(13, 40)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.    
-
 // 지도 위에 마커를 표시합니다
 for (var i = 0, len = positions.length; i < len; i++) {
     // 마커를 생성하고 지도위에 표시합니다
@@ -474,30 +341,10 @@ function setCenter(position) {
     // 지도 중심을 이동 시킵니다
     map.panTo(moveLatLon);
 }
-
 function setLocMove(x, y) {
 	var goLoc = new daum.maps.LatLng(x,y);
 	setCenter(goLoc);
 }
-
-function goSearch(){
-	$.get( "./mapListProc.jsp?strLocCode="+loc, function(data) {
-		alert(data);
-		var json = JSON.parse($.trim(data));
-		if(json.isSuccess) {
-			var goLoc = new daum.maps.LatLng(json.strCoodinate);
-			setCenter(goLoc);
-		} else {
-			console.log("데이터 없냐옹");
-		}
-	})
-	.error(function(){
-		console.log("카카오api 연동중...오류");
-	});		
-}
-
-
-
 $(document).ready(function() {
 	
 	//가맹문의 신청
@@ -524,7 +371,6 @@ $(document).ready(function() {
     });
 	
 });
-
 function fnRegChk() {
 	
 	//이름
@@ -569,7 +415,6 @@ function fnRegChk() {
 	
 	return true;
 }
-
 </script>
 
 <script src='onloaded.js?0.4'></script>
@@ -578,4 +423,3 @@ function fnRegChk() {
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>
 </jsp:include>
-

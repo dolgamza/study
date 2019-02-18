@@ -15,6 +15,10 @@
 	//검색조건 변수
 	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "");
 	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
+	String strMyGubun	= StrUtil.getParameter(request.getParameter("strMyGubun"), "OK");
+	
+	System.out.println("strMyGubun : " + strMyGubun);
+	System.out.println("strMyGubun : " + strMyGubun);
 	
 	boolean isSuccess	= true;
 	JSONArray resData	= new JSONArray();
@@ -27,7 +31,7 @@
 	req.SEL_FG			= strSelFg;
 	req.SEL_VAL			= strSelVal;
 	req.USR_PHONE_NO 	= sessUsrPhoneNo;
-	
+	req.MY_GUBUN		= strMyGubun;
 	ArrayList<ChainVO.resCenterListVO> arrList	= new ChainBean().FC_STORE_SELECT_LIST_PROC(req);
 	
 	String setMsg		= "";
