@@ -24,14 +24,18 @@ a:hover {color:#80191f;}
 .pop {
 	z-index:21;
 	display:none;position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);
-	width:50%;height:200px;
-	padding:30px;
-	background-color:white;border:1px solid #eee;border-radius:17px;
-	color:#000;line-height:1.2em;
+	background-color:transparent;
+	background-image:url('../images/settle/end.png');background-size:contain;background-repeat: no-repeat;
+	width:250px;height:250px;
+	padding:30px;padding-top:140px;
+	line-height:1.2em;color:#80191f;font-size:0.8em;
 }
 
-.pop div {text-align:center;margin-top:120px;}
-.pop div span {margin:20px 1px;padding:20px;font-size:1.2em;background-color:#80191f;border:1px solid #80191f;color:white;cursor:pointer;}
+.pop div {width:100%;}
+
+.pop div.txt {position:absolute;top:85px;left:0px;text-align:center;}
+.pop div.btn {position:absolute;top:135px;left:0px;text-align:center;background-color:transparent;border:0;}
+.pop div span {padding:5px;background-color:#fff;border:0;color:#80191f;cursor:pointer;}
 
 #mask {position:absolute;left:0;top:0;z-index:20;background-color:#000;display:none;}
 

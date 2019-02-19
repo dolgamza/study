@@ -29,7 +29,7 @@ public class LocalDatabaseBean {
 	 * @throws Exception
 	 */
 	public String CM_STORE_DB_CONN_INFO_PROC (String strStoreNo) throws Exception {
-		ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseDAO().CM_STORE_DB_CONN_INFO_PROC("1");
+		ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseDAO().CM_STORE_DB_CONN_INFO_PROC(strStoreNo);
 		LocalDatabaseInfoVO vo = arr.get(0);
 		String strUrl 	= "X";
 		if (vo.DB_IP.length()>4 && vo.DB_PORT.length()>1 && vo.DB_NM.length()>1 && vo.DB_USER_NM.length()>0 && vo.DB_PW.length()>0) {

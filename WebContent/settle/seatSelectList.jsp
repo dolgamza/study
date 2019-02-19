@@ -11,7 +11,7 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
-	String strTitle 		= "";
+	String strTitle 		= "좌석 선택";
 	String strLocation 		= "";
 	
 	String paramSeqNo 		= StrUtil.nvl(request.getParameter("paramSeqNo"), "");	//가맹점 번호
@@ -21,9 +21,8 @@
 	System.out.println("paramSeqNo : " + paramSeqNo);
 	System.out.println("paramCardNo : " + paramCardNo);
 	
-	/* 해당지점좌석배치표 조회 */
-	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
-	ArrayList<LocalSeatVO> arrOcc = new LocalSeatBean().getSeats(paramSeqNo);
+	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo); // 해당지점좌석배치표 조회
+	ArrayList<LocalSeatVO> arrOcc = new LocalSeatBean().getSeats(paramSeqNo); // 좌석이용현황 조회
 	String strCampusRoom	= "";
 	
 	if (arr!=null && arr.size()>0) {
@@ -35,7 +34,7 @@
 		}
 		strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
 	}
-	
+	/* 좌석이용현황을 조회하여 이용중인 좌석에 X를 추가한다. */
 	if (strCampusRoom.length()>0 && arrOcc!=null && arrOcc.size()>0) {
 		for (int i=0; i<arrOcc.size(); i++) {
 			LocalSeatVO vo = arrOcc.get(i);
@@ -83,7 +82,7 @@ a:hover {color:#80191f;}
 #seat td.F {background-color:#efe;}
 #seat td.N {background-color:#eef;}
 #seat td.S {background-color:#fee;}
-#seat td.X {background-color:#ccc;color:#aaa;cursor:default;}
+#seat td.X {background-color:#ccc;color:#c5c5c5;cursor:default;}
 #seat td.on {background-color:#80191f;border:1px solid #80191f;color:#fff;}
 </style>
 

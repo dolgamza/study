@@ -32,6 +32,7 @@ response.setDateHeader("Expires",0);
 body {background-image:url('./images/main/bg_00.png');}
 
 .logo {z-index:10;position:absolute;}
+.logo img {width:150px;}
 .section .title {position:absolute;top:100px;margin:0px 40px;font-size:3em;color:#fff;}
 
 .section ul {text-align:center;display:inline-table;width:90%;margin:0;}
@@ -54,6 +55,25 @@ body {background-image:url('./images/main/bg_00.png');}
 
 .section.main-section-2 .darky {text-align:left;}
 
+
+.blinking {
+	-webkit-animation:blink 1.5s ease-in-out infinite alternate;
+    -moz-animation:blink 1.5s ease-in-out infinite alternate;
+    animation:blink 1.5s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@-moz-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+@keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}
+
 /* responsive web */
 @media only screen and (max-width : 1040px) {
 	body {font-size:1.1em;}	
@@ -62,12 +82,12 @@ body {background-image:url('./images/main/bg_00.png');}
 	.section div img {width:100%;}
 	.section.main-section-1 img {width:80%}
 	
-	.section.main-section-2 li {display:block;float:none;height:150px;}
+	.section.main-section-2 li {display:block;float:none;height:110px;}
 	.section.main-section-2 ul {margin-top:100px;margin-left:20px;}
 	.section.main-section-2 ul:nth-child(1) {position:absolute;top:0;left:60px;width:30%;}
 	.section.main-section-2 ul:nth-child(2) {position:absolute;top:0;left:130px;}
 	.section.main-section-2 li img {width:100px;}
-	.section.main-section-2 .darky {width:58%;height:150px;padding:20px;border-right:0;border-bottom:1px solid #777;}
+	.section.main-section-2 .darky {width:58%;height:110px;padding:20px;border-right:0;border-bottom:1px solid #444;}
 	.section.main-section-2 .darkl:last-child {border-bottom:0;}
 	.section.main-section-2 .darky.hr {display:none;}
 	.section.main-section-3 ul, .section.main-section-4 ul {width:25%;}
@@ -108,7 +128,7 @@ body {background-image:url('./images/main/bg_00.png');}
   <div class='logo'><img src='./images/main/logo.png'></div>
 
   <div id="fullpage">
-    <div class="section main-section-1"><img src='./images/main/logo_neon.png?1'></div>
+    <div class="section main-section-1"><img src='./images/main/logo_neon.png?1' class='blinking'></div>
     <div class="section main-section-2">
 		<ul>
 			<li><img src='./images/main/section_2_icon_1.png'></li>
