@@ -3,7 +3,8 @@
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.SeatVO" %>
 <%@ page import = "kr.co.beable.chain.SeatBean" %>
-<%@ page import="kr.co.beable.inf.LocalDatabaseBean" %>
+<%@ page import = "kr.co.beable.settle.LocalSeatVO" %>
+<%@ page import = "kr.co.beable.settle.LocalSeatBean" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
 	response.setHeader("Cache-Control","no-cache");
@@ -22,22 +23,30 @@
 	
 	/* 해당지점좌석배치표 조회 */
 	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
+	ArrayList<LocalSeatVO> arrOcc = new LocalSeatBean().getSeats(paramSeqNo);
 	String strCampusRoom	= "";
 	
 	if (arr!=null && arr.size()>0) {
 		for (int i=0; i<arr.size(); i++) {
 			SeatVO vo = arr.get(i);
-			if (vo.ROOM_CD.equals("C")) strCampusRoom += vo.SEAT;
+			if (vo.ROOM_CD.equals("C")) {
+				strCampusRoom += vo.SEAT;
+			}
 		}
 		strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
 	}
 	
-	String strUrl = new LocalDatabaseBean().CM_STORE_DB_CONN_INFO_PROC(paramSeqNo);
+	if (strCampusRoom.length()>0 && arrOcc!=null && arrOcc.size()>0) {
+		for (int i=0; i<arrOcc.size(); i++) {
+			LocalSeatVO vo = arrOcc.get(i);
+			if (vo.USING.equals("Y")) {
+				String s = "_" + vo.SEAT + "'";
+				strCampusRoom = strCampusRoom.replaceAll(s, " X"+s);
+			}
+		}
+	}
+	System.out.println(strCampusRoom);
 	
-	System.out.println(strUrl);
-	
-	
-	System.out.println("strCampusRoom : " + strCampusRoom);
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -74,6 +83,7 @@ a:hover {color:#80191f;}
 #seat td.F {background-color:#efe;}
 #seat td.N {background-color:#eef;}
 #seat td.S {background-color:#fee;}
+#seat td.X {background-color:#ccc;color:#aaa;cursor:default;}
 #seat td.on {background-color:#80191f;border:1px solid #80191f;color:#fff;}
 </style>
 
@@ -120,17 +130,20 @@ $(document).ready(function() {
 	}
 	
 	/* choice seat */
-	$(document).on("click", "#seat td.seat", function() {
-		var t = $("#seat td.seat").index(this);
-		seatTypeAndNo = $(this).attr("seatno");
+	$(document).on("click", "#seat td.seat", function(e) {
 		
-		$("#chkSeat").val(seatTypeAndNo);
-		console.log("t : " + t); // <--------------------------- seat type and number
-		console.log("seatTypeAndNo : " + seatTypeAndNo); // <--------------------------- seat type and number
-		
-		$("#seat td.seat").removeClass("on");
-		$(this).addClass("on");
-		$("#next").removeClass("off");
+		if (!$(e.target).hasClass("X")) {
+			var t = $("#seat td.seat").index(this);
+			seatTypeAndNo = $(this).attr("seatno");
+			
+			$("#chkSeat").val(seatTypeAndNo);
+			console.log("t : " + t); // <--------------------------- seat type and number
+			console.log("seatTypeAndNo : " + seatTypeAndNo); // <--------------------------- seat type and number
+			
+			$("#seat td.seat").removeClass("on");
+			$(this).addClass("on");
+			$("#next").removeClass("off");
+		}
 	});
 
 	$(".back").click(function(){

@@ -62,26 +62,10 @@ public class SettleDAO {
 			logger.error(ps.getQueryString());
 			System.out.println(e.toString());
 		} finally {
-			ConnectionMgr.getInstance().closeConnection(conn, ps);
+			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
 		}
 		return arrResult;
 	}
 	
-	protected ArrayList<LocalSeatVO> getEnableSeats(String strStoreNo) {
-		Logger logger 				= Logger.getLogger(this.getClass());
-		LocalDatabaseBean ldb		= new LocalDatabaseBean();
-		Connection conn				= ldb.getLocalConnection(strStoreNo);
-		ArrayList<LocalSeatVO> arr	= new ArrayList<LocalSeatVO>();
-		
-		try {
-			
-		} catch (Exception e) {
-			logger.error(e.toString());
-		} finally {
-			ldb.closeLocalConnection(conn);
-		}
-		return arr;
-	}
-	
-	
+
 }
