@@ -24,10 +24,7 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel='stylesheet' href='customer.css?0.1.0.12' />
-<style>
-
-</style>
+<link rel='stylesheet' href='customer.css?<%= (new java.util.Date()).toLocaleString()%>' />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src="${pageContext.request.contextPath}/js/paging.js" type="text/javascript"></script>
@@ -71,8 +68,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic"><img src="'+jsonList[i].IMG_URL+'"></td>';
-			listHtml += '	<td colspan="2" class="detail">'+jsonList[i].STORE_NM+'</td>';
+			listHtml += '   <td rowspan="4" class="pic"><img src="${pageContext.request.contextPath}'+jsonList[i].IMG_URL+'"></td>';
+			listHtml += '	<td colspan="2" class="nm">'+jsonList[i].STORE_NM+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>주소</th>';
@@ -84,7 +81,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>홈페이지</th>';
-			listHtml += '	<td class="detail">'+jsonList[i].WEB_URL+'</td>';
+			listHtml += '	<td class="detail homepage">'+jsonList[i].WEB_URL+'</td>';
 			listHtml += '</tr>';
 		}
 	} else {
@@ -102,16 +99,17 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
     	<div class='slideup'>
     		<img src='../images/main/logo4sub.png' class='subheading_img'/>
     		<div class='subheading'>이용수칙 및 방법</div>
+    		<div>&nbsp;<br/>&nbsp;</div>
     		<div class='title'>_키오스크 이용방법</div>
-    		<div class='detail'>
-    			<div style='padding:10px 0 20px 0;text-align:left;'><font color='#80191f'>★</font> 1~2시간 이용하셔도 회원카드는 발급받으셔야 합니다.</div>
+    		<div class='detail nbgfont'>
+    			<div style='padding:10px 0 20px 0;text-align:left;font-size:0.8em;font-weight:bold;'><font color='#80191f'>★</font> 1~2시간 이용하셔도 회원카드는 발급받으셔야 합니다.</div>
     			<ol style="margin-left:-20px;">
-    					<li>4주 회원권, 금액권, 시간권을 구매하셨다면, 구매 후 좌석배정을 받으셔야 합니다.</li>
-    					<li>퇴실(좌석반납)은 다른 이용객을 위한 배려입니다.</li>
-    					<li>센터를 재방문하실 예정이면 카드를 반납할 필요는 없습니다.</li>
-    					<li>이용시간을 확인하시고, 연장하시려면 꼭 이용시간 내에 진행해 주세요.</li>
-    				</ol>
-	    		</div>
+   					<li>회원권(4주), 금액권, 시간권을 구매 후 좌석을 선택해주세요.</li>
+   					<li>퇴실(좌석 반납)은 다른 이용객을 위한 배려입니다.</li>
+   					<li>재방문 예정이시면 카드를 반납하지 않으셔도 됩니다.</li>
+   					<li>이용 시간을 확인하시고, 연장 시 이용 시간 내에 진행해 주세요.</li>
+   				</ol>
+    		</div>
     	</div>	
 	</div>
 	<div class="section main-section-3">
@@ -120,49 +118,49 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   		<li>
 		   			<div>
 		   				<span>1</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
+		   				<span>회원카드발급</span><br/>
 		   				<img src='../images/customer/k_01.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>[회원카드 발급] 버튼을 터치하여 카드를 발급받습니다.<br>* 50,000원권 불가</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>2</span>
-		   				<span>&lt;이용공간의 선택&gt;</span><br/>
+		   				<span>이용공간선택</span><br/>
 		   				<img src='../images/customer/k_02.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>1인석과 스터디룸 중 이용할 공간을 선택합니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>3</span>
-		   				<span>&lt;회원카드 터치&gt;</span><br/>
+		   				<span>회원카드터치</span><br/>
 		   				<img src='../images/customer/k_03.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>카드리더기에 회원카드를 터치합니다. 절대 신용카드 투입구에 넣지 마세요.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>4</span>
-		   				<span>&lt;전화번호 입력&gt;</span><br/>
+		   				<span>전화번호입력</span><br/>
 		   				<img src='../images/customer/k_04.png'>
-		   				<div>전화번호를 통해 입출입문자, 퇴실알림문자 서비스 발송, 다양한 이벤트 및 연락의 수단 분실시 이용객과의 소통을 위해 필요한 절차입니다.</div>
+		   				<div class='nbgfont'>전화번호를 통해 입출입문자, 퇴실 알림 문자 발송, 다양한 이벤트 및 이용객과의 소통을 위해 필요한 절차입니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>5</span>
-		   				<span>&lt;좌석 선택&gt;</span><br/>
+		   				<span>좌석선택</span><br/>
 		   				<img src='../images/customer/k_05.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>이용하실 좌석을 선택하세요. 커피잔은 이미 좌석 이용 중입니다. 이용 시간 내에 횟수 제한 없이 이동이 가능합니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>6</span>
-		   				<span>&lt;결제방법 선택&gt;</span><br/>
+		   				<span>결제방법선택</span><br/>
 		   				<img src='../images/customer/k_06.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>결제방법을 선택하세요. 할인권/회원권을 이용 시 해당 버튼을 터치하세요.</div>
 		   			</div>
 		   		</li>
 	   		</ul>
@@ -175,25 +173,25 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		   		<li>
 		   			<div>
 		   				<span>1</span>
-		   				<span>&lt;회원카드 발급 터치&gt;</span><br/>
+		   				<span>스터디룸 선택</span><br/>
 		   				<img src='../images/customer/k_01.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>스터디룸을 터치합니다. 한 분만 카드를 발급합니다. 전화번호를 입력합니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>2</span>
-		   				<span>&lt;2/4/6인실 선택&gt;</span><br/>
+		   				<span>공간 선택</span><br/>
 		   				<img src='../images/customer/k_05.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다. 회원카드발급 버튼을 터치하여 카드를 발급받습니다. 회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>이용하실 스터디룸을 선택 후 의자 버튼을 터치합니다.</div>
 		   			</div>
 		   		</li>
 		   		<li>
 		   			<div>
 		   				<span>3</span>
-		   				<span>&lt;시간 선택&gt;</span><br/>
+		   				<span>시간 선택</span><br/>
 		   				<img src='../images/customer/sr_03.png'>
-		   				<div>회원카드발급 버튼을 터치하여 카드를 발급받습니다.</div>
+		   				<div class='nbgfont'>당일 방문 이용에서 시작 시간 및 이용 시간을 설정합니다.</div>
 		   			</div>
 		   		</li>
 		   	</ul>
@@ -204,33 +202,33 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
    		<div class='subheading'>센터찾기</div>
 		<div class='all'>
    			<div class='title'>_전체센터</div>
-   			<div style="overflow:auto;width:100%; height:500px;" class="search_list" tabindex="1">
-   			<div class='list_center'>
-	   			<table>
-	   				<%
-	   				ArrayList<CenterVO.resCenterAllVO> arrList = new CenterBean().CM_ALL_STORE_LIST_PROC();
-	   				if (arrList != null && arrList.size() > 0) {
-	   					for (int i=0; i<arrList.size(); i++) {
-	   						CenterVO.resCenterAllVO vo = (CenterVO.resCenterAllVO)arrList.get(i);
-	   						
-	   						out.println("<tr>");
-	   						if("0".equals(vo.LOC_SEQ)){
-	   							out.println("<td colspan='2'>"+ vo.STORE_NM +"</td>");	
-	   						} else {
-	   							out.println("<th>"+ vo.SIGUGUN_NM +"</th>");
-		   						out.println("<td class='chains'>"+ vo.STORE_NM +"</td>");
-	   						}
-	   						out.println("</tr>");
-	   						
-	   					}
-	   				} else {
-	   					out.println("<tr>");
-	   					out.println("<td colspan='2'>센터가 없습니다.</td>");
-	   					out.println("</tr>");
-	   				}
-	   				%>
-	   			</table>
-	   		</div>
+   			<div class="search_list" tabindex="1">
+	   			<div class='list_center'>
+		   			<table>
+		   				<%
+		   				ArrayList<CenterVO.resCenterAllVO> arrList = new CenterBean().CM_ALL_STORE_LIST_PROC();
+		   				if (arrList != null && arrList.size() > 0) {
+		   					for (int i=0; i<arrList.size(); i++) {
+		   						CenterVO.resCenterAllVO vo = (CenterVO.resCenterAllVO)arrList.get(i);
+		   						
+		   						out.println("<tr>");
+		   						if("0".equals(vo.LOC_SEQ)){
+		   							out.println("<td colspan='2'>"+ vo.STORE_NM +"</td>");	
+		   						} else {
+		   							out.println("<th>"+ vo.SIGUGUN_NM +"</th>");
+			   						out.println("<td class='chains'>"+ vo.STORE_NM +"</td>");
+		   						}
+		   						out.println("</tr>");
+		   						
+		   					}
+		   				} else {
+		   					out.println("<tr>");
+		   					out.println("<td colspan='2'>센터가 없습니다.</td>");
+		   					out.println("</tr>");
+		   				}
+		   				%>
+		   			</table>
+		   		</div>
 	   		</div>
    		</div>
    		<div class='search'>
@@ -258,7 +256,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 </div>
 
 <!-- slide show event -->
-<script src='onloaded.js?02'></script>
+<script src='onloaded.js?<%= (new java.util.Date()).toLocaleString()%>'></script>
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>

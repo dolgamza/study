@@ -104,4 +104,7 @@ input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;colo
 	.main-section-3 .maparea {display:none;}
 	.fb {width:30%;}
 	
+	input, select {font-size:0.6em;}
+	.nbgfont, .list td, .list_center td {font-size:0.75em;}
+	
 }

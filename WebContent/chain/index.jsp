@@ -60,7 +60,7 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel="stylesheet" href="chain.css?4" type="text/css" media="all">
+<link rel="stylesheet" href="chain.css?<%= (new java.util.Date()).toLocaleString()%>" type="text/css" media="all">
 <style>
 .main-section-3 div>ul>li>div>span {
    display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;

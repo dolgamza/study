@@ -34,14 +34,14 @@ a:hover {color:#80191f;}
 function login() {
 	
 	if (!checkLength($('#f_id'), 10, 11)) {
-		alertify.alert('올바른 아이디를 입력하십시오.');
+		alertify.alert('올바른 휴대전화번호를 입력하십시오.');
 		$('#f_id').css('background-color' ,'#fee');
 		$('#f_id').focus();
 		return false;
 	} else $('#f_id').css('background-color' ,'#fff');
 	
 	if (!checkPhone($('#f_id'))) {
-		alertify.alert("아이디를 정확히 입력하세요.");
+		alertify.alert("휴대전화번호를 정확히 입력하세요.");
 		$('#f_id').css('background-color' ,'#fee');
 		$('#f_id').focus();
 		return false;
@@ -78,10 +78,10 @@ function goMain() {
 
 <div class='section'>
 		<a href='javascript:goMain();'><img src='../images/main/logo4sub.png' class='subheading_img'/></a>
-   		<div style='margin-top:20px;margin-bottom:80px;'>비밀번호를 찾고자 하는 아이디를 입력해 주세요.</div>	
+   		<div style='margin-top:20px;margin-bottom:80px;line-height:1.2em;'>비밀번호를 찾고자 하는<br/>휴대전화번호를 입력해 주세요.</div>	
 
 		<form id='frmEnt' name='frmEnt' method='post'>
-		<div><label for='f_id'></label><input type='text' name= 'f_id' id='f_id' placeholder='휴대폰번호' onkeypress='numberOnly(this);' maxlength='11'></div>
+		<div><label for='f_id'></label><input type='text' name= 'f_id' id='f_id' placeholder='휴대전화번호' onkeypress='numberOnly(this);' maxlength='11'></div>
 		<div class='btn' onclick='login();'>다음</div>
 		</form>
 

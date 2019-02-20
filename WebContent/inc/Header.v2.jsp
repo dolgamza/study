@@ -28,9 +28,9 @@ String strLocation = java.net.URLDecoder.decode(((request.getParameter("location
     <link rel="canonical" href="http://">
     <link rel="apple-touch-icon-precomposed" href="/favicon.ico">
     <link rel="shortcut icon" href="<%=application.getContextPath() %>/favicon.ico">
-    <link rel="stylesheet" href="<%=application.getContextPath() %>/css/style.v2.css?0.1.0.5" type="text/css" media="all">
+    <link rel="stylesheet" href="<%=application.getContextPath() %>/css/style.v2.css?<%= (new java.util.Date()).toLocaleString()%>" type="text/css" media="all">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
-     <script src="<%=application.getContextPath() %>/js/common.js" type="text/javascript"></script>
+    <script src="<%=application.getContextPath() %>/js/common.js?<%= (new java.util.Date()).toLocaleString()%>" type="text/javascript"></script>
 </head>
 <body>
 	<div class="rooptop">

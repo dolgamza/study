@@ -5,9 +5,9 @@
 <%@ page import = "java.util.ArrayList" %>
 <%@ page import = "kr.co.beable.chain.*" %>
 <%
-
-	System.out.println("111111");
-
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
 
 	//페이징 변수
 	String strPage		= StrUtil.getParameter(request.getParameter("strPage"), "1");
