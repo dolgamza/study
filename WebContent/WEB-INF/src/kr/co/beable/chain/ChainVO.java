@@ -64,6 +64,7 @@ public class ChainVO {
 		public String ADDR;
 		public String ZIP_CODE;
 		public String COORDINATE;
+		public String THUMBNAIL;
 		public String WEB_URL;
 		public String IMG_URL;
 		public String USR_PHONE_NO;

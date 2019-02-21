@@ -17,8 +17,6 @@
 	String strSelFg		= StrUtil.getParameter(request.getParameter("strSelFg"), "FC_NAME");
 	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
 	String strMyGubun	= StrUtil.getParameter(request.getParameter("strMyGubun"), "OK");
-	
-	String Referer = request.getHeader("referer");
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -43,29 +41,35 @@ a:hover {color:#80191f;}
 select.fa {width:calc(30% - 17px);}
 input.fb {width:calc(50% - 0px);margin:5px;}
 input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;color:white;padding-right:10px;cursor:pointer;}
-.chain_search {margin-bottom:8px;background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);}
+.chain_search {margin-bottom:8px;} /* background:url('../images/m.png') no-repeat;background-position:calc(100% - 10px);} */
 
 div.list {width:90%;}
-.section table {width:100%;margin:2px;}
+.section table {width:100%;margin:2px;table-layout:fixed;}
 .section td {background-color:white;border-top:1px solid #ccc;}
-.section td.pic {width:160px;height:160px;padding:0;text-align:left;vertical-align:top;}
+.section td.pic {width:150px;height:150px;padding:0;text-align:left;vertical-align:top;}
 .section td img {width:100%;height:100%;}
 .section td a {color:#80191f;}
-.section .chains {text-align:left;color:#000;}
-
-/* responsive web */
-@media only screen and (max-width : 1040px) {
-.section td.pic {width:120px;height:120px;}
-}
+.section td.chains {text-align:left;color:#000;vertical-align:center;}
+.section td.chains img {position:absolute;margin-top:0px;} 
+.section td.nw {width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;}
 
 /* pagination */ 
 #pagination {position:relative;width:90%;height:40px;padding-top:15px;font-size:0.9em;text-align:left;}
 #pagination #paging {display:inline-block;position:absolute;}
-#pagination #paging .btn {border-radius:14px;padding:4px 10px;vertical-align:middle;color:#000;background-color:#fff;}
+#pagination #paging .btn {border-radius:3px;padding:4px 6px;vertical-align:middle;color:#000;background-color:#fff;margin-right:3px;}
 #pagination #paging .btn:hover {color:#fff;background-color:#000;}
-#pagination #paging .on {background-color:#eee;color:#555;}
+#pagination #paging .on {background-color:#80191f;color:#fff;}
+
+/* responsive web */
+@media only screen and (max-width : 1040px) {
+.s {font-size:0.75em;}
+.section td.chains img {margin-top:-3px;} 
+}
+
 </style>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src="../js/paging.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
@@ -102,6 +106,29 @@ function goPage(i) {
 	});
 }
 
+function fnCardchk(strStNo, strCardNo){
+	
+	$("#store_no").val(strStNo);
+	$("#card_no").val(strCardNo);
+	
+	$.post("${pageContext.request.contextPath}/settle/setCardUsingChk.jsp", $("#frmSearch").serialize(), function(data){
+		var json = JSON.parse($.trim(data));
+		
+		if(json.isSuccess) {
+			if("Y" == json.resData[0].RESULT){
+				location.href = json.resUrl;	
+			} else {
+				alertify.alert(json.resMsg);
+			}
+		} else {
+			alertify.alert(json.resMsg);
+		}
+	})
+	.error(function(){  
+		alertify.alert("로그인 중 오류가 발생했습니다.\n시스템 관리자에게 문의하세요.");
+	});
+}
+
 function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	
 	var nextUrl;
@@ -111,31 +138,31 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
 	
 	/* 화면 리스트 구현 */
-	var listHtml = '<table>';
+	var listHtml = '<table >';
 	if(jsonList != '' && jsonList.length > 0) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
 			
 			if('OK' == jsonList[i].USR_CODE) {
-				nextUrl 	= 'center_detail.jsp?strFcNo='+jsonList[i].STORE_NO+'&strCardNo='+jsonList[i].CARD_NO;
-				modifyUrl 	= '<a href="javascript:cardModify(\'M\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;&nbsp;&nbsp;카드번호 변경</a>';
+				nextUrl		= '<a href="javascript:fnCardchk(\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].CARD_NO+'\')">';
+				modifyUrl 	= '<a href="javascript:cardModify(\'M\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;<img src="../images/center/card_modify.png" style="width:90px;height:21px"/></a>';
 			} else {
-				nextUrl 	= '#'; 
-				modifyUrl 	= '<a href="javascript:cardModify(\'I\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;&nbsp;&nbsp;카드번호 등록</a>';
+				nextUrl 	= '<a href="javascript:msg();">'; 
+				modifyUrl 	= '<a href="javascript:cardModify(\'I\',\''+jsonList[i].STORE_NO+'\',\''+jsonList[i].STORE_NM+'\');">&nbsp;<img src="../images/center/card_write.png" style="width:90px;height:21px" /></a>';
 			}
 			
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic"><img src="'+jsonList[i].IMG_URL+'"></td>';
-			listHtml += '	<td class="chains"><a href="'+nextUrl+'">'+jsonList[i].STORE_NM+'</a></td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src="${pageContext.request.contextPath}'+jsonList[i].IMG_URL+'"></td>';
+			listHtml += '	<td class="chains">'+nextUrl+jsonList[i].STORE_NM+'</a></td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<td class="chains">'+jsonList[i].ADDR+'</td>';
+			listHtml += '	<td class="chains nw s">'+jsonList[i].ADDR+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<td class="chains">'+jsonList[i].PHONE_NO+'</td>';
+			listHtml += '	<td class="chains s">'+jsonList[i].PHONE_NO+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
-			listHtml += '	<td class="chains">'+jsonList[i].SET_MSG+modifyUrl+'</td>';
+			listHtml += '	<td class="chains s">'+jsonList[i].SET_MSG+modifyUrl+'</td>';
 			listHtml += '</tr>';
 		}  
 	} else {
@@ -145,6 +172,10 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	listHtml += '</table>';
 	
 	$(".list").html(listHtml);
+}
+
+function msg(){
+	alertify.alert('카드번호 등록 후 사용해 주세요.');
 }
 
 function cardModify(gubun, store_no, store_nm) {
@@ -170,6 +201,7 @@ function cardModify(gubun, store_no, store_nm) {
 	<input type="hidden" name="gubun" id="gubun">
 	<input type="hidden" name="store_no" id="store_no">
 	<input type="hidden" name="store_nm" id="store_nm">
+	<input type="hidden" name="card_no" id="card_no">
 	<input type="hidden" name="strPage" id="strPage">
 	<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
 	<input type="hidden" name="strMyGubun" id="strMyGubun">

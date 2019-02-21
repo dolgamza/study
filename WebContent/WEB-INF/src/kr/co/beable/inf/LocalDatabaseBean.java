@@ -11,25 +11,12 @@ import kr.co.dw.des.DESCrypto;
 
 public class LocalDatabaseBean {
 
-	/**
-	 * insert store's connection information
-	 * 
-	 * @param vo
-	 * @return
-	 */
 	public int CM_STORE_SERVER_INS_PROC (LocalDatabaseVO vo) {
 		return new LocalDatabaseDAO().CM_STORE_SERVER_INS_PROC(vo);
 	}
 	
-	/**
-	 * get connection string
-	 * 
-	 * @param strStoreNo
-	 * @return connection information
-	 * @throws Exception
-	 */
 	public String CM_STORE_DB_CONN_INFO_PROC (String strStoreNo) throws Exception {
-		ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseDAO().CM_STORE_DB_CONN_INFO_PROC(strStoreNo);
+		ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseDAO().CM_STORE_DB_CONN_INFO_PROC("1");
 		LocalDatabaseInfoVO vo = arr.get(0);
 		String strUrl 	= "X";
 		if (vo.DB_IP.length()>4 && vo.DB_PORT.length()>1 && vo.DB_NM.length()>1 && vo.DB_USER_NM.length()>0 && vo.DB_PW.length()>0) {
@@ -40,6 +27,10 @@ public class LocalDatabaseBean {
 	
 	public int CM_STORE_MAKE_CERTIFICATION_PROC (String strF_id, String strStoreNo) throws SQLException {
 		return new LocalDatabaseDAO().CM_STORE_MAKE_CERTIFICATION_PROC(strF_id, strStoreNo);
+	}
+	
+	public ArrayList<LocalDatabaseInfoVO> CM_USER_CARD_CHK_PROC (String strStoreNo, String strCardNo) throws SQLException {
+		return new LocalDatabaseDAO().CM_USER_CARD_CHK_PROC (strStoreNo, strCardNo);
 	}
 	
 	/**
@@ -74,6 +65,4 @@ public class LocalDatabaseBean {
 			logger.error(e.toString());
 		}
 	}
-	
-	
 }

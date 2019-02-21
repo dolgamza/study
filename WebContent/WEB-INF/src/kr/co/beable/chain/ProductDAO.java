@@ -81,4 +81,38 @@ public class ProductDAO {
 		return arrResult;
 	}
 	
+	protected ArrayList<ProductVO> PM_ROOM_LIST_PROC(int strStoreNo, int strPrdCd){
+		Connection conn					= ConnectionMgr.getInstance().getConnetion();
+		WrapPreparedStatementUtil ps	= null;
+		ResultSet rs					= null;
+		Logger logger					= Logger.getLogger(this.getClass());
+		ArrayList<ProductVO> arrResult		= new ArrayList<ProductVO>();
+		
+		try {
+			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.PM_ROOM_LIST_PROC ?, ? ");
+			ps.setInt(1, strStoreNo);
+			ps.setInt(2, strPrdCd);
+			System.out.println(ps.getQueryString());
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				ProductVO vo 		= new ProductVO();
+				vo.STORE_NO			= rs.getString("STORE_NO");
+				vo.PRD_CD			= rs.getString("PRD_CD");
+				vo.ROOM_CD			= rs.getString("ROOM_CD");
+				vo.PRD_GRP_CD		= rs.getString("PRD_GRP_CD");
+				vo.SEAT_NO			= rs.getString("SEAT_NO");
+				vo.SEAT_NM			= rs.getString("SEAT_NM");
+				arrResult.add(vo);
+			}
+			
+		} catch (Exception e) {
+			logger.error(ps.getQueryString());
+			System.out.println(e.toString());
+		} finally {
+			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
+		}
+		return arrResult;
+	}
+	
 }

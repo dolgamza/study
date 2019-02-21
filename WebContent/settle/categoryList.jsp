@@ -14,6 +14,7 @@
 	
 	String paramSeqNo 	= StrUtil.nvl(request.getParameter("paramSeqNo"), "");	//가맹점 번호
 	String paramCardNo 	= StrUtil.nvl(request.getParameter("paramCardNo"), "");	//카드번호
+	String paramRfid 	= StrUtil.nvl(request.getParameter("paramRfid"), "");	//RFID 번호
 	
 	/* 해당지점좌석배치표 조회 */
 	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
@@ -57,8 +58,10 @@ a:hover {color:#80191f;}
 .section div.subtitle {margin-top:20px;text-align:left;color:#80191f;font-size:1em;margin-bottom:10px;}
 
 /* room */
-.choice {text-align:left;padding:15px 0;}
+.choice1 {text-align:left;padding:15px 0;}
+.choice2 {text-align:left;padding:15px 0;}
 .section div > span {padding:10px;font-size:0.8em; }
+.btn {display:inline-block;width:130px;}
 .btn.off {border:1px solid #999;background-color:#999;}
 
 /* seat */
@@ -77,22 +80,32 @@ a:hover {color:#80191f;}
 
 $(document).ready(function() {
 
-	$(".choice span").click(function() {
+	$(".choice1 .btn").click(function() {
 		
 		room = $(this).index();
 		
 		$("#chkRoom").val(room);
 		
-		$(".choice span").addClass("off");
-		$(".choice span").eq(room).removeClass("off");
+		$(".choice1 .btn").addClass("off");
+		$(".choice1 .btn").eq(room).removeClass("off");
 		$("#next").addClass("off");
 		if (room==0) { next(0); } // campus room
 		else if(room==1) { next(1); } // study room
-		else if(room==2) { next(2); } // study room
 		
 	});
 	
+	$(".choice2 .btn").click(function() {
+		$(".choice2 .btn").addClass("off");
+		$(".choice2 .btn").eq(0).removeClass("off");
+		$("#next").addClass("off");
+		next(2);
+	});
+	
 });
+
+function goBack() {
+	location.href='./center_detail.jsp?strFcNo=<%=paramSeqNo %>&strCardNo=<%=paramCardNo %>';
+}
 
 function next(roomtype) {
 	var frm = document.frmSettle;
@@ -105,16 +118,21 @@ function next(roomtype) {
 <form name='frmSettle' id='frmSettle' method='post'>
 <input type='hidden' name='centerNo' id='centerNo' value=<%=paramSeqNo %> />
 <input type='hidden' name='cardNo' id='cardNo' value=<%=paramCardNo %> />
+<input type='hidden' name='rfidNo' id='rfidNo' value=<%=paramRfid %> />
+
 </form>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>좌석 선택</div>	
 
-		<div class='subtitle'>서비스 선택</div>
-
-		<div class='choice'>
+		<div class='subtitle'>이용할 공간</div>
+		<div class='choice1'>
 			<span class='btn off'>CAMPUS ROOM</span>
 			<span class='btn off'>STUDY ROOM</span>
+		</div>
+		<div>&nbsp;</div>
+		<div class='subtitle'>회원권 구입</div>
+		<div class='choice2'>
 			<span class='btn off'>회원권/할인권</span>
 		</div>
 </div>

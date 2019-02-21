@@ -17,9 +17,6 @@
 	String strSelVal	= StrUtil.getParameter(request.getParameter("strSelVal"), "");
 	String strMyGubun	= StrUtil.getParameter(request.getParameter("strMyGubun"), "OK");
 	
-	System.out.println("strMyGubun : " + strMyGubun);
-	System.out.println("strMyGubun : " + strMyGubun);
-	
 	boolean isSuccess	= true;
 	JSONArray resData	= new JSONArray();
 	JSONObject json 	= new JSONObject();
@@ -61,8 +58,6 @@
 				jsonData.put("USR_MSG"		, VO.USR_MSG);
 				jsonData.put("SET_MSG"		, setMsg);
 				jsonData.put("USR_CODE"		, VO.USR_CODE);
-				 
-				System.out.println(VO.USR_CODE);
 				
 				resData.add(jsonData);
 			}

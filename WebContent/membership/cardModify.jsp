@@ -45,14 +45,13 @@ a:hover {color:#80191f;}
 .section div.title {margin-top:20px;text-align:center;color:#80191f;font-size:1.4em;margin-bottom:50px;}
 .section div.subtitle {margin-top:20px;text-align:left;color:#80191f;font-size:1em;margin-bottom:10px;}
 
-input.fa {width:calc(45%);}
-input.fc {width:calc(45%);background-color:#80191f;text-align:center;color:white;padding-right:10px;margin-left:0px;cursor:pointer;}
-
-.section span:last-child {margin-left:5px;} 
-.section select {width:49%;}
-
+.section div.frm {position:relative;text-align:left;height:40px;}
+label {position:absolute;width:120px;margin-top:8px;}
+input {position:absolute;margin-left:128px;margin-top:0px;width:calc(100% - 140px);}
+.noborder {border:0 none;background-color:transparent;}
 
 @media only screen and (max-width : 1040px) {
+
 }
 
 </style>
@@ -104,10 +103,8 @@ function modifyCardNo() {
 		<input type="hidden" id="strGubun" name="strGubun" value="<%=strGubun %>">
 		<input type="hidden" id="strStoreNo" name="strStoreNo" value="<%=strStoreNo %>">
 		
-		<div class='subtitle'>가맹점명</div>
-		<div><label for='f_id'><%=strStoreNm %></label></div>
-		<div class='subtitle'>회원카드번호</div>
-		<div><label for='f_cardno'></label><input type='text' name='f_cardno' id='f_cardno' placeholder='회원카드번호(숫자만 입력)' onkeyup='numberOnly(this);' maxlength='10'></div>
+		<div class='frm'><label>가맹점명</label><input type='text' class='noborder' value='<%=strStoreNm %>'></div>
+		<div class='frm'><label for='f_cardno'>회원카드번호</label><input type='text' name='f_cardno' id='f_cardno' placeholder='회원카드번호(숫자만 입력)' onkeyup='numberOnly(this);' maxlength='10'></div>
 		<div><img src='../images/card_sample.png'></div>
 
 		<div class='btn' onclick='modifyCardNo();'><%=buttonNm %></div>

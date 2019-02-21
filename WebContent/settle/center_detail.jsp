@@ -13,9 +13,7 @@
 	
 	String paramFcNo 	= StrUtil.nvl(request.getParameter("strFcNo"), "");
 	String paramCardNo	= StrUtil.nvl(request.getParameter("strCardNo"), "");
-	
-	System.out.println("paramFcNo : " + paramFcNo);
-	System.out.println("paramCardNo : " + paramCardNo);
+	String paramRfid	= StrUtil.nvl(request.getParameter("strRfid"), "");
 	
 	CenterVO.resCenterDetailVO vo = null;
 	
@@ -68,7 +66,7 @@ function goBack() {
 
 function next() {
 	//location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>+'&paramCardNo='+<%=paramCardNo %>;
-	location.href='categoryList.jsp?paramSeqNo=28&paramCardNo='+<%=paramCardNo %>;
+	location.href='categoryList.jsp?paramSeqNo=28&paramCardNo=<%=paramCardNo %>&paramRfid=<%=paramRfid %>';
 }
 </script>
 
@@ -77,8 +75,7 @@ function next() {
    		<div class='title'>센터 검색</div>	
 
 		<div class='subtitle'><%=vo.STORE_NM %></div>
-		<div><img src='<%=vo.IMG_PATH %>' class='space'></div>
-
+		<div><img src='${pageContext.request.contextPath}<%=vo.IMG_URL %>' class='space'></div>
 		<div>
 			<table>
 			<tr>

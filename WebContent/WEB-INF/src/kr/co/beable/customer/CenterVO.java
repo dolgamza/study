@@ -26,6 +26,7 @@ public class CenterVO {
 		public String DB_NM;
 		public String DB_USER_NM;
 		public String DB_PW;
+		public String IMG_URL;
 		public String IMG_PATH;
 	}
 }

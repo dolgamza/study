@@ -9,12 +9,19 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
+import kr.co.beable.customer.CenterVO;
+import kr.co.beable.customer.CenterVO.resCenterAllVO;
 import kr.co.dw.mgr.ConnectionMgr;
 import kr.co.dw.util.StrUtil;
 import kr.co.dw.util.WrapPreparedStatementUtil;
 
 public class LocalDatabaseDAO {
 	
+	/**
+	 * DB INFO UPDATE
+	 * @param vo
+	 * @return
+	 */
 	protected int CM_STORE_SERVER_INS_PROC (LocalDatabaseVO vo) {
 		Connection conn					= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps	= null;
@@ -35,6 +42,11 @@ public class LocalDatabaseDAO {
 		return intResult;
 	}
 	
+	/**
+	 * DB INFO
+	 * @param strStoreNo
+	 * @return
+	 */
 	protected ArrayList<LocalDatabaseInfoVO> CM_STORE_DB_CONN_INFO_PROC (String strStoreNo) {
 		Connection conn					= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps	= null;
@@ -65,6 +77,13 @@ public class LocalDatabaseDAO {
 		return arr;
 	}
 	
+	/**
+	 * CERTIFICATION SEND SMS
+	 * @param strF_id
+	 * @param strStoreNo
+	 * @return
+	 * @throws SQLException
+	 */
 	protected int CM_STORE_MAKE_CERTIFICATION_PROC (String strF_id, String strStoreNo) throws SQLException {
 		
 		System.out.println("class strF_id : " + strF_id);
@@ -93,7 +112,7 @@ public class LocalDatabaseDAO {
 			localPs.setString(i++, "00000000000000");	//예약문자 전송시 'YYYYmmddHHMMss', 즉시전송시 '00000000000000'
 			localPs.setString(i++, "0");				//Default = 0, ( 0 : 즉시전송(숫자 0) R : 예약전송 )
 			localPs.setString(i++, "S");				//'S' -- M : MMS, S : SMS, I : 국제문자, L : 국제 MMS
-			localPs.setString(i++, "SM_006_SEAT_IN");   //기본값
+			localPs.setString(i++, "");   //기본값 [알림톡 발송시 예약된 메크로 코드( 일반 문자 발송시 빈문자 넣으시면 됨)] //SM_006_SEAT_IN
 			System.out.println(localPs.getQueryString());
 			
 			insertCnt += localPs.executeUpdate();
@@ -115,6 +134,12 @@ public class LocalDatabaseDAO {
 		
 	}
 	
+	/**
+	 * CERTIFICATION CHK
+	 * @param strF_id
+	 * @param strRandomNum
+	 * @return
+	 */
 	protected int CM_STORE_CHECK_CERTIFICATION_PROC (String strF_id, String strRandomNum) {
 		Connection conn					= ConnectionMgr.getInstance().getConnetion();
 		WrapPreparedStatementUtil ps	= null;
@@ -142,7 +167,7 @@ public class LocalDatabaseDAO {
 	}
 	
 	/**
-	 * random number
+	 * CREATE RANDOM NUMBER
 	 * @param len
 	 * @return
 	 */
@@ -167,6 +192,115 @@ public class LocalDatabaseDAO {
         
         return numStr;
     }
+	
+	/**
+	 * CARD TO RFID
+	 * @param strStoreNo
+	 * @param strCardNo
+	 * @return
+	 * @throws SQLException
+	 */
+	protected String CM_USER_CARD_TO_RFID_PROC (String strStoreNo, String strCardNo) throws SQLException {
+		
+		String rtnResult 	= "";
+		int cnt				= 0; 
+		String strUrl		= "";
+		
+		Connection localConn 				= null;
+		WrapPreparedStatementUtil localPs	= null;
+		ResultSet localRs					= null;
+		
+		try {
+			
+			strUrl	= new LocalDatabaseBean().CM_STORE_DB_CONN_INFO_PROC(strStoreNo);
+			
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			localConn 	= DriverManager.getConnection(strUrl);
+			localPs 	= new WrapPreparedStatementUtil(localConn, " SELECT RFID, COUNT(*) AS CNT FROM RFID WITH (NOLOCK) WHERE RFIDNUMBER = ? GROUP BY RFID; ");
+			
+			int i = 1;
+			localPs.setString(i++, strCardNo);
+			localRs 	= localPs.executeQuery();
+			System.out.println(localPs.getQueryString());
+			
+			if(localRs.next()) {
+				rtnResult = localRs.getString("RFID");
+				cnt		  = localRs.getInt("CNT");
+			}
+			
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			localRs.close();
+			localPs.close();
+			localConn.close();
+		}
+		
+		return rtnResult;
+		
+	}
+	
+	/**
+	 * CARD USE CHECK
+	 * @param strStoreNo
+	 * @param strCardNo
+	 * @return
+	 * @throws SQLException
+	 */
+	protected ArrayList<LocalDatabaseInfoVO> CM_USER_CARD_CHK_PROC (String strStoreNo, String strCardNo) throws SQLException {
+		
+		boolean result 	= false;
+		String strUrl	= "";
+		
+		Connection localConn 				= null;
+		WrapPreparedStatementUtil localPs	= null;
+		ResultSet localRs					= null;
+		ArrayList<LocalDatabaseInfoVO> arrResult	= new ArrayList<LocalDatabaseInfoVO>();
+		
+		try {
+			
+			String rfid = CM_USER_CARD_TO_RFID_PROC(strStoreNo, strCardNo);
+			
+			strUrl	= new LocalDatabaseBean().CM_STORE_DB_CONN_INFO_PROC(strStoreNo);
+			
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			localConn 	= DriverManager.getConnection(strUrl);
+			localPs 	= new WrapPreparedStatementUtil(localConn, " EXEC DBO.RFID_CARD_CHECK ? ");
+			
+			localPs.setString(1, rfid);
+			localRs = localPs.executeQuery();
+			result = localRs.next();
+			
+			System.out.println("result : " + result);
+			
+			if(result) {
+				
+				LocalDatabaseInfoVO res = new LocalDatabaseInfoVO();
+				
+				res.RESULT		= localRs.getString("RESULT");
+				res.MSG			= localRs.getString("MSG");
+				res.RFID		= localRs.getString("RFID");
+				res.CASH		= localRs.getString("CASH");
+				res.SD			= localRs.getString("SD");
+				res.ED			= localRs.getString("ED");
+				res.SIZE		= localRs.getString("SIZE");
+				res.HP			= localRs.getString("HP");
+				res.POINT		= localRs.getString("POINT");
+				res.RFIDINFO	= localRs.getString("RFIDINFO");
+				
+				arrResult.add(res);
+			}
+			
+		} catch(Exception e) {
+			System.out.println(e.toString());
+		} finally {
+			localRs.close();
+			localPs.close();
+			localConn.close();
+		}
+		
+		return arrResult;
+	}
 	
 	public static void main(String args[]) {
 		System.out.println(new LocalDatabaseDAO().numberGen(6));

@@ -8,4 +8,7 @@ public class ProductVO {
 	public String PRD_NM;
 	public String PRICE;
 	public String PRD_MATCHING_CD;
+	public String ROOM_CD;
+	public String SEAT_NO;
+	public String SEAT_NM;
 }

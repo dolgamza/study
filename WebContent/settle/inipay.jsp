@@ -67,11 +67,16 @@ body {color:#777;text-align:center;}
 .section div.subtitle {margin-top:20px;text-align:left;color:#80191f;font-size:1em;margin-bottom:10px;}
 
 p {position:relative;width:100%;height:40px;text-align:left;}
-label {position:absolute;width:150px;margin-top:7px;}
-input[type=text] {position:absolute;width:calc(100% - 162px);right:0;}
-select {position:absolute;width:calc(100% - 150px);right:0;padding-left:5px;}
+label {position:absolute;width:130px;margin-top:7px;font-size:0.75em;}
+input[type=text] {position:absolute;width:calc(100% - 132px);right:0;font-size:0.75em;}
+select {position:absolute;width:calc(100% - 120px);right:0;padding-left:5px;font-size:0.75em;}
 
 .btn {text-align:center;border:0;}
+
+.detail {font-size:0.75em;text-align:left;}
+.room {text-align:right;color:#80191f;font-weight:bold;font-size:1.2em;padding-top:30px;}
+.prod {text-align:right;color:#80191f;font-size:0.9em;padding-top:5px;}
+.price {text-align:right;color:#000;font-size:1.3em;padding:14px 0;}
 
 </style>
 <script src="${pageContext.request.contextPath}/js/formchecker.js?0.1" type="text/javascript"></script>
@@ -133,6 +138,8 @@ var features = position + ", width=320, height=440";
 			return;
 		}
 		
+		
+		
 		/**************************************************************************** 
 		결제수단 action url을 아래와 같이 설정한다
 		URL끝에 /를 삭제하면 다음과 같은 오류가 발생한다.
@@ -170,7 +177,7 @@ var features = position + ", width=320, height=440";
 		
 		var p_noti = "";
 		p_noti += "centerNo=<%= centerNo %>|cardNo=<%= cardNo %>|chkRoom=<%= chkRoom %>|chkSeat=<%= chkSeat %>|product=<%= product %>";
-		p_noti += "|eMail="+$("#P_EMAIL").val()+"|mobileNo="+$("#P_MOBILE").val();
+		p_noti += "|eMail="+$("#P_EMAIL").val()+"|mobileNo="+$("#P_MOBILE").val()+"|rfId=0C038575|strTmr=1|strRoomTmr=12:00|strDelayFg=N";
 		//p_noti += "centerNo="+$("#pCenterNo").val()+"|chkRoom="+$("#pChkRoom").val()+"|chkSeat="+$("#pChkSeat").val()+"|product="+$("#pProduct").val();
 		
 		$("#P_NOTI").val(p_noti);//P_NOTI 설정
@@ -204,7 +211,16 @@ var features = position + ", width=320, height=440";
 
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
-	<div class='title'>결제정보 입력</div>	
+	<div class='title'>이용권 결제</div>	
+	<div class='subtitle'>00센터</div>
+	<div class='detail'>소지하고 계신 카드의 선터와 결제하시려는 센터가 일치하는지 확인해 주세요.</div>
+
+	<div class='room'>CAMPUS ROOM</div>
+	<div class='prod'>당일권 / 4시간</div>
+	<div class='price'>6,000원</div>
+
+	<div class='subtitle'>결제수단</div>
+	
 <!--utf-8환경의 경우 accept-charset="euc-kr" 반드시 설정이 되셔야 한글이 깨지지 않습니다. -->
 
 <form name="inipay_form" method="post" accept-charset="euc-kr">

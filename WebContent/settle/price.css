@@ -22,19 +22,19 @@ a:hover {color:#80191f;}
 .btn.title {border:1px solid #c44;background-color:#c44;cursor:default;}
 
 .pop {
-	z-index:21;
-	display:none;position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);
-	background-color:transparent;
-	background-image:url('../images/settle/end.png');background-size:contain;background-repeat: no-repeat;
-	width:250px;height:250px;
-	padding:30px;padding-top:140px;
-	line-height:1.2em;color:#80191f;font-size:0.8em;
+   z-index:21;
+   display:none;position:absolute;left:50%;top:50%;transform:translate(-50%, -50%);
+   background-color:transparent;
+   background-image:url('../images/settle/end.png');background-size:contain;background-repeat: no-repeat;
+   width:250px;height:250px;
+   padding:30px;padding-top:140px;
+   line-height:1.2em;color:#80191f;font-size:0.8em;
 }
 
 .pop div {width:100%;}
 
-.pop div.txt {position:absolute;top:85px;left:0px;text-align:center;}
-.pop div.btn {position:absolute;top:135px;left:0px;text-align:center;background-color:transparent;border:0;}
+.pop div.txt {position:absolute;top:95px;left:0px;text-align:center;}
+.pop div.btn {position:absolute;top:140px;left:0px;text-align:center;background-color:transparent;border:0;}
 .pop div span {padding:5px;background-color:#fff;border:0;color:#80191f;cursor:pointer;}
 
 #mask {position:absolute;left:0;top:0;z-index:20;background-color:#000;display:none;}

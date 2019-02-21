@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-import kr.co.beable.inf.LocalDatabaseBean;
 import kr.co.dw.mgr.ConnectionMgr;
 import kr.co.dw.util.WrapPreparedStatementUtil;
 
@@ -62,10 +61,8 @@ public class SettleDAO {
 			logger.error(ps.getQueryString());
 			System.out.println(e.toString());
 		} finally {
-			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
+			ConnectionMgr.getInstance().closeConnection(conn, ps);
 		}
 		return arrResult;
 	}
-	
-
 }

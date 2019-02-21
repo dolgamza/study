@@ -119,6 +119,7 @@ public class ChainDAO {
 				res.ADDR		= rs.getString("ADDR");
 				res.ZIP_CODE	= rs.getString("ZIP_CODE");
 				res.COORDINATE	= rs.getString("COORDINATE");
+				res.THUMBNAIL	= rs.getString("THUMBNAIL");
 				res.WEB_URL		= rs.getString("WEB_URL");
 				res.IMG_URL		= rs.getString("IMG_URL");
 				arrResult.add(res);
@@ -184,8 +185,7 @@ public class ChainDAO {
 			ps.setString(i++, req.SEL_VAL);
 			ps.setString(i++, req.USR_PHONE_NO);
 			ps.setString(i++, req.MY_GUBUN);
-			logger.debug(ps.getQueryString());
-			System.out.println(ps.getQueryString());
+			//logger.debug(ps.getQueryString());
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -210,9 +210,8 @@ public class ChainDAO {
 			
 		} catch (Exception e) {
 			logger.error(ps.getQueryString());
-			System.out.println(e.toString());
+			System.out.println(e.toString()); 
 		} finally {
-			System.out.println(ps.getQueryString());
 			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
 		}
 		return arrResult;

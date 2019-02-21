@@ -82,7 +82,7 @@ a:hover {color:#80191f;}
 #seat td.F {background-color:#efe;}
 #seat td.N {background-color:#eef;}
 #seat td.S {background-color:#fee;}
-#seat td.X {background-color:#ccc;color:#c5c5c5;cursor:default;}
+#seat td.X {background-color:#ccc;color:#aaa;cursor:default;}
 #seat td.on {background-color:#80191f;border:1px solid #80191f;color:#fff;}
 </style>
 

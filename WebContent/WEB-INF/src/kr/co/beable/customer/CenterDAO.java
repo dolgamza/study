@@ -76,6 +76,7 @@ public class CenterDAO {
 				res.DB_NM		= rs.getString("DB_NM");
 				res.DB_USER_NM	= rs.getString("DB_USER_NM");
 				res.DB_PW		= rs.getString("DB_PW");
+				res.IMG_URL		= rs.getString("IMG_URL");
 				res.IMG_PATH	= rs.getString("IMG_PATH");
 				arrResult.add(res);
 			}

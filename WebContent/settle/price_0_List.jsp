@@ -19,17 +19,15 @@
 	System.out.println("centerNo : " + centerNo);
 	System.out.println("strcardNo : " + strcardNo);
 
-
-	StringBuffer sb = new StringBuffer();
 	String strPrdGrpCd = "";
+	StringBuffer sb = new StringBuffer();
 	ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom, "A");
 	if (arr!=null && arr.size()>0) {
-		
 		
 		int j = 0;
 		for (int i=0; i<arr.size(); i++) {
 			ProductVO vo = arr.get(i);
-			if (!strPrdGrpCd.equals(vo.PRD_GRP_CD)) {
+			if (!strPrdGrpCd.equals(vo.PRD_GRP_CD)) {  
 				if (i!=0) {
 					sb.append("--></ul>\n");
 				}
@@ -52,22 +50,19 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?0.3' />
+<link rel='stylesheet' href='price.css?6' />
 <style>
 .btn.title {background-color:transparent;border:1px solid transparent;background-image:url('../images/settle/<%=strPrdGrpCd%>.png');background-size:contain;background-repeat: no-repeat;}
 </style>
-<script type="text/javascript" src="price.js?3" ></script>
+<script type="text/javascript" src="price.js?2" ></script>
 
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>캠퍼스룸 이용권 결제</div>	
 		<div class='subtitle'></div>
 		<div class='choice'>
-
-<%=sb.toString() %>
-
+		<%=sb.toString() %>
 		</div>
-
 		<div class="btn" onclick="complete('<%=centerNo %>', '<%=strcardNo %>', '<%=chkRoom %>');">선택완료</div>
 </div>
 <form name='frmPrice' id='frmPrice' method='post'>
@@ -101,6 +96,30 @@ function cancel(){
 function goBack() {
 	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>';
 }
+
+$(document).ready(function() {
+	
+	$(".choice li").click(function() {
+		
+		//초기화
+		$(".list").html("");
+		
+		t = $(".choice li").index(this);
+		
+		product = $(this).attr("product");
+		//seat 	= $(this).attr("seat");
+		
+		$("#product").val(product);
+		//$("#seat").val(seat);
+		
+		$(".choice li").addClass("off");
+		$(".choice li").eq(t).removeClass("off");
+		
+		//goPage();
+		
+	});
+});
+
 </script>
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">

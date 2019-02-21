@@ -13,20 +13,16 @@
 	String strLocation 	= "";
 	
 	
-	String strcardNo 	= StrUtil.nvl(request.getParameter("cardNo"), "");
-	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
-	String chkRoom 		= "S";													//ROOM_CD
-	String chkSeat 		= StrUtil.nvl(request.getParameter("chkSeat"), "1");	//SEAT_NO
-	
-	System.out.println("centerNo : " + centerNo);
-	System.out.println("chkSeat : " + chkSeat);
-	
+	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "1");	
+	String cardNo 		= StrUtil.nvl(request.getParameter("cardNo"), "");
+	String rfidNo 		= StrUtil.nvl(request.getParameter("rfidNo"), "1");		
+	String chkRoom 		= "S";													
+
+	String strPrdGrpCd = "";
 	
 	StringBuffer sb = new StringBuffer();
 	ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom, "C");
 	if (arr!=null && arr.size()>0) {
-		String strPrdGrpCd = "";
-		
 		int j = 0;
 		for (int i=0; i<arr.size(); i++) {
 			ProductVO vo = arr.get(i);
@@ -34,7 +30,7 @@
 				if (i!=0) {
 					sb.append("--></ul>\n");
 				}
-				sb.append("<ul>\n<li class='btn title'>"+vo.PRD_GRP_NM+"<br/>&nbsp;</li><!-- \n");
+				sb.append("<ul>\n<li class='btn title'>&nbsp;<br/>&nbsp;</li><!-- \n");
 				strPrdGrpCd = vo.PRD_GRP_CD;
 				j = 1;
 			}
@@ -53,79 +49,72 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?5' />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.8.18/themes/base/jquery-ui.css" type="text/css" />
+<link rel='stylesheet' href='price.css?6' />
+<style>
+.choice li.btn {font-size:0.7em;}
+</style>
 <script src="../js/jquery-ui.js" type="text/javascript"></script>
-<script type="text/javascript" src="price.js?2" ></script>
+<script type="text/javascript" src="price.js?20190220" ></script>
 <script>
-$(document).ready(function(){
-	$( "#strStartYmd" ).datepicker({
-           monthNamesShort: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'],
-           dayNamesMin:["월","화","수","목","금","토","일"],
-           showMonthAfterYear: true,
-           changeMonth: true,
-           changeYear: true,
-           dateFormat:"yy/mm/dd"
+$(document).ready(function() {
+	
+	$(".choice li").click(function() {
+		
+		//초기화
+		$(".list").html("");
+		
+		t = $(".choice li").index(this);
+		
+		product = $(this).attr("product");
+		//seat 	= $(this).attr("seat");
+		
+		$("#product").val(product);
+		//$("#seat").val(seat);
+		
+		$(".choice li").addClass("off");
+		$(".choice li").eq(t).removeClass("off");
+		
+		//goPage();
+		
 	});
 });
+
 </script>
+<style>
+.btn.title {background-color:transparent;border:1px solid transparent;background-image:url('../images/settle/<%=strPrdGrpCd%>.png');background-size:contain;background-repeat: no-repeat;}
+</style>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>스터디룸 이용권 결제</div>	
 		<div class='subtitle'></div>
 		<div class='choice'>
-
-<%=sb.toString() %>
-
+		<%=sb.toString() %>
 		</div>
-		<div>
-			<select id=''>
-				<option value='1'>1시간</option>
-				<option value='2'>2시간</option>
-				<option value='3'>3시간</option>
-				<option value='4'>4시간</option>
-				<option value='5'>5시간</option>
-				<option value='6'>6시간</option>
-				<option value='7'>7시간</option>
-				<option value='8'>8시간</option>
-			</select>
-		</div>
-		<div style='left:0;'>
-		이용일자 : <input type='text' id="strStartYmd" name='strStartYmd' maxlength='10' style='width:100px' value='' readOnly>
-		</div>
-		<div class='btn' onclick='complete();'>선택완료</div>
+		<div class='btn' onclick='setRoom();'>선택완료</div>
 </div>
 <form name='frmPrice' id='frmPrice' method='post'>
-<input type='hidden' name='centerNo' id='centerNo' value='<%=centerNo %>' />
-<input type='hidden' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
-<input type='hidden' name='chkSeat' id='chkSeat' value='<%=chkSeat %>' />
+<input type='hidden' name='paramSeqNo' id='paramSeqNo' value='<%=centerNo %>' />
+<input type='hidden' name='paramCardNo' id='paramCardNo' value='<%=cardNo %>' />
+<input type='hidden' name='paramRfid' id='paramRfid' value='<%=rfidNo %>' />
 <input type='hidden' name='product' id='product' />
 </form>
-<!-- popup> -->
-<div id="mask"></div>
-<div class='pop'>
-	모든 이용권은 <strong>결제한 즉시</strong> 이용시간으로 측정됩니다.
-	<div>
-		<span>결제</span>
-		<span>취소</span>
-	</div>
-</div>
-<!-- >popup -->
+
 <script>
-function settle(){
+
+function setRoom() {
 	var frm = document.frmPrice;
-	frm.target = "_self";
-	frm.action = "inipay.jsp"
-	frm.submit();
+	
+	if (typeof product == "undefined") { 
+		alert('이용권을 석택하세요.')
+	} else {
+		frm.action="roomSelectList.jsp";
+		frm.target="_self";
+		frm.submit();
+	}
 }
-
-function cancel(){
-	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
-}
-
 
 function goBack() {
-	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>';
+	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>&paramCardNo=<%=cardNo %>&paramRfid=<%=rfidNo %>';
 }
 </script>
 

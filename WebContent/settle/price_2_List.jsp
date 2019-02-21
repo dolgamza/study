@@ -21,11 +21,11 @@
 	System.out.println("centerNo : " + centerNo);
 	System.out.println("chkSeat : " + chkSeat);
 	
-	
+	String strPrdGrpCd = "";
 	StringBuffer sb = new StringBuffer();
 	ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom, "B");
 	if (arr!=null && arr.size()>0) {
-		String strPrdGrpCd = "";
+		
 		
 		int j = 0;
 		for (int i=0; i<arr.size(); i++) {
@@ -34,7 +34,7 @@
 				if (i!=0) {
 					sb.append("--></ul>\n");
 				}
-				sb.append("<ul>\n<li class='btn title'>"+vo.PRD_GRP_NM+"<br/>&nbsp;</li><!-- \n");
+				sb.append("<ul>\n<li class='btn title' style='background-image:url(\"../images/settle/"+ vo.PRD_GRP_CD +".png\");'>&nbsp;<br/>&nbsp;</li><!-- \n");
 				strPrdGrpCd = vo.PRD_GRP_CD;
 				j = 1;
 			}
@@ -53,7 +53,10 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?5' />
+<link rel='stylesheet' href='price.css?6' />
+<style>
+.btn.title {background-color:transparent;border:1px solid transparent;background-size:contain;background-repeat: no-repeat;}
+</style>
 <script type="text/javascript" src="price.js?2" ></script>
 
 <div class='back' onclick='goBack();'>&lt;</div>
@@ -77,10 +80,10 @@
 <!-- popup> -->
 <div id="mask"></div>
 <div class='pop'>
-	모든 이용권은 <strong>결제한 즉시</strong> 이용시간으로 측정됩니다.
-	<div>
-		<span>결제</span>
-		<span>취소</span>
+	<div class='txt'>모든 이용권은 <strong>결제한 즉시</strong><br/>이용시간으로 측정됩니다.</div>
+	<div class='btn'>
+		<span class='settle'>결제</span>
+		<span class='cancel'>취소</span>
 	</div>
 </div>
 <!-- >popup -->
@@ -100,7 +103,32 @@ function cancel(){
 function goBack() {
 	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>';
 }
+
+$(document).ready(function() {
+	
+	$(".choice li").click(function() {
+		
+		//초기화
+		$(".list").html("");
+		
+		t = $(".choice li").index(this);
+		
+		product = $(this).attr("product");
+		//seat 	= $(this).attr("seat");
+		
+		$("#product").val(product);
+		//$("#seat").val(seat);
+		
+		$(".choice li").addClass("off");
+		$(".choice li").eq(t).removeClass("off");
+		
+		//goPage();
+		
+	});
+});
+
 </script>
+
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>
