@@ -11,18 +11,26 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
+	request.setCharacterEncoding("utf-8");
+	
 	String strTitle 		= "좌석 선택";
 	String strLocation 		= "";
 	
-	String paramSeqNo 		= StrUtil.nvl(request.getParameter("paramSeqNo"), "");	//가맹점 번호
-	String paramCardNo 		= StrUtil.nvl(request.getParameter("paramCardNo"), "");	//카드번호
-	String paramroomType 	= StrUtil.nvl(request.getParameter("paramroomType"), "");	//룸타입
+	String centerNo 		= StrUtil.nvl(request.getParameter("centerNo"), "");		//가맹점 번호
+	String cardNo 			= StrUtil.nvl(request.getParameter("cardNo"), "");		//카드번호
+	String rfidNo 			= StrUtil.nvl(request.getParameter("rfidNo"), "");		//RFID
+	String cardType 		= StrUtil.nvl(request.getParameter("cardType"), "");	//RFID
+	String chkRoom 			= StrUtil.nvl(request.getParameter("chkRoom"), "");			//룸타입
+	String product 			= StrUtil.nvl(request.getParameter("product"), "");			//PRD_CD _ PRD_NM _ PRICE _ PRD_TIME _ DELAY_YN
 	
-	System.out.println("paramSeqNo : " + paramSeqNo);
-	System.out.println("paramCardNo : " + paramCardNo);
+	System.out.println("centerNo 	: " + centerNo);
+	System.out.println("cardNo : " + cardNo);
+	System.out.println("rfidNo 	: " + rfidNo);
+	System.out.println("chkRoom 	: " + chkRoom);
+	System.out.println("product 	: " + product);
 	
-	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo); // 해당지점좌석배치표 조회
-	ArrayList<LocalSeatVO> arrOcc = new LocalSeatBean().getSeats(paramSeqNo); // 좌석이용현황 조회
+	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(centerNo); // 해당지점좌석배치표 조회
+	ArrayList<LocalSeatVO> arrOcc = new LocalSeatBean().getSeats(centerNo); // 좌석이용현황 조회
 	String strCampusRoom	= "";
 	
 	if (arr!=null && arr.size()>0) {
@@ -52,6 +60,7 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
+<link rel='stylesheet' href='price.css?5' />
 <style>
 body {color:#777;}
 .rooptop {position:relative;}
@@ -86,23 +95,10 @@ a:hover {color:#80191f;}
 #seat td.on {background-color:#80191f;border:1px solid #80191f;color:#fff;}
 </style>
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="screen">
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script>
-
-var room = -1;
 var seatTypeAndNo = "";
-
-function next() {
-	if (room>-1 && seatTypeAndNo!="") {
-		
-		var frm = document.frmSettle;
-			frm.target = "_self";
-			frm.action = 'price_'+room+'.jsp';
-			frm.submit();
-			
-	} else {
-		alert('choice room and seat!');
-	}
-}
 
 $(document).ready(function() {
 	
@@ -136,7 +132,7 @@ $(document).ready(function() {
 			seatTypeAndNo = $(this).attr("seatno");
 			
 			$("#chkSeat").val(seatTypeAndNo);
-			console.log("t : " + t); // <--------------------------- seat type and number
+			console.log("t : " + t); // 						<--------------------------- seat type and number
 			console.log("seatTypeAndNo : " + seatTypeAndNo); // <--------------------------- seat type and number
 			
 			$("#seat td.seat").removeClass("on");
@@ -146,27 +142,67 @@ $(document).ready(function() {
 	});
 
 	$(".back").click(function(){
-		location.href="price_0_List.jsp?centerNo="+<%=paramSeqNo %>+"&cardNo="+<%=paramCardNo %>;
+		var frm = document.frmSettle;
+			frm.target = "_self";
+			frm.action = 'price_0_List.jsp';
+			frm.submit();
 	});
 	
 });
 
+function complete() {
+	if (seatTypeAndNo!="") {
+		var maskHeight = $(document).height();
+       	var maskWidth = $(window).width();  
+       	$('#mask').css({'width':maskWidth,'height':maskHeight});  
+       	$('#mask').fadeIn(300);      
+       	$('#mask').fadeTo("slow",0.7);
+       	$(".pop").show();
+       	$("html, body").scrollTop(0);
+       	$(".pop .settle").click(function() {
+			var frm = document.frmSettle;
+   			frm.target = "_self";
+   			frm.action = 'inipay.jsp';
+   			frm.submit();
+       	});
+       	$(".pop .cancel").click(function() {
+       		$('#mask').hide();  
+			$(".pop").hide();
+       	});
+  	} else {
+  		alertify.alert("좌석을 선택하세요.");
+   }
+}
+
 </script>
 <form name='frmSettle' id='frmSettle' method='post'>
-<input type='hidden' name='centerNo' id='centerNo' value='<%=paramSeqNo %>' />
-<input type='hidden' name='chkRoom' id='chkRoom' />
-<input type='hidden' name='chkSeat' id='chkSeat' />
+<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+<input type='text' name='cardNo' id='cardNo' value='<%=chkRoom %>' />
+<input type='text' name='rfidNo' id='rfidNo' value='<%=rfidNo %>' />
+<input type='text' name='cardType' id='cardType' value='<%=cardType %>' />
+<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %>' />
+<input type='text' name='product' id='product' value='<%=product %>' />
+<input type='text' name='chkSeat' id='chkSeat' />
 </form>
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
    		<div class='title'>좌석 선택</div>	
 		<div class='subtitle'>이용하실 좌석 선택</div>
 		<div id='seat'>
 		
 		</div>
-		<div id="next" class='btn off' onclick='next();'>다음</div>
+		<div id="next" class='btn off' onclick='complete();'>다음</div>
 </div>
-
+<!-- popup> -->
+<div id="mask"></div>
+<div class='pop'>
+	<div class='txt'>모든 이용권은 <strong>결제한 즉시</strong><br/>이용시간으로 측정됩니다.</div>
+	<div class='btn'>
+		<span class='settle'>결제</span>
+		<span class='cancel'>취소</span>
+	</div>
+</div>
+<!-- >popup -->
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>
 </jsp:include>

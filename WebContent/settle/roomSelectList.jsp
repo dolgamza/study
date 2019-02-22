@@ -1,40 +1,34 @@
-<%@page contentType="text/html;charset=utf-8"%>
+﻿<%@page contentType="text/html;charset=utf-8"%>
 <%@ page import = "java.util.ArrayList" %>
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "kr.co.beable.chain.ProductVO" %>
 <%@ page import = "kr.co.beable.chain.ProductBean" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
-	request.setCharacterEncoding("utf-8");
-
 	response.setHeader("Cache-Control","no-cache");
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
+	
+	request.setCharacterEncoding("utf-8");
 	
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
 	String now_date		= DwUtil.addDashYMD(DateUtil.getCurrentDate(), "/");
 	
-	String centerNo 	= StrUtil.nvl(request.getParameter("paramSeqNo"), "1");	
-	String cardNo 		= StrUtil.nvl(request.getParameter("paramCardNo"), "");
-	String rfidNo 		= StrUtil.nvl(request.getParameter("paramRfid"), "");	
-	String product 		= StrUtil.nvl(request.getParameter("product"), "");
+	String centerNo 	   = StrUtil.nvl(request.getParameter("centerNo"), "1");	
+	String cardNo 		   = StrUtil.nvl(request.getParameter("cardNo"), "");
+	String rfidNo 		   = StrUtil.nvl(request.getParameter("rfidNo"), "");
+	String cardType   	   = StrUtil.nvl(request.getParameter("cardType"), "");
+	String chkRoom 		   = StrUtil.nvl(request.getParameter("chkRoom"), "");
+	String short_product   = StrUtil.nvl(request.getParameter("product"), "");
+	String delayYN 		   = StrUtil.nvl(request.getParameter("delayYN"), "");
 	
-	String[] products 	= product.split("_");
+	String[] products 	= short_product.split("_");
 	
 	String productCd	= products[0];
 	String productNm 	= products[1];
 	String productAmt	= products[2];
-	
-	System.out.println(productAmt);
-	
-	System.out.println("centerNo : " + centerNo);
-	System.out.println("cardNo : " + cardNo);
-	System.out.println("rfidNo : " + rfidNo);
-	System.out.println("product : " + product);
-	 
-	System.out.println(DwUtil.addDashYMD(DateUtil.getCurrentDate(), "/"));
 	
 	StringBuffer sb = new StringBuffer();
 	ArrayList<ProductVO> arr = new ProductBean().PM_ROOM_LIST_PROC(Integer.parseInt(centerNo), Integer.parseInt(productCd));
@@ -44,18 +38,16 @@
 		for (int i=0; i<arr.size(); i++) {
 			ProductVO vo = arr.get(i);
 			
-			sb.append("--><li class='btn off' product='"+ productCd +"_"+ productNm +"_"+ productAmt +"' seat='"+vo.SEAT_NO+"'>"+ vo.SEAT_NM +"<br/></li><!-- \n");
+			sb.append("--><li class='btn off' short_product='"+ productCd +"_"+ productNm +"' seat='"+vo.SEAT_CD+"_"+vo.SEAT_NO+"'>"+ vo.SEAT_NM +"<br/></li><!-- \n");
 		}
 		sb.append("--></ul>");
-		  
 	}
-	
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel='stylesheet' href='price.css?1' />
+<link rel='stylesheet' href='price.css?<%=DateUtil.getCurrentDateTimeMilli() %>' />
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <style>
 
@@ -76,10 +68,13 @@ input.fc {width:60px;background-color:#80191f;text-align:center;color:white;padd
 .frm input, .frm select {margin-left:2px;}
 
 </style>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="screen">
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-<script type="text/javascript" src="price.js?20190220" ></script>
 <script>
+var seatTypeAndNo = "";
+
 $(document).ready(function() {
 	
 	setNowTime();
@@ -94,17 +89,16 @@ $(document).ready(function() {
 	});
 	
 	$(".choice li").click(function() {
-		
 		//초기화
 		$(".status").html("");
 		
 		t = $(".choice li").index(this);
 		
-		product = $(this).attr("product");
-		seat 	= $(this).attr("seat");
+		short_product 	= $(this).attr("short_product");
+		seatTypeAndNo 	= $(this).attr("seat");
 		
-		$("#product").val(product);
-		$("#seat").val(seat);
+		$("#short_product").val(short_product);
+		$("#chkSeat").val(seatTypeAndNo);
 		
 		$(".choice li").addClass("off");
 		$(".choice li").eq(t).removeClass("off");
@@ -112,13 +106,19 @@ $(document).ready(function() {
 		goPage();
 		
 		$(".hide").show();
-		
+	});
+	
+	$(".back").click(function(){
+		var frm = document.frmSettle;
+			frm.target = "_self";
+			frm.action = 'price_1_List.jsp';
+			frm.submit();
 	});
 });
 
 function goPage() {
 	//리스트 가져오기
-	$.post("./roomSelectAjax.jsp", $("#frmPrice").serialize(), function(data){
+	$.post("./roomSelectAjax.jsp", $("#frmSettle").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
 		if(json.isSuccess) {
 			fnMakList(json.resData);
@@ -164,23 +164,73 @@ function fnMakList(jsonList) {
 
 function setNowTime() {
 	
-	var sd = new Date();
+	var sd 		= new Date();
+	var se_mm 	= Math.ceil(sd.getMinutes() / 5) * 5;
+	var hh;
 	
-	var se_mm = Math.ceil(sd.getMinutes() / 5) * 5;
+	if(sd.getHours() < 10){
+		hh = "0" + sd.getHours();
+	} else {
+		hh = sd.getHours();
+	}
 	
-	$("#strev_hh").val(sd.getHours());
+	$("#strev_hh").val(hh);
 	$("#strev_mm").val(se_mm);
-	
+	  
 	setUseAmt(60);
 	
 }
 
 function setUseAmt(time){
+	
+	var timeHH = time / 60;
 	var useAmt = (<%=productAmt %> * time / 60);
+	var strProduct = '<%=productCd %>_<%=productNm %>_'+useAmt+'_'+timeHH+'_<%=delayYN %>';   
+	
 	$("#tot_amt").val(useAmt);
+	$("#product").val(strProduct);
 }
+
+function chkRoomTime() {
+	if (seatTypeAndNo!="") { 
+		$.post("./setRoomUseChk.jsp", $("#frmSettle").serialize(), function(data){
+			var json = JSON.parse($.trim(data));
+			if(json.isSuccess) {
+				complete();
+			} else {
+				alertify.alert("이미 예약된 일정입니다.");
+			}
+		})
+		.error(function(){  
+			alertify.alert("다시 한번 시도해주세요.");
+		});
+	} else {
+		alertify.alert("스터디룸을 선택하세요.");
+	}
+}
+
+function complete() {
+	var maskHeight = $(document).height();
+    var maskWidth = $(window).width();  
+    $('#mask').css({'width':maskWidth,'height':maskHeight});  
+     	$('#mask').fadeIn(300);      
+     	$('#mask').fadeTo("slow",0.7);
+     	$(".pop").show();
+     	$("html, body").scrollTop(0);
+    $(".pop .settle").click(function() {
+    	var frm = document.frmSettle;
+ 		frm.target = "_self";
+ 		frm.action = 'inipay.jsp';
+ 		frm.submit();
+    });
+    $(".pop .cancel").click(function() {
+    	$('#mask').hide();  
+		$(".pop").hide();
+    });
+}
+
 </script>
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
    		<div class='title'>스터디룸 이용권 결제</div>	
 		<div class='subtitle'>* 스터디룸을 선택하세요.</div>
@@ -194,13 +244,15 @@ function setUseAmt(time){
 		</div>
 		<div class='status'></div>
 		
-		<form name='frmPrice' id='frmPrice' method='post'> 
+		<form name='frmSettle' id='frmSettle' method='post'> 
 		<div class='subtitle hide'>* 스터디룸 예약하기</div>
-		<input type='hidden' name='paramSeqNo' id='centerNo' value='<%=centerNo %>' />
-		<input type='hidden' name='paramCardNo' id='cardNo' value='<%=cardNo %>' />
-		<input type='hidden' name='paramRfid' id='rfidNo' value='<%=rfidNo %>' />
-		<input type='hidden' name='product' id='product' /> 
-		<input type='hidden' name='seat' id='seat' />
+		<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+		<input type='text' name='cardNo' id='cardNo' value='<%=cardNo %>' />
+		<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %>' />
+		<input type='text' name='rfidNo' id='rfidNo' value='<%=rfidNo %>' />
+		<input type='text' name='cardType' id='cardType' value='<%=cardType %>' />
+		<input type='text' name='product' id='product' /> 
+		<input type='text' name='chkSeat' id='chkSeat' />
 		<div class='hide frm'>
 			<label>이용일자</label>
 			<input type='text' id="strReserveYmd" name='strReserveYmd' maxlength='10' style='width:120px' value='<%=now_date %>' readOnly>
@@ -276,50 +328,13 @@ function setUseAmt(time){
 <!-- popup> -->
 <div id="mask"></div>
 <div class='pop'>
-   <div class='txt'>모든 이용권은 <strong>결제한 즉시</strong><br/>이용시간으로 측정됩니다.</div>
-   <div class='btn'>
-      <span class='settle'>결제</span>
-      <span class='cancel'>취소</span>
-   </div>
+	<div class='txt'>모든 이용권은 <strong>결제한 즉시</strong><br/>이용시간으로 측정됩니다.</div>
+	<div class='btn'>
+		<span class='settle'>결제</span>
+		<span class='cancel'>취소</span>
+	</div>
 </div>
 <!-- >popup -->
-<script>
-function chkRoomTime() {
-	if (typeof product == "undefined") { 
-		alert('이용권을 석택하세요.')
-	} else {
-		$.post("./setRoomUseChk.jsp", $("#frmPrice").serialize(), function(data){
-			var json = JSON.parse($.trim(data));
-			if(json.isSuccess) {
-				alert("111");
-			} else {
-				alert("111222");
-			}
-			/*
-			var json = JSON.parse($.trim(data));
-			
-			if(json.isSuccess) {
-				if("Y" == json.resData[0].RESULT){
-					location.href = json.resUrl;	
-				} else {
-					alertify.alert(json.resMsg);
-				}
-			} else {
-				alertify.alert(json.resMsg);
-			}
-			*/
-		})
-		.error(function(){  
-			alertify.alert("로그인 중 오류가 발생했습니다.\n시스템 관리자에게 문의하세요.");
-		});
-	}
-}
-
-function goBack() {
-	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>&paramCardNo=<%=cardNo %>&paramRfid=<%=rfidNo %>';
-}
-</script>
-
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>
 </jsp:include>

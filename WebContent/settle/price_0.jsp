@@ -5,62 +5,61 @@
 <%@ page import = "kr.co.beable.chain.ProductBean" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
-response.setHeader("Cache-Control","no-cache");
-response.setHeader("Pragma","no-cache");
-response.setDateHeader("Expires",0);
-
-String strTitle 	= "";
-String strLocation 	= "";
-
-/**
-0. 해당 지점 DB 커넥션
-1. 이용권 가져오기
-*/
-
-String centerNo = StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
-String chkRoom 	= "C";													//ROOM_CD
-String chkSeat 	= StrUtil.nvl(request.getParameter("chkSeat"), "1");	//SEAT_NO
-
-System.out.println("centerNo : " + centerNo);
-System.out.println("chkRoom : " + chkRoom);
-System.out.println("chkSeat : " + chkSeat);
-
-StringBuffer sb = new StringBuffer();
-ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom);
-if (arr!=null && arr.size()>0) {
-	String strPrdGrpCd = "";
+	response.setHeader("Cache-Control","no-cache");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader("Expires",0);
 	
-	int j = 0;
-	for (int i=0; i<arr.size(); i++) {
-		ProductVO vo = arr.get(i);
-		if (!strPrdGrpCd.equals(vo.PRD_GRP_CD)) {
-			if (i!=0) {
-				sb.append("--></ul>\n");
+	String strTitle 	= "";
+	String strLocation 	= "";
+	
+	/**
+	0. 해당 지점 DB 커넥션
+	1. 이용권 가져오기
+	*/
+	
+	String centerNo = StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
+	String chkRoom 	= "C";													//ROOM_CD
+	String chkSeat 	= StrUtil.nvl(request.getParameter("chkSeat"), "1");	//SEAT_NO
+	
+	System.out.println("centerNo : " + centerNo);
+	System.out.println("chkRoom : " + chkRoom);
+	System.out.println("chkSeat : " + chkSeat);
+	
+	String strPrdGrpCd = "";
+	StringBuffer sb = new StringBuffer();
+	ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom);
+	if (arr!=null && arr.size()>0) {
+		
+		int j = 0;
+		for (int i=0; i<arr.size(); i++) {
+			ProductVO vo = arr.get(i);
+			if (!strPrdGrpCd.equals(vo.PRD_GRP_CD)) {
+				if (i!=0) {
+					sb.append("--></ul>\n");
+				}
+				sb.append("<ul>\n<li class='btn title'>"+vo.PRD_GRP_NM+"<br/>&nbsp;</li><!-- \n");
+				strPrdGrpCd = vo.PRD_GRP_CD;
+				j = 1;
 			}
-			sb.append("<ul>\n<li class='btn title'>"+vo.PRD_GRP_NM+"<br/>&nbsp;</li><!-- \n");
-			strPrdGrpCd = vo.PRD_GRP_CD;
-			j = 1;
-		}
-		if (j%3 == 0) {
-			sb.append("--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!-- \n");
+			if (j%3 == 0) {
+				sb.append("--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!-- \n");
+				j++;
+			}
+			sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
 			j++;
 		}
-		sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
-		j++;
+		sb.append("--></ul>");
 	}
-	sb.append("--></ul>");
-}
-
-
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?5' />
-<script type="text/javascript" src="price.js?2" ></script>
-
+<link rel='stylesheet' href='price.css?<%=DateUtil.getCurrentDateTimeMilli() %>' />
+<style>
+.btn.title {background-color:transparent;border:1px solid transparent;background-image:url('../images/settle/<%=strPrdGrpCd %>.png');background-size:contain;background-repeat: no-repeat;}
+</style>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>
    		<div class='title'>이용권 선택</div>	

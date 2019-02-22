@@ -13,9 +13,9 @@
 	String strLocation 	= "";
 	
 	String strGubun 	= StrUtil.nvl(request.getParameter("gubun"), "");
-	String strStoreNo 	= StrUtil.nvl(request.getParameter("store_no"), "");
+	String strStoreNo 	= StrUtil.nvl(request.getParameter("centerNo"), "");
 	String strStoreNm 	= StrUtil.nvl(request.getParameter("store_nm"), "");
-	String strCardNo 	= StrUtil.nvl(request.getParameter("card_no"), "");
+	String strCardNo 	= StrUtil.nvl(request.getParameter("cardNo"), "");
 	
 	String buttonNm 	= "";
 	

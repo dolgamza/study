@@ -9,23 +9,23 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
+	request.setCharacterEncoding("utf-8");
+	
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
-	
-	String strcardNo 	= StrUtil.nvl(request.getParameter("cardNo"), "");
 	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
+	String strcardNo 	= StrUtil.nvl(request.getParameter("cardNo"), "");
+	String rfidNo 		= StrUtil.nvl(request.getParameter("rfidNo"), "");
+	String cardType 	= StrUtil.nvl(request.getParameter("cardType"), "");
 	String chkRoom 		= "C";													//ROOM_CD
-	String chkSeat 		= StrUtil.nvl(request.getParameter("chkSeat"), "1");	//SEAT_NO
 	
 	System.out.println("centerNo : " + centerNo);
-	System.out.println("chkSeat : " + chkSeat);
 	
-	String strPrdGrpCd = "";
 	StringBuffer sb = new StringBuffer();
 	ArrayList<ProductVO> arr = new ProductBean().PM_PRODUCT_LIST_PROC(centerNo, chkRoom, "B");
 	if (arr!=null && arr.size()>0) {
-		
+		String strPrdGrpCd = "";
 		
 		int j = 0;
 		for (int i=0; i<arr.size(); i++) {
@@ -42,7 +42,7 @@
 				sb.append("--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!-- \n");
 				j++;
 			}
-			sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
+			sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"_"+vo.PRD_TIME+"_"+vo.DELAY_YN+"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
 			j++;
 		}
 		sb.append("--></ul>");
@@ -53,29 +53,31 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?6' />
+<link rel='stylesheet' href='price.css?5' />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="screen">
 <style>
 .btn.title {background-color:transparent;border:1px solid transparent;background-size:contain;background-repeat: no-repeat;}
 </style>
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script type="text/javascript" src="price.js?2" ></script>
 
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
    		<div class='title'>이용권 선택</div>	
 		<div class='subtitle'>_ [캠퍼스룸] 이용권 선택</div>
 		<div class='choice'>
-
-<%=sb.toString() %>
-
+		<%=sb.toString() %>
 		</div>
 
 		<div class='btn' onclick='complete();'>선택완료</div>
 </div>
 <form name='frmPrice' id='frmPrice' method='post'>
-<input type='hidden' name='centerNo' id='centerNo' value='<%=centerNo %>' />
-<input type='hidden' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
-<input type='hidden' name='chkSeat' id='chkSeat' value='<%=chkSeat %>' />
-<input type='hidden' name='product' id='product' />
+<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+<input type='text' name='cardNo' id='cardNo' value='<%=strcardNo %>' />
+<input type='text' name='rfidNo' id='rfidNo' value='<%=rfidNo %>' />
+<input type='text' name='cardType' id='cardType' value='<%=cardType %>' />
+<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
+<input type='text' name='product' id='product' />
 </form>
 <!-- popup> -->
 <div id="mask"></div>
@@ -88,47 +90,58 @@
 </div>
 <!-- >popup -->
 <script>
-function settle(){
-	var frm = document.frmPrice;
-	frm.target = "_self";
-	frm.action = "inipay.jsp"
-	frm.submit();
-}
-
-function cancel(){
-	location.href='seat.jsp?paramSeqNo=<%=centerNo %>';
-}
-
-
-function goBack() {
-	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>';
-}
+var product = "";
 
 $(document).ready(function() {
 	
 	$(".choice li").click(function() {
-		
 		//초기화
 		$(".list").html("");
 		
 		t = $(".choice li").index(this);
 		
 		product = $(this).attr("product");
-		//seat 	= $(this).attr("seat");
 		
 		$("#product").val(product);
-		//$("#seat").val(seat);
 		
 		$(".choice li").addClass("off");
 		$(".choice li").eq(t).removeClass("off");
-		
-		//goPage();
-		
+	});
+	
+	$(".back").click(function(){
+		var frm = document.frmPrice;
+			frm.target = "_self";
+			frm.action = 'categoryList.jsp';
+			frm.submit();
 	});
 });
 
-</script>
+function complete() {
+	
+	if (product!="") {
+		var maskHeight = $(document).height();
+	    var maskWidth = $(window).width();  
+	    $('#mask').css({'width':maskWidth,'height':maskHeight});  
+	     	$('#mask').fadeIn(300);      
+	     	$('#mask').fadeTo("slow",0.7);
+	     	$(".pop").show();
+	     	$("html, body").scrollTop(0);
+	    $(".pop .settle").click(function() {
+	    	var frm = document.frmSettle;
+	 		frm.target = "_self";
+	 		frm.action = 'inipay.jsp';
+	 		frm.submit();
+	    });
+	    $(".pop .cancel").click(function() {
+	    	$('#mask').hide();  
+			$(".pop").hide();
+	    });
+	} else {
+		alertify.alert("이용권을 선택하세요.");
+	}
+}
 
+</script>
 
 <jsp:include page="../inc/Footer.v2.jsp" flush="false">
 	<jsp:param name="param" value=""/>

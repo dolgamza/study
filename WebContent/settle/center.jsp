@@ -68,9 +68,9 @@ div.list {width:90%;}
 
 </style>
 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
-<script src="../js/paging.js" type="text/javascript"></script>
+<script src="${pageContext.request.contextPath}/js/paging.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function(){
 	$(window).on("load",function() {
@@ -79,7 +79,7 @@ $(function(){
 });
 
 function goBack() {
-	location.href='../customer/';
+	location.href='${pageContext.request.contextPath}/customer/';
 }
 
 function search() {
@@ -93,7 +93,7 @@ function goPage(i) {
 	$("#strPage").val(i);
 	
 	//리스트 가져오기
-	$.post("./centerAjax.jsp", $("#frmSearch").serialize(), function(data){
+	$.post("${pageContext.request.contextPath}/settle/centerAjax.jsp", $("#frmSearch").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
 		if(json.isSuccess) {
 			fnMakList(i, json.intTotalCnt, json.resData);
@@ -108,15 +108,20 @@ function goPage(i) {
 
 function fnCardchk(strStNo, strCardNo){
 	
-	$("#store_no").val(strStNo);
-	$("#card_no").val(strCardNo);
+	//$("#strFcNo").val(strStNo);
+	$("#centerNo").val(28);
+	$("#cardNo").val(strCardNo);
 	
 	$.post("${pageContext.request.contextPath}/settle/setCardUsingChk.jsp", $("#frmSearch").serialize(), function(data){
 		var json = JSON.parse($.trim(data));
 		
 		if(json.isSuccess) {
 			if("Y" == json.resData[0].RESULT){
-				location.href = json.resUrl;	
+				
+				$("#rfidNo").val(json.resData[0].RFID);
+				$("#cardType").val(json.resData[0].CARDTYPE);
+				goNext();
+				
 			} else {
 				alertify.alert(json.resMsg);
 			}
@@ -125,8 +130,16 @@ function fnCardchk(strStNo, strCardNo){
 		}
 	})
 	.error(function(){  
-		alertify.alert("로그인 중 오류가 발생했습니다.\n시스템 관리자에게 문의하세요.");
+		alertify.alert("데이터 연결 중입니다. 다시 한번 시도해주세요.");
 	});
+}
+
+function goNext(){
+	var frm = document.frmSearch;
+	
+	frm.target = "_self";
+	frm.action = "${pageContext.request.contextPath}/settle/center_detail.jsp";
+	frm.submit();
 }
 
 function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
@@ -138,7 +151,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 	fnMakPaging(intCurrentPage, intTotalRowNum, $("#strPageBlock").val(), 10, "goPage");
 	
 	/* 화면 리스트 구현 */
-	var listHtml = '<table >';
+	var listHtml = '<table>';
 	if(jsonList != '' && jsonList.length > 0) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
@@ -183,11 +196,11 @@ function cardModify(gubun, store_no, store_nm) {
 	frm = document.frmSearch;
 	
 	$("#gubun").val(gubun);
-	$("#store_no").val(store_no);
+	$("#centerNo").val(store_no);
 	$("#store_nm").val(store_nm);
 	
 	frm.target = "_self";
-	frm.action = "../membership/cardModify.jsp";
+	frm.action = "${pageContext.request.contextPath}/membership/cardModify.jsp";
 	frm.submit();
 	
 }
@@ -198,13 +211,15 @@ function cardModify(gubun, store_no, store_nm) {
    	<div class='title'>센터 검색</div>	
 
 	<form name="frmSearch" id="frmSearch" method="post">
-	<input type="hidden" name="gubun" id="gubun">
-	<input type="hidden" name="store_no" id="store_no">
-	<input type="hidden" name="store_nm" id="store_nm">
-	<input type="hidden" name="card_no" id="card_no">
-	<input type="hidden" name="strPage" id="strPage">
-	<input type="hidden" name="strPageBlock" id="strPageBlock" value="5">
-	<input type="hidden" name="strMyGubun" id="strMyGubun">
+	<input type="text" name="centerNo" id="centerNo">
+	<input type="text" name="cardNo" id="cardNo">
+	<input type="text" name="gubun" id="gubun">
+	<input type="text" name="store_nm" id="store_nm">
+	<input type="text" name="strPage" id="strPage">
+	<input type="text" name="strPageBlock" id="strPageBlock" value="5">
+	<input type="text" name="strMyGubun" id="strMyGubun">
+	<input type="text" name="rfidNo" id="rfidNo">
+	<input type="text" name="cardType" id="cardType">
 		<div>
 			<span>
 				<label for='strSelFg'></label>

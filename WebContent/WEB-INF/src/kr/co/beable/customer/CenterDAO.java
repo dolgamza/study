@@ -60,7 +60,7 @@ public class CenterDAO {
 			ps = new WrapPreparedStatementUtil(conn, " EXEC DBO.CM_STORE_DETAIL_PROC ? ");
 			ps.setInt(1, paramStoreNo);
 			logger.debug(ps.getQueryString());
-			System.out.println(ps.getQueryString());
+			//System.out.println(ps.getQueryString());
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -85,7 +85,7 @@ public class CenterDAO {
 			logger.error(ps.getQueryString());
 			System.out.println(e.toString());
 		} finally {
-			System.out.println(ps.getQueryString());
+			//System.out.println(ps.getQueryString());
 			ConnectionMgr.getInstance().closeConnection(conn, ps, rs);
 		}
 		return arrResult;

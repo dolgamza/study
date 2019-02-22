@@ -1,3 +1,4 @@
+/*
 new fullpage('#fullpage', {
 	anchors:['process', 'as-is', 'fund', 'contact-us'],
     navigation: true,
@@ -18,3 +19,4 @@ $(document).ready(function() {
   $(".slideup").show();
 	
 });
+*/

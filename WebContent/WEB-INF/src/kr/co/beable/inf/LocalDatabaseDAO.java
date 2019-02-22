@@ -269,9 +269,8 @@ public class LocalDatabaseDAO {
 			
 			localPs.setString(1, rfid);
 			localRs = localPs.executeQuery();
+			System.out.println(localPs.getQueryString());
 			result = localRs.next();
-			
-			System.out.println("result : " + result);
 			
 			if(result) {
 				
@@ -284,6 +283,7 @@ public class LocalDatabaseDAO {
 				res.SD			= localRs.getString("SD");
 				res.ED			= localRs.getString("ED");
 				res.SIZE		= localRs.getString("SIZE");
+				res.CARDTYPE		= localRs.getString("CARDTYPE");
 				res.HP			= localRs.getString("HP");
 				res.POINT		= localRs.getString("POINT");
 				res.RFIDINFO	= localRs.getString("RFIDINFO");

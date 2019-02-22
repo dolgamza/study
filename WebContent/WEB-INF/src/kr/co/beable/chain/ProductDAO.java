@@ -57,7 +57,7 @@ public class ProductDAO {
 			ps.setString(1, strStoreNo);
 			ps.setString(2, strRoomCd);
 			ps.setString(3, strProductNo);
-			System.out.println(ps.getQueryString());
+			//System.out.println(ps.getQueryString());
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
@@ -69,6 +69,8 @@ public class ProductDAO {
 				vo.PRD_NM			= rs.getString("PRD_NM");
 				vo.PRICE			= rs.getString("PRICE");
 				vo.PRD_MATCHING_CD	= rs.getString("PRD_MATCHING_CD");
+				vo.PRD_TIME			= rs.getString("PRD_TIME");
+				vo.DELAY_YN			= rs.getString("DELAY_YN");
 				arrResult.add(vo);
 			}
 			
@@ -99,10 +101,14 @@ public class ProductDAO {
 				ProductVO vo 		= new ProductVO();
 				vo.STORE_NO			= rs.getString("STORE_NO");
 				vo.PRD_CD			= rs.getString("PRD_CD");
+				vo.PRD_NM			= rs.getString("PRD_NM");
 				vo.ROOM_CD			= rs.getString("ROOM_CD");
-				vo.PRD_GRP_CD		= rs.getString("PRD_GRP_CD");
 				vo.SEAT_NO			= rs.getString("SEAT_NO");
+				vo.PRD_GRP_CD		= rs.getString("PRD_GRP_CD");
+				vo.SEAT_CD			= rs.getString("SEAT_CD");
 				vo.SEAT_NM			= rs.getString("SEAT_NM");
+				vo.PRD_TIME			= rs.getString("PRD_TIME");
+				vo.DELAY_YN			= rs.getString("DELAY_YN");
 				arrResult.add(vo);
 			}
 			

@@ -9,33 +9,22 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
+	request.setCharacterEncoding("utf-8");
+	
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
-	String paramSeqNo 	= StrUtil.nvl(request.getParameter("paramSeqNo"), "");	//가맹점 번호
-	String paramCardNo 	= StrUtil.nvl(request.getParameter("paramCardNo"), "");	//카드번호
-	String paramRfid 	= StrUtil.nvl(request.getParameter("paramRfid"), "");	//RFID 번호
+	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "");	//가맹점 번호
+	String cardNo 		= StrUtil.nvl(request.getParameter("cardNo"), "");	//카드번호
+	String rfidNo 		= StrUtil.nvl(request.getParameter("rfidNo"), "");	//RFID 번호
+	String cardType 	= StrUtil.nvl(request.getParameter("cardType"), "");	//RFID 번호
 	
-	/* 해당지점좌석배치표 조회 */
-	ArrayList<SeatVO> arr	= new SeatBean().CM_SEATS_PROC(paramSeqNo);
-	String strCampusRoom	= "";
-	String strStudyRoom		= "";
+	System.out.println("centerNo : " + centerNo);
+	System.out.println("cardNo : " + cardNo);
+	System.out.println("rfidNo : " + rfidNo);
+	System.out.println("cardType : " + cardType);
 	
-	System.out.println("arr.size() : " + arr.size());
-	System.out.println("arr.size() : " + arr.size());
 	
-	if (arr!=null && arr.size()>0) {
-		for (int i=0; i<arr.size(); i++) {
-			SeatVO vo = arr.get(i);
-			if (vo.ROOM_CD.equals("C")) strCampusRoom += vo.SEAT;
-			else strStudyRoom += vo.SEAT;
-		}
-		strCampusRoom = strCampusRoom.substring(0, strCampusRoom.length()-1);
-		strStudyRoom  = strStudyRoom.substring(0, strStudyRoom.length()-1);
-	}
-	
-	System.out.println("strCampusRoom : " + strCampusRoom);
-	System.out.println("strStudyRoom : " + strStudyRoom);
 %>
 <jsp:include page="../inc/Header.v2.jsp" flush="false">
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
@@ -101,10 +90,17 @@ $(document).ready(function() {
 		next(2);
 	});
 	
+	$(".back").click(function(){
+		var frm = document.frmSettle;
+			frm.target = "_self";
+			frm.action = 'center_detail.jsp';
+			frm.submit();
+	});
+	
 });
 
 function goBack() {
-	location.href='./center_detail.jsp?strFcNo=<%=paramSeqNo %>&strCardNo=<%=paramCardNo %>';
+	location.href='./center_detail.jsp?strFcNo=<%=centerNo %>&strCardNo=<%=cardNo %>';
 }
 
 function next(roomtype) {
@@ -116,10 +112,11 @@ function next(roomtype) {
 
 </script>
 <form name='frmSettle' id='frmSettle' method='post'>
-<input type='hidden' name='centerNo' id='centerNo' value=<%=paramSeqNo %> />
-<input type='hidden' name='cardNo' id='cardNo' value=<%=paramCardNo %> />
-<input type='hidden' name='rfidNo' id='rfidNo' value=<%=paramRfid %> />
-
+<input type='text' name='centerNo' id='centerNo' value=<%=centerNo %> />
+<input type='text' name='cardNo' id='cardNo' value=<%=cardNo %> />
+<input type='text' name='rfidNo' id='rfidNo' value=<%=rfidNo %> />
+<input type='text' name='cardType' id='cardType' value=<%=cardType %> />
+<input type='text' name='delayYN' id='delayYN' />
 </form>
 <div class='back' onclick='goBack();'>&lt;</div>
 <div class='section'>

@@ -9,14 +9,17 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
+	request.setCharacterEncoding("utf-8");
+	
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
+	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "1");	//가맹점 번호
+	String cardNo 		= StrUtil.nvl(request.getParameter("cardNo"), "");		//카드번호
+	String rfidNo 		= StrUtil.nvl(request.getParameter("rfidNo"), "");		//가맹점 번호
+	String cardType 	= StrUtil.nvl(request.getParameter("cardType"), "");	//카드타입
 	
-	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "1");	
-	String cardNo 		= StrUtil.nvl(request.getParameter("cardNo"), "");
-	String rfidNo 		= StrUtil.nvl(request.getParameter("rfidNo"), "1");		
-	String chkRoom 		= "S";													
+	String chkRoom 		= "S";													//ROOM_CD
 
 	String strPrdGrpCd = "";
 	
@@ -38,7 +41,7 @@
 				sb.append("--><li class='btn hide'>&nbsp;<br/>&nbsp;</li><!-- \n");
 				j++;
 			}
-			sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
+			sb.append("--><li class='btn off' product='"+ vo.PRD_CD +"_"+ vo.PRD_NM +"_"+ vo.PRICE +"' delayYN='"+vo.DELAY_YN+"'>"+ vo.PRD_NM +"<br/>"+ StrUtil.addComma(vo.PRICE) +"원</li><!-- \n");
 			j++;
 		}
 		sb.append("--></ul>");
@@ -49,33 +52,38 @@
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
 
-<link rel='stylesheet' href='price.css?6' />
+<link rel='stylesheet' href='price.css?5' />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="screen">
 <style>
 .choice li.btn {font-size:0.7em;}
 </style>
+<script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
 <script src="../js/jquery-ui.js" type="text/javascript"></script>
 <script type="text/javascript" src="price.js?20190220" ></script>
 <script>
 $(document).ready(function() {
 	
 	$(".choice li").click(function() {
-		
 		//초기화
 		$(".list").html("");
 		
 		t = $(".choice li").index(this);
 		
 		product = $(this).attr("product");
-		//seat 	= $(this).attr("seat");
+		delayYN = $(this).attr("delayYN");
 		
 		$("#product").val(product);
-		//$("#seat").val(seat);
+		$("#delayYN").val(delayYN);
 		
 		$(".choice li").addClass("off");
 		$(".choice li").eq(t).removeClass("off");
-		
-		//goPage();
-		
+	});
+	
+	$(".back").click(function(){
+		var frm = document.frmPrice;
+			frm.target = "_self";
+			frm.action = 'categoryList.jsp';
+			frm.submit();
 	});
 });
 
@@ -83,7 +91,7 @@ $(document).ready(function() {
 <style>
 .btn.title {background-color:transparent;border:1px solid transparent;background-image:url('../images/settle/<%=strPrdGrpCd%>.png');background-size:contain;background-repeat: no-repeat;}
 </style>
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
    		<div class='title'>스터디룸 이용권 결제</div>	
 		<div class='subtitle'></div>
@@ -93,10 +101,13 @@ $(document).ready(function() {
 		<div class='btn' onclick='setRoom();'>선택완료</div>
 </div>
 <form name='frmPrice' id='frmPrice' method='post'>
-<input type='hidden' name='paramSeqNo' id='paramSeqNo' value='<%=centerNo %>' />
-<input type='hidden' name='paramCardNo' id='paramCardNo' value='<%=cardNo %>' />
-<input type='hidden' name='paramRfid' id='paramRfid' value='<%=rfidNo %>' />
-<input type='hidden' name='product' id='product' />
+<input type='text' name='centerNo' id='centerNo' value='<%=centerNo %>' />
+<input type='text' name='cardNo' id='cardNo' value='<%=cardNo %>' />
+<input type='text' name='rfidNo' id='rfidNo' value='<%=rfidNo %>' />
+<input type='text' name='cardType' id='cardType' value='<%=cardType %>' />
+<input type='text' name='chkRoom' id='chkRoom' value='<%=chkRoom %> '/>
+<input type='text' name='product' id='product' />
+<input type='text' name='delayYN' id='delayYN' />
 </form>
 
 <script>
@@ -105,16 +116,12 @@ function setRoom() {
 	var frm = document.frmPrice;
 	
 	if (typeof product == "undefined") { 
-		alert('이용권을 석택하세요.')
+		alertify.alert("이용권을 선택하세요.");
 	} else {
 		frm.action="roomSelectList.jsp";
 		frm.target="_self";
 		frm.submit();
 	}
-}
-
-function goBack() {
-	location.href='categoryList.jsp?paramSeqNo=<%=centerNo %>&paramCardNo=<%=cardNo %>&paramRfid=<%=rfidNo %>';
 }
 </script>
 

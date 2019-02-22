@@ -26,7 +26,8 @@ a:hover {color:#80191f;}
 .subheading_img {width:160px;height:auto;}
 .section div {width:90%;margin-left:auto;margin-right:auto;margin-bottom:5px;}
 .section div ul {margin-left:20px;}
-.section div li {text-align:left;font-size:0.825em;}
+.section div li {text-align:left;font-size:0.75em;}
+.section div li:last-child {margin-bottom:40px;}
 
 @media only screen and (max-width : 1040px) {
 }
@@ -88,8 +89,8 @@ function goMain() {
 		<div><label for='f_pw2'></label><input type='password' name= 'f_pw2' id='f_pw2' placeholder='새 비밀번호 확인' maxlength='20'></div>
 		<div>
 			<ul>
-				<li>영문, 숫자, 특수문자를 함께 사용하면(8자 이상 16자 이하)보다 안전합니다.</li>
-				<li>다른 사이트와 다른 비에이블스터디카페 아이디만의 비밀번호를 만들어 주세요.</li>
+				<li>영문, 숫자, 특수문자를 함께 사용하면 보다 안전합니다.</li>
+				<li>다른 사이트와 다른 비에이블스터디카페만의 비밀번호를 만들어 주세요.</li>
 			</ul>
 		</div>
 		<div class='btn' onclick='pwdChange();'>확인</div>

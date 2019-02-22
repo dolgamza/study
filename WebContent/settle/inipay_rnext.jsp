@@ -40,24 +40,35 @@ if(P_STATUS.equals("01")) {
 	String strResultNoti	= StrUtil.nvl(P_NOTI);			//PG인증 수신 - 주문정보 (centerNo=centerNo값|cardNo=cardNo값|chkRoom=chkRoom값|chkSeat=chkSeat|product=product|eMail=eMail|mobileNo=mobileNo)
 	
 	//P_NOTI 값
-	//centerNo	-> 0
-	//cardNo	-> 1
-	//chkRoom	-> 2
-	//chkSeat	-> 3
-	//product	-> 4
-	//eMail		-> 5
-	//mobileNo	-> 6
+	//centerNo		-> 0
+	//cardNo		-> 1
+	//rfidNo		-> 2
+	//cardType		-> 3
+	//chkRoom		-> 4
+	//product		-> 5
+	//chkSeat		-> 6
+	//reserveYmd	-> 7
+	//reserveTime	-> 8
+	//eMail			-> 9
+	//mobileNo		-> 10
+	//payMethod		-> 11
 	String[] arrNoti = strResultNoti.split("[|]");
 	
 	String strStoreNo		= StrUtil.nvl(arrNoti[0].substring(arrNoti[0].indexOf("=")+1), "0");	//가맹점번호
 	String strCardNo		= StrUtil.nvl(arrNoti[1].substring(arrNoti[1].indexOf("=")+1), "0");	//카드번호
-	String strRoomCd		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//룸구분
-	String strChkSeat		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//좌석유형코드_좌석번호
-	String strProduct		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//상품코드_상품명_금액
-	String strEMail			= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//이용자이메일주소
-	String strUsrPhoneNo	= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//이용자전화번호
+	String strRfidNo		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//RFID 번호
+	String strCardType		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//회원구분
+	String strRoomCd		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//룸구분
+	String strProduct		= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//상품코드_상품명_금액_이용시간_연장구분
+	String strChkSeat		= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//좌석유형코드_좌석번호
+	String strReserveYmd	= StrUtil.nvl(arrNoti[7].substring(arrNoti[7].indexOf("=")+1));			//이용일자
+	String strReserveTime	= StrUtil.nvl(arrNoti[8].substring(arrNoti[8].indexOf("=")+1));			//이용시간-시분(00:00)
+	String strEMail			= StrUtil.nvl(arrNoti[9].substring(arrNoti[9].indexOf("=")+1));			//이용자이메일주소
+	String strUsrPhoneNo	= StrUtil.nvl(arrNoti[10].substring(arrNoti[10].indexOf("=")+1));		//이용자전화번호
+	String strPayMethod		= StrUtil.nvl(arrNoti[11].substring(arrNoti[11].indexOf("=")+1));		//지불수단(CARD, MEMB)
 	
-	String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8");
+	String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&rfidNo="+strRfidNo+"&cardType="+strCardType+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8")+"&chkSeat="+strChkSeat;
+		   strParam	= "&reserveYmd="+strReserveYmd+"&reserveTime="+strReserveTime+"&eMail="+strEMail+"&mobileNo="+strUsrPhoneNo+"&payMethod="+strPayMethod;
 	out.println("<script>");
 	out.println("	alert('결제실패되었습니다. 결제를 다시 진행해주세요.');");
 	out.println("	location.href = 'inipay.jsp?"+strParam+"';");
@@ -93,27 +104,40 @@ if(P_STATUS.equals("01")) {
 			//System.err.println("Method failed: " + method.getStatusLine());
 			System.out.println("Method failed: " + method.getStatusLine());
 			
-			String strResultNoti	= StrUtil.nvl(P_NOTI);	//PG인증 수신 - 주문정보 (centerNo=centerNo값|cardNo=cardNo값|chkRoom=chkRoom값|chkSeat=chkSeat|product=product|eMail=eMail|mobileNo=mobileNo)
+			//PG인증 수신 - 주문정보 
+			//(centerNo=centerNo값|cardNo=cardNo값|rfidNo=rfidNo값|cardType=cardType값|chkRoom=chkRoom값|product=product값|chkSeat=chkSeat값|eMail=eMail값|mobileNo=mobileNo값)
+			String strResultNoti	= StrUtil.nvl(P_NOTI);
 			
 			//P_NOTI 값
-			//centerNo	-> 0
-			//cardNo	-> 1
-			//chkRoom	-> 2
-			//chkSeat	-> 3
-			//product	-> 4
-			//eMail		-> 5
-			//mobileNo	-> 6
+			//centerNo		-> 0
+			//cardNo		-> 1
+			//rfidNo		-> 2
+			//cardType		-> 3
+			//chkRoom		-> 4
+			//product		-> 5
+			//chkSeat		-> 6
+			//reserveYmd	-> 7
+			//reserveTime	-> 8
+			//eMail			-> 9
+			//mobileNo		-> 10
+			//payMethod		-> 11
 			String[] arrNoti = strResultNoti.split("[|]");
 			
 			String strStoreNo		= StrUtil.nvl(arrNoti[0].substring(arrNoti[0].indexOf("=")+1), "0");	//가맹점번호
 			String strCardNo		= StrUtil.nvl(arrNoti[1].substring(arrNoti[1].indexOf("=")+1), "0");	//카드번호
-			String strRoomCd		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//룸구분
-			String strChkSeat		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//좌석유형코드_좌석번호
-			String strProduct		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//상품코드_상품명_금액
-			String strEMail			= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//이용자이메일주소
-			String strUsrPhoneNo	= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//이용자전화번호
+			String strRfidNo		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//RFID 번호
+			String strCardType		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//회원구분
+			String strRoomCd		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//룸구분
+			String strProduct		= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//상품코드_상품명_금액_이용시간_연장구분
+			String strChkSeat		= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//좌석유형코드_좌석번호
+			String strReserveYmd	= StrUtil.nvl(arrNoti[7].substring(arrNoti[7].indexOf("=")+1));			//이용일자
+			String strReserveTime	= StrUtil.nvl(arrNoti[8].substring(arrNoti[8].indexOf("=")+1));			//이용시간-시분(00:00)
+			String strEMail			= StrUtil.nvl(arrNoti[9].substring(arrNoti[9].indexOf("=")+1));			//이용자이메일주소
+			String strUsrPhoneNo	= StrUtil.nvl(arrNoti[10].substring(arrNoti[10].indexOf("=")+1));		//이용자전화번호
+			String strPayMethod		= StrUtil.nvl(arrNoti[11].substring(arrNoti[11].indexOf("=")+1));		//지불수단(CARD, MEMB)
 			
-			String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8");
+			String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&rfidNo="+strRfidNo+"&cardType="+strCardType+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8")+"&chkSeat="+strChkSeat;
+				   strParam	= "&reserveYmd="+strReserveYmd+"&reserveTime="+strReserveTime+"&eMail="+strEMail+"&mobileNo="+strUsrPhoneNo+"&payMethod="+strPayMethod;
 			out.println("<script>");
 			out.println("	alert('결제실패되었습니다. 결제를 다시 진행해주세요.');");
 			out.println("	location.href = 'inipay.jsp?"+strParam+"';");
@@ -164,30 +188,35 @@ if(P_STATUS.equals("01")) {
 		//P_NOTI에 가맹점정보, 이용자전화번호, 카드번호가 들어있어 해당값이 없을 경우 등록을 못함.
 		if (strResultNoti != null && !"".equals(strResultNoti)) {
 			//P_NOTI 값
-			//centerNo	-> 0
-			//cardNo	-> 1
-			//chkRoom	-> 2
-			//chkSeat	-> 3
-			//product	-> 4
-			//eMail		-> 5
-			//mobileNo	-> 6
+			//centerNo		-> 0
+			//cardNo		-> 1
+			//rfidNo		-> 2
+			//cardType		-> 3
+			//chkRoom		-> 4
+			//product		-> 5
+			//chkSeat		-> 6
+			//reserveYmd	-> 7
+			//reserveTime	-> 8
+			//eMail			-> 9
+			//mobileNo		-> 10
+			//payMethod		-> 11
 			String[] arrNoti = strResultNoti.split("[|]");
 			
 			String strStoreNo		= StrUtil.nvl(arrNoti[0].substring(arrNoti[0].indexOf("=")+1), "0");	//가맹점번호
 			String strCardNo		= StrUtil.nvl(arrNoti[1].substring(arrNoti[1].indexOf("=")+1), "0");	//카드번호
-			String strRoomCd		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//룸구분
-			String strChkSeat		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//좌석유형코드_좌석번호
-			String strProduct		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//상품코드_상품명_금액
-			String strEMail			= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//이용자이메일주소
-			String strUsrPhoneNo	= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//이용자전화번호
-			String strRfId			= StrUtil.nvl(arrNoti[7].substring(arrNoti[7].indexOf("=")+1));			//RFID
-			String strTmr			= StrUtil.nvl(arrNoti[8].substring(arrNoti[8].indexOf("=")+1), "0");	//TMR(캠퍼스룸일 경우 이용시간)
-			String strRoomTmr		= StrUtil.nvl(arrNoti[9].substring(arrNoti[9].indexOf("=")+1));			//Roomtmr(스터디룸일 경우 시작 이용시간)
-			String strDelayFg		= StrUtil.nvl(arrNoti[10].substring(arrNoti[10].indexOf("=")+1));		//연장여부
+			String strRfidNo		= StrUtil.nvl(arrNoti[2].substring(arrNoti[2].indexOf("=")+1));			//RFID 번호
+			String strCardType		= StrUtil.nvl(arrNoti[3].substring(arrNoti[3].indexOf("=")+1));			//회원구분
+			String strRoomCd		= StrUtil.nvl(arrNoti[4].substring(arrNoti[4].indexOf("=")+1));			//룸구분
+			String strProduct		= StrUtil.nvl(arrNoti[5].substring(arrNoti[5].indexOf("=")+1));			//상품코드_상품명_금액_이용시간_연장구분
+			String strChkSeat		= StrUtil.nvl(arrNoti[6].substring(arrNoti[6].indexOf("=")+1));			//좌석유형코드_좌석번호
+			String strReserveYmd	= StrUtil.nvl(arrNoti[7].substring(arrNoti[7].indexOf("=")+1));			//이용일자
+			String strReserveTime	= StrUtil.nvl(arrNoti[8].substring(arrNoti[8].indexOf("=")+1));			//이용시간-시분(00:00)
+			String strEMail			= StrUtil.nvl(arrNoti[9].substring(arrNoti[9].indexOf("=")+1));			//이용자이메일주소
+			String strUsrPhoneNo	= StrUtil.nvl(arrNoti[10].substring(arrNoti[10].indexOf("=")+1));		//이용자전화번호
+			String strPayMethod		= StrUtil.nvl(arrNoti[11].substring(arrNoti[11].indexOf("=")+1));		//지불수단(CARD, MEMB)
 			
 			//결제정보 입력값 추가
 			mapResult.put("P_EMAIL", strEMail);			//이메일주소
-			mapResult.put("P_MOBILE", strUsrPhoneNo);	//휴대폰번호
 			
 			//hashmap -> json -> xml
 			JSONObject jsonData		= new JSONObject(mapResult);
@@ -206,6 +235,8 @@ if(P_STATUS.equals("01")) {
 			reqInipayVO.STORE_NO		= Integer.parseInt(strStoreNo);
 			reqInipayVO.USR_PHONE_NO	= strUsrPhoneNo;
 			reqInipayVO.CARD_NO			= Integer.parseInt(strCardNo);
+			reqInipayVO.RFID			= strRfidNo;
+			reqInipayVO.CARD_TYPE		= strCardType;
 			reqInipayVO.DATA_XML		= resultXml;
 			
 			//PG_SETTLE_TB 등록
@@ -222,9 +253,11 @@ if(P_STATUS.equals("01")) {
 				String[] arrChkSeats 	= strChkSeat.split("_");
 				String[] arrProducts 	= strProduct.split("_");
 				
-				String strSeatNo 		= StrUtil.nvl(arrChkSeats[1], "0");		//좌석번호
-				String strPrdCd			= StrUtil.nvl(arrProducts[0], "0");		//상품코드
+				String strSeatNo 		= StrUtil.nvl(arrChkSeats[0], "0");		//좌석번호
+				String strPrdCd			= StrUtil.nvl(arrProducts[1], "0");		//상품코드
 				String strPrice			= StrUtil.nvl(arrProducts[2], "0");		//판매금액
+				String strPrdTime		= StrUtil.nvl(arrProducts[3], "0");		//이용시간
+				String strDelayYn		= StrUtil.nvl(arrProducts[4], "N");		//연장구분
 				
 				//결제수단코드
 				String strMethodCd = "";
@@ -290,7 +323,6 @@ if(P_STATUS.equals("01")) {
 						InipayVO.resSmProductSeatVO prodSeatInfoVO = (InipayVO.resSmProductSeatVO)arrProdSeatInfo.get(0);
 						String strInfoPrdMatchingCd		= StrUtil.nvl(prodSeatInfoVO.PRD_MATCHING_CD);
 						String strInfMethod				= StrUtil.nvl(prodSeatInfoVO.METHOD_NM);
-						int intInfTmr					= prodSeatInfoVO.PRD_TIME;
 						int intInfMemCnt				= prodSeatInfoVO.MEM_CNT;
 						
 						String strCashGubun	= ("CARD".equals(strMethodCd)) ? strMethodCd : "CARD";
@@ -299,17 +331,17 @@ if(P_STATUS.equals("01")) {
 						//회원권/할인권일 경우 IUD_REFILL 등록처리
 						boolean blIns	= false;
 						int intSel		= -1;
-						if ("B".equals(strInfoPrdMatchingCd)) {
+						if ("MEMB".equals(strPayMethod)) {
 							//IUD_REFILL 등록
-							System.out.println(strStoreNo+"^"+strRfId+"^"+strReceipt+"^"+strResultAmt+"^"+strCashGubun+"^"+strInfMethod+"^"+intInfTmr+"^"+strUsrPhoneNo.replace("-", ""));
+							System.out.println(strStoreNo+"^"+strRfidNo+"^"+strReceipt+"^"+strResultAmt+"^"+strCashGubun+"^"+strCardType+"^"+strPrdTime+"^"+strUsrPhoneNo.replace("-", ""));
 							InipayVO.reqIudRefillVO reqIudRefillVO = new InipayVO().new reqIudRefillVO();
 							reqIudRefillVO.STORE_NO		= strStoreNo;
-							reqIudRefillVO.RFID			= strRfId;
+							reqIudRefillVO.RFID			= strRfidNo;
 							reqIudRefillVO.RECEIPT		= strReceipt;
 							reqIudRefillVO.CASH			= strResultAmt;
 							reqIudRefillVO.CASHGUBUN	= strCashGubun;
-							reqIudRefillVO.METHOD		= strInfMethod;
-							reqIudRefillVO.TMR			= intInfTmr;
+							reqIudRefillVO.METHOD		= strCardType;
+							reqIudRefillVO.TMR			= Integer.parseInt(strPrdTime);
 							reqIudRefillVO.HP			= strUsrPhoneNo.replace("-", "");
 							
 							blIns = new InipayBean().IUD_REFILL_INS_PROC(reqIudRefillVO);
@@ -320,25 +352,25 @@ if(P_STATUS.equals("01")) {
 							System.out.println("intSel:"+intSel);
 							
 							if (intSel == 0) {
+								System.out.println(">>>>>>>>>재등록예정");
 								//등록된 내역이 없을 경우 재등록처리
 								//blIns = new InipayBean().IUD_REFILL_INS_PROC(reqIudRefillVO);
 								//System.out.println("blIns:"+blIns);
-								System.out.println(">>>>>>>>>재등록예정");
 							}
 						} else {
 							
 							//연장선택 시 연장은 분기처리해야함. 작업 미진행.......
-							if (!"Y".equals(strDelayFg)) {
+							if (!"Y".equals(strDelayYn)) {
 								InipayVO.reqIudRecordVO reqIudRecordVO = new InipayVO().new reqIudRecordVO();
 								reqIudRecordVO.STORE_NO		= strStoreNo;
 								reqIudRecordVO.RECEIPT		= strReceipt;
 								reqIudRecordVO.SEAT			= strSeatNo;
-								reqIudRecordVO.RFID			= strRfId;
+								reqIudRecordVO.RFID			= strRfidNo;
 								reqIudRecordVO.FEE			= strResultAmt;
 								reqIudRecordVO.CASHERTYPE	= strCashGubun;
-								reqIudRecordVO.TMR			= Integer.parseInt(strTmr);
+								reqIudRecordVO.TMR			= Integer.parseInt(strPrdTime);
 								reqIudRecordVO.HP			= strUsrPhoneNo.replace("-", "");
-								reqIudRecordVO.ROOMTMR		= ("S".equals(strRoomCd)) ? strRoomTmr : "";
+								reqIudRecordVO.ROOMTMR		= ("S".equals(strRoomCd)) ? strReserveTime : "";
 								reqIudRecordVO.MEMCNT		= intInfMemCnt;
 								
 								blIns = new InipayBean().IUD_RECORD_INS_PROC(reqIudRecordVO);
@@ -349,19 +381,19 @@ if(P_STATUS.equals("01")) {
 								System.out.println("intSel:"+intSel);
 								
 								if (intSel == 0) {
+									System.out.println(">>>>>>>>>재등록예정");
 									//등록된 내역이 없을 경우 재등록처리
 									//blIns = new InipayBean().IUD_RECORD_INS_PROC(reqIudRecordVO);
 									//System.out.println("blIns:"+blIns);
-									System.out.println(">>>>>>>>>재등록예정");
 								}
 							} else {
 							
 								//연장시 처리될 부분
 								InipayVO.reqIudDelayVO reqIudDelayVO = new InipayVO().new reqIudDelayVO();
 								reqIudDelayVO.STORE_NO		= strStoreNo;
-								reqIudDelayVO.RFID			= strRfId;
+								reqIudDelayVO.RFID			= strRfidNo;
 								reqIudDelayVO.SEAT			= Integer.parseInt(strSeatNo);
-								reqIudDelayVO.TMR			= Integer.parseInt(strTmr);
+								reqIudDelayVO.TMR			= Integer.parseInt(strPrdTime);
 								reqIudDelayVO.CASH			= 0;
 								reqIudDelayVO.CARD			= Integer.parseInt(strResultAmt);
 								reqIudDelayVO.POINT			= 0;
@@ -380,7 +412,8 @@ if(P_STATUS.equals("01")) {
 			if (!"00".equals(strResultStatus)) {
 				// 인증결과가 실패일 경우 결제화면으로 이동
 				System.out.println("Pay Fail : "+strResultRmesg);
-				String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8");
+				String strParam	= "centerNo="+strStoreNo+"&cardNo="+strCardNo+"&rfidNo="+strRfidNo+"&cardType="+strCardType+"&chkRoom="+strRoomCd+"&product="+URLEncoder.encode(strProduct, "UTF-8")+"&chkSeat="+strChkSeat;
+					   strParam	= "&reserveYmd="+strReserveYmd+"&reserveTime="+strReserveTime+"&eMail="+strEMail+"&mobileNo="+strUsrPhoneNo+"&payMethod="+strPayMethod;
 				out.println("<script>");
 				out.println("	alert('결제실패되었습니다. 결제를 다시 진행해주세요.');");
 				out.println("	location.href = 'inipay.jsp?"+strParam+"';");

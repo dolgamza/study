@@ -10,6 +10,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 
 import kr.co.beable.inf.LocalDatabaseBean;
+import kr.co.dw.util.DateTimeUtil;
 import kr.co.dw.util.DateUtil;
 import kr.co.dw.util.WrapPreparedStatementUtil;
 
@@ -170,7 +171,7 @@ public class LocalSeatDAO {
 		sb.append("       ( SELECT *                                                                          \n");
 		sb.append("		   FROM	Reservation                                                                   \n");
 		sb.append("		  WHERE	1=1                                                                           \n");
-		sb.append("		    AND CONVERT(VARCHAR, SD,112) LIKE '" + DateUtil.getCurrentDate() + "%'");
+		sb.append("		    AND CONVERT(VARCHAR, SD, 112) LIKE '" + DateUtil.getCurrentDate() + "%'");
 		sb.append("	        AND GETDATE() < ED                                                                \n");
 		sb.append("		  UNION ALL                                                                           \n");
 		sb.append("		 SELECT '' AS RESERVATION                                                             \n");
@@ -232,10 +233,6 @@ public class LocalSeatDAO {
 			ldb.closeLocalConnection(conn);
 		}
 		return intRtn;
-	}
-	
-	public static void main(String args[]) throws ParseException {
-		
 	}
 	
 }

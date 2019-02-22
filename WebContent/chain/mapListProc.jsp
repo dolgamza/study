@@ -1,6 +1,6 @@
 <%@page contentType="text/html;charset=utf-8"%>
 <%@ page import = "java.util.*" %>
-<%@ page import = "kr.co.beable.chain.*" %>
+<%@ page import = "kr.co.beable.customer.*" %>
 <%@ page import = "kr.co.dw.util.*" %>
 <%@ page import = "org.json.simple.JSONObject" %>
 <%@ page import = "org.json.simple.JSONArray" %>

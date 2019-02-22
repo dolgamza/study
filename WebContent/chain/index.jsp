@@ -60,13 +60,14 @@
 	<jsp:param name="title" value="<%=java.net.URLEncoder.encode(strTitle, java.nio.charset.StandardCharsets.UTF_8.toString())%>"/>
 	<jsp:param name="location" value="<%=java.net.URLEncoder.encode(strLocation, java.nio.charset.StandardCharsets.UTF_8.toString()) %>"/>
 </jsp:include>
-<link rel="stylesheet" href="chain.css?<%= (new java.util.Date()).toLocaleString()%>" type="text/css" media="all">
+<link rel="stylesheet" href="chain.css?<%=DateUtil.getCurrentDateTimeMilli() %>" type="text/css" media="all">
 <style>
 .main-section-3 div>ul>li>div>span {
    display:inline-block;font-size:0.8em;padding:10px 4.5px;background-color:#fff;border:1px solid #ccc;border-right:0;
    width:calc(95%/5 - 10px);
    text-align:center;cursor:pointer;
 }
+
 </style>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/js/alertify.css?0.5" type="text/css" media="screen">
 <script src="${pageContext.request.contextPath}/js/alertify.js" type="text/javascript"></script>
@@ -109,8 +110,8 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 		listHtml += '';
 		for (var i = 0; i < jsonList.length; i++) {
 			listHtml += '<tr>';
-			listHtml += '	<td rowspan="4" class="pic"><img src="${pageContext.request.contextPath}'+jsonList[i].IMG_URL+'"></td>';
-			listHtml += '	<td colspan="2" class="detail">'+jsonList[i].STORE_NM+'</td>';
+			listHtml += '	<td rowspan="4" class="pic"><img src="${pageContext.request.contextPath}'+jsonList[i].THUMBNAIL+'"></td>';
+			listHtml += '	<td colspan="2" class="tdtitle">'+jsonList[i].STORE_NM+'</td>';
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>주소</th>';
@@ -122,7 +123,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 			listHtml += '</tr>';
 			listHtml += '<tr>';
 			listHtml += '	<th>홈페이지</th>';
-			listHtml += '	<td class="detail">'+jsonList[i].WEB_URL+'</td>';
+			listHtml += '	<td class="detail"><a href="http://'+jsonList[i].WEB_URL+'" target="_blank">'+jsonList[i].WEB_URL+'</a></td>';
 			listHtml += '</tr>';
 		}
 	} else {
@@ -187,7 +188,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 									<option value="FC_TELN" <%if("FC_TELN".equals(strSelFg)){ out.println("selected");} %>>연락처</option>
 									<option value="FC_ADDR" <%if("FC_ADDR".equals(strSelFg)){ out.println("selected");} %>>주소</option>
 								</select></span><!-- 
-							--><span><input type='text' name='strSelVal' id='strSelVal' class='fb chain_search'></span><!--
+							--><span><input type='text' name='strSelVal' id='strSelVal' class='fb chain_search' placeholder='검색어를 입력해 주세요.'></span><!--
 							--><span><input type='text' value='검색' class='fc' onclick='search();'></span>
 						</div>
    						</form>
@@ -258,7 +259,7 @@ function fnMakList(intCurrentPage, intTotalRowNum, jsonList) {
 				</li>
 				<li>
 					<label for='f_phone'>연락처</label>
-					<input type='text' id='f_phone' name='f_phone' class='half' maxlength='3' onkeypress='numberOnly(this);'>
+					<input type='text' id='f_phone' name='f_phone' class='half' maxlength='3' onkeyup='numberOnly(this);'>
 				</li>
 				<li class='textarea'><textarea id="f_bigo" name='f_bigo' maxlength='250'></textarea></li>
 			</ul>

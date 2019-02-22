@@ -6,15 +6,17 @@ function goBack() {
 }
 
 $(document).ready(function() {
-
+	/*
 	$(".pop div span").click(function() {
+		alert("1111");
+		alert($(".pop div span").index(this));
 		if ($(".pop div span").index(this) == 0) settle();
 		else {
 			$('#mask').hide();  
 			$(".pop").hide();
 		}
 	});
-	
+	*/
 });
 
 
@@ -36,7 +38,7 @@ function complete(storeNo, cardNo, roomType) {
         $("html, body").scrollTop(0);
 	}
 }
-*/
+
 
 function complete(storeNo, cardNo, roomType) {
 	   if (typeof product == "undefined") { 
@@ -57,7 +59,7 @@ function complete(storeNo, cardNo, roomType) {
 	        });
 	   }
 	}
-
+*/
 
 function settle() {
 	var frm = document.frmPrice;

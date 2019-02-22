@@ -18,9 +18,11 @@ div.detail {width:90%;margin-left:auto;margin-right:auto;text-align:left;}
 .slideup div.title {padding-top:0;}
 ol {list-style-type: decimal;margin:0;color:#333;}
 
-/* #process */
-.slide {position:relative;width:90%;height:400px;margin-left:auto;margin-right:auto;overflow:hidden;}
+.slide {position:relative;width:90%;height:450px;margin-left:auto;margin-right:auto;overflow:hidden;}
 .section ul {padding:30px 0 0 0;list-style-type:none;}
+.main-section-4 {margin-top:30px;}
+.main-section-4 ul {padding:0;}
+.main-section-5 {margin-top:-50px;}
 .section ul li {position:absolute;text-align:left;height:450px;vertical-align:top;}
 .section li:after {content:">";font-size:2em;color:#80191f;position:absolute;margin-top:-350px;right:-30px;}
 .section li:last-child:after {content:"";}
@@ -75,9 +77,9 @@ input.fc {width:calc(20% - 27px);background-color:#80191f;text-align:center;colo
 	th {display:none;}
 
 	.nm {text-align:left;}
-	.slide {height:550px;}
-	.section ul li {height:550px;}
+	.slide {height:650px;}
 	.slide ul li div div {padding:10px 0;}
+	.slide ul li div img {width:auto;height:590px;}
 	
 	/*
 	.section td img {width:113px;height:113px;}

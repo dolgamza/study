@@ -23,12 +23,12 @@ request.setCharacterEncoding("utf-8");
 				<th>대표번호</th>
 				<td class='f'>1544-8306</td>
 				<th>통신판매업신고</th>
-				<td class='b tong'>제2011-서울강남-03265호</td>
+				<td class='b tong'>통신판매업 번호</td>
 			</tr>
 		</table>
 	</div>
 
-	<script src="<%=application.getContextPath()%>/js/OnLoaded.v2.js?0.1.6" type='text/javascript'></script>
+	<script src="<%=application.getContextPath()%>/js/OnLoaded.v2.js?0.1.7" type='text/javascript'></script>
 
 
 </body>

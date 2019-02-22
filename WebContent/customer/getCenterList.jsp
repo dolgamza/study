@@ -53,6 +53,7 @@
 				jsonData.put("ADDR"			, VO.ADDR);
 				jsonData.put("ZIP_CODE"		, VO.ZIP_CODE);
 				jsonData.put("COORDINATE"	, VO.COORDINATE);
+				jsonData.put("THUMBNAIL"	, VO.THUMBNAIL);
 				jsonData.put("WEB_URL"		, VO.WEB_URL);
 				jsonData.put("IMG_URL"		, VO.IMG_URL);
 				

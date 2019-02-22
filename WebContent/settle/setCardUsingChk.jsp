@@ -8,8 +8,8 @@
 <%
 	Logger logger = Logger.getLogger(this.getClass());
 
-	String store_no		= StrUtil.nvl(request.getParameter("store_no"));
-	String card_no		= StrUtil.nvl(request.getParameter("card_no"));
+	String strFcNo		= StrUtil.nvl(request.getParameter("centerNo"));
+	String strCardNo	= StrUtil.nvl(request.getParameter("cardNo"));
 	
 	boolean vResult		= false;
 	String vResMsg		= "";
@@ -17,7 +17,7 @@
 	JSONArray resData	= new JSONArray();
 	JSONObject json 	= new JSONObject();
 	
-	ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseBean().CM_USER_CARD_CHK_PROC(store_no, card_no);
+	ArrayList<LocalDatabaseInfoVO> arr = new LocalDatabaseBean().CM_USER_CARD_CHK_PROC(strFcNo, strCardNo);
 	
 	if(null != arr && arr.size() > 0) {
 		
@@ -44,6 +44,7 @@
 		jsonData.put("SD"      , StrUtil.nvl(VO.SD, ""));
 		jsonData.put("ED"      , StrUtil.nvl(VO.ED, ""));
 		jsonData.put("SIZE"    , VO.SIZE);
+		jsonData.put("CARDTYPE"    , VO.CARDTYPE);
 		jsonData.put("HP"      , VO.HP);
 		jsonData.put("POINT"   , VO.POINT);
 		jsonData.put("RFIDINFO", VO.RFIDINFO);
@@ -52,7 +53,7 @@
 		
 		vResult		= true;
 		if("Y".equalsIgnoreCase(VO.RESULT)){
-			vResUrl		= request.getContextPath()+"/settle/center_detail.jsp?strFcNo="+store_no+"&strCardNo="+card_no+"&strRfid="+VO.RFID;	
+			vResUrl		= "";//request.getContextPath()+"/settle/center_detail.jsp?strFcNo="+store_no+"&strCardNo="+card_no+"&strRfid="+VO.RFID;	
 		} else {
 			vResMsg		= "유효하지 않은 카드입니다.<br>카드번호를 확인해주시기 바랍니다.";
 		}

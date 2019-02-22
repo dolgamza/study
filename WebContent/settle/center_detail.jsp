@@ -8,21 +8,29 @@
 	response.setHeader("Pragma","no-cache");
 	response.setDateHeader("Expires",0);
 	
+	request.setCharacterEncoding("utf-8");
+	
 	String strTitle 	= "";
 	String strLocation 	= "";
 	
-	String paramFcNo 	= StrUtil.nvl(request.getParameter("strFcNo"), "");
-	String paramCardNo	= StrUtil.nvl(request.getParameter("strCardNo"), "");
-	String paramRfid	= StrUtil.nvl(request.getParameter("strRfid"), "");
+	String centerNo 	= StrUtil.nvl(request.getParameter("centerNo"), "");
+	String cardNo		= StrUtil.nvl(request.getParameter("cardNo"), "");
+	String rfidNo		= StrUtil.nvl(request.getParameter("rfidNo"), "");
+	String cardType		= StrUtil.nvl(request.getParameter("cardType"), "");
+	
+	System.out.println("centerNo : " + centerNo);
+	System.out.println("cardNo : " + cardNo);
+	System.out.println("rfidNo : " + rfidNo);
+	System.out.println("cardType : " + cardType);
 	
 	CenterVO.resCenterDetailVO vo = null;
 	
-	ArrayList<CenterVO.resCenterDetailVO> arr = new CenterBean().CM_STORE_DETAIL_PROC(Integer.parseInt(paramFcNo));
+	ArrayList<CenterVO.resCenterDetailVO> arr = new CenterBean().CM_STORE_DETAIL_PROC(Integer.parseInt(centerNo));
 	if(arr != null && arr.size() > 0) {
 		vo = (CenterVO.resCenterDetailVO)arr.get(0);
 	} else {
 		out.println("<script language='javascript'>");
-		out.println("location.href='./center.jsp';");
+		out.println("location.href='${pageContext.request.contextPath}/settle/center.jsp';");
 		out.println("</script>");
 	}
 %>
@@ -46,10 +54,7 @@ a:hover {color:#80191f;}
 .section div.title {margin-top:20px;text-align:center;color:#80191f;font-size:1.4em;margin-bottom:50px;}
 .section div.subtitle {margin-top:20px;text-align:left;color:#80191f;font-size:1em;margin-bottom:10px;}
 
-/**************/
-
 .space {width:100%;border:1px solid #ccc;}
-
 
 .section table {width:100%;margin:2px;}
 .section th {border-top:2px solid #fff;}
@@ -60,24 +65,31 @@ a:hover {color:#80191f;}
 </style>
 
 <script>
-function goBack() {
-	location.href='./center.jsp';
-}
-
-function next() {
-	//location.href='seat.jsp?paramSeqNo='+<%=paramFcNo %>+'&paramCardNo='+<%=paramCardNo %>;
-	location.href='categoryList.jsp?paramSeqNo=28&paramCardNo=<%=paramCardNo %>&paramRfid=<%=paramRfid %>';
-}
+$(document).ready(function() {
+	
+	$(".btn").live("click", function(){
+		
+		var frm = document.frmCenter;
+		
+		frm.target = "_self";
+		frm.action = "${pageContext.request.contextPath}/settle/categoryList.jsp";
+		frm.submit();
+	});
+	
+	$(".back").live("click", function(){
+		location.href='${pageContext.request.contextPath}/settle/center.jsp';
+	});
+	
+});
 </script>
 
-<div class='back' onclick='goBack();'>&lt;</div>
+<div class='back'>&lt;</div>
 <div class='section'>
-   		<div class='title'>센터 검색</div>	
-
-		<div class='subtitle'><%=vo.STORE_NM %></div>
-		<div><img src='${pageContext.request.contextPath}<%=vo.IMG_URL %>' class='space'></div>
-		<div>
-			<table>
+	<div class='title'>센터 검색</div>	
+	<div class='subtitle'><%=vo.STORE_NM %></div>
+	<div><img src='${pageContext.request.contextPath}<%=vo.IMG_URL %>' class='space'></div>
+	<div>
+		<table>
 			<tr>
 				<th>연락처</th>
 				<td class='chains'><%=vo.PHONE_NO %></td>
@@ -86,15 +98,22 @@ function next() {
 				<th>센터위치</th>
 				<td class='chains'><%=vo.ADDR %></td>
 			</tr>
-			</table>
-		</div>
+		</table>
+	</div>
 
-		<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dab0208119ff46e1af518efed56ac285"></script>
-		<div id="map" style="width:90%;height:450px;border:1px solid #ccc;" tabindex="2"></div>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dab0208119ff46e1af518efed56ac285"></script>
+	<div id="map" style="width:90%;height:450px;border:1px solid #ccc;" tabindex="2"></div>
 
-		<div class='btn' onclick='next();'>다음</div>
+	<div class='btn'>다음</div>
 </div>
 
+<form name="frmCenter" id="frmCenter" method="post">
+<%-- <input type="hidden" name="centerNo" id="centerNo" value="<%=centerNo %>" /> --%>
+<input type="text" name="centerNo" id="centerNo" value="28" />
+<input type="text" name="cardNo" id="cardNo" value="<%=cardNo %>" />
+<input type="text" name="rfidNo" id="rfidNo" value="<%=rfidNo %>" />
+<input type="text" name="cardType" id="cardType" value="<%=cardType %>" />
+</form>
 
 <script>
 

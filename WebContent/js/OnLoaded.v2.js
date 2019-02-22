@@ -32,6 +32,14 @@ $(document).ready(function() {
       event.stopPropagation();
    });
    
+   /*
+   if (!isMobile()) {
+	   $(".onlymobile").hide();
+   } else {
+	   $(".onlymobile").show();
+   }
+   */
+   
 });
 
 // toggle drawer

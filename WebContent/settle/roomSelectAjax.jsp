@@ -6,8 +6,15 @@
 <%@ page import = "kr.co.beable.settle.*" %>
 <%@ include file = "/membership/loginSess.jsp" %>
 <%
-	String paramSeqNo		= StrUtil.getParameter(request.getParameter("paramSeqNo"), "");
-	String seat				= StrUtil.getParameter(request.getParameter("seat"), "");
+	String paramSeqNo = StrUtil.getParameter(request.getParameter("centerNo"), "");
+	String paramSeat  = StrUtil.getParameter(request.getParameter("chkSeat"), "");
+	
+	System.out.println("paramSeqNo : " + paramSeqNo);
+	System.out.println("paramSeat : " + paramSeat);
+	
+	String[] seats    = paramSeat.split("_");
+   	String seat       = seats[1];
+	
 	/*
 	String strReserveYmd	= StrUtil.getParameter(request.getParameter("strReserveYmd"), "");
 	String strev_hh			= StrUtil.getParameter(request.getParameter("strev_hh"), "");
